@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { Link, router } from 'expo-router';
+import { RouteProp } from '@react-navigation/native';
 import { isLoading } from 'expo-font';
 
 interface LoginParams {
@@ -15,7 +16,10 @@ interface FormState {
 }
 
 
-const Login_Base: React.FC = () => {
+interface LoginBaseProps {
+  route: string;
+}
+const Login_Base: React.FC<LoginBaseProps> = ({ route }) => {
   const [form, setForm] = useState<FormState>({
     email: '',
     password: ''
@@ -37,7 +41,7 @@ const Login_Base: React.FC = () => {
       // await AsyncStorage.setItem('userData', JSON.stringify(logIn));
 
       //Por ahora a Profesores 
-      router.replace('(professors)')
+      router.replace(route)
     } catch (error: any) {
       Alert.alert('Error', error.message);
     } finally {
@@ -137,8 +141,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 16
   }
 });
 
