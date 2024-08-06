@@ -1,6 +1,6 @@
 // LoginDesarrolloAcademico.js
 import React, { useState } from 'react';
-import Login_Base from '@/components/auth/login';
+import Login_Base from '@/components/auth/Login';
 
 const LoginProfessors = () => {
     return (

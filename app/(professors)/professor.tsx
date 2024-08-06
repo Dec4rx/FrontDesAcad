@@ -1,8 +1,9 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, Alert, Button } from 'react-native';
 import React, { useEffect, useState, useCallback } from 'react';
 import { FontAwesome6 } from '@expo/vector-icons';
-import CurrentCourses from '@/components/myComponents/currentCourses';
-import CourseRegistration from '@/components/myComponents/courseRegistration';
+import CurrentCourses from '@/components/professor/CurrentCourses';
+import CourseRegistration from '@/components/professor/CourseRegistration';
+import CompletedCourses from '@/components/professor/CompletedCourses';
 
 const Professor = () => {
   const professorInfo = {
@@ -63,6 +64,7 @@ const Professor = () => {
 
       {selectedOption === 'currentCourses' && <CurrentCourses />}
       {selectedOption === 'courseRegistration' && <CourseRegistration />}
+      {selectedOption === 'completedCourses' && <CompletedCourses />}
 
     </View>
   )
@@ -92,9 +94,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#1B396A',
     color: 'white',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     fontSize: 16,
-    margin: 3
+    margin: 5
   },
   buttonSelected: {
     backgroundColor: '#2f64ba', // Color diferente para el botón seleccionado

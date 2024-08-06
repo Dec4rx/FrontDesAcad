@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   buttonIngresar: {
     backgroundColor: '#1B396A', // Azul
     padding: 15,
-    borderRadius: 8,
+    borderRadius: 10,
     alignItems: 'center'
   },
   buttonText: {

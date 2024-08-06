@@ -1,8 +1,10 @@
-import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, Modal, View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import NewCourseRegistration from './modals/NewCourseRegistration';
+import React, { useState } from 'react';
 
 interface ItemProps {
+    id: number,
     nombreCurso: string,
     fechaInicio: string,
     fechaFin: string,
@@ -10,6 +12,11 @@ interface ItemProps {
     horario: string,
     cupo: number,
     requerimientos: string
+}
+
+interface ModalProps {
+    id: number,
+    nombreCurso: string,
 }
 
 const CourseRegistration = () => {
@@ -38,7 +45,14 @@ const CourseRegistration = () => {
         // Más cursos pueden ser añadidos aquí
     ];
 
-    const Item: React.FC<ItemProps> = ({ nombreCurso, fechaInicio, fechaFin, turno, horario, cupo, requerimientos }) => (
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const handleConfirm = () => {
+        // Lógica para inscribir el curso
+        console.log('Curso inscrito');
+    };
+
+    const Item: React.FC<ItemProps> = ({ id, nombreCurso, fechaInicio, fechaFin, turno, horario, cupo, requerimientos }) => (
         <View style={styles.row}>
             <Text style={styles.cell}>{nombreCurso}</Text>
             <Text style={styles.cell}>{fechaInicio}</Text>
@@ -48,15 +62,23 @@ const CourseRegistration = () => {
             <Text style={styles.cell}>{cupo}</Text>
             <Text style={styles.cell}>{requerimientos}</Text>
             <View style={styles.cell}>
-            <TouchableOpacity style={styles.buttonInscribir}>
-                <Ionicons name='add-circle-outline' size={35} color="green" />
-            </TouchableOpacity>
+                {/* <TouchableOpacity style={styles.buttonInscribir} onPress={() => ModalRegister(id, nombreCurso)}> */}
+                <TouchableOpacity style={styles.buttonInscribir} onPress={() => setModalVisible(!modalVisible)}>
+                    <Ionicons name='add-circle-outline' size={35} color="#2f64ba" />
+                </TouchableOpacity>
             </View>
         </View>
     );
 
     return (
         <ScrollView horizontal style={styles.container}>
+
+            <NewCourseRegistration
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                onConfirm={handleConfirm}
+            />
+
             <View>
                 <View style={styles.rowHeader}>
                     <Text style={styles.headerCell}>Nombre del Curso</Text>
@@ -72,6 +94,7 @@ const CourseRegistration = () => {
                     data={cursos}
                     renderItem={({ item }) => (
                         <Item
+                            id={item.id}
                             nombreCurso={item.nombreCurso}
                             fechaInicio={item.fechaInicio}
                             fechaFin={item.fechaFin}
@@ -89,6 +112,59 @@ const CourseRegistration = () => {
 }
 
 const styles = StyleSheet.create({
+    buttonCross: {
+        position: 'absolute',
+        top: 10,
+        left: 10,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalView: {
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button: {
+        borderRadius: 10,
+        padding: 13,
+        elevation: 2,
+        margin: 5,
+    },
+    buttonRegister: {
+        backgroundColor: '#1B396A',
+    },
+    buttonClose: {
+        backgroundColor: '#8B0000'
+    },
+    textStyle: {
+        fontSize: 16,
+        color: 'white',
+        textAlign: 'center',
+    },
+    modalText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between', // Distribuye el espacio entre los botones
+        marginTop: 15,
+    },
+
+
     container: {
         flex: 1,
         padding: 20,

@@ -6,6 +6,7 @@ export default function CoordinatorsLayout() {
         <Stack>
 
             <Stack.Screen name="loginCoordinators" options={{ headerShown: false }} />
+            <Stack.Screen name="coordinator" options={{ headerShown: false }} />
             {/* <Stack.Screen name="" options={{ headerShown: false }} /> */}
         </Stack>
     );
