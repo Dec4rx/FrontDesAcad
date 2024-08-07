@@ -5,7 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-
+import { SafeAreaView } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export {

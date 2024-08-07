@@ -4,12 +4,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
 
 interface ItemProps {
-    nombreCurso: string,
-    fechaInicio: string,
-    fechaFin: string,
-    turno: string,
-    horario: string,
-    requerimientos: string
+    nombreCurso: string;
+    fechaInicio: string;
+    fechaFin: string;
+    turno: string;
+    horario: string;
+    requerimientos: string;
 }
 
 const CompletedCourses = () => {

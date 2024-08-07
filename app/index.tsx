@@ -1,13 +1,13 @@
 // Index.js
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar, Dimensions, SafeAreaView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Link, router } from 'expo-router';
 
 const Index = () => {
     return (
-        <View style={styles.container}>
+        <SafeAreaView  style={styles.container}>
 
             <StatusBar backgroundColor="transparent" barStyle="light-content" translucent={true} />
 
@@ -39,7 +39,7 @@ const Index = () => {
                 </TouchableOpacity>
                 
             </View>
-        </View>
+        </SafeAreaView >
     );
 };
 

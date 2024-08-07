@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, Alert, Button } from 'react-native';
+import { View, SafeAreaView, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, Alert, Button } from 'react-native';
 import React, { useEffect, useState, useCallback } from 'react';
 import { FontAwesome6 } from '@expo/vector-icons';
 import CurrentCourses from '@/components/professor/CurrentCourses';
@@ -21,7 +21,7 @@ const Professor = () => {
     setSelectedOption(component);
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.welcomeText}>
         Bienvenido Profesor
         <Text style={{ color: '#8B0000' }}>
@@ -66,7 +66,7 @@ const Professor = () => {
       {selectedOption === 'courseRegistration' && <CourseRegistration />}
       {selectedOption === 'completedCourses' && <CompletedCourses />}
 
-    </View>
+    </SafeAreaView>
   )
 }
 

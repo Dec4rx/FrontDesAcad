@@ -6,6 +6,7 @@ export default function AuthorizersLayout() {
         <Stack>
 
             <Stack.Screen name="loginAuthorizers" options={{ headerShown: false }} />
+            <Stack.Screen name="authorizer" options={{ headerShown: false }} />
             {/* <Stack.Screen name="" options={{ headerShown: false }} /> */}
         </Stack>
     );
