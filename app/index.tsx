@@ -13,27 +13,27 @@ const Index = () => {
 
             <View style={styles.buttonContainer}>
 
-                <TouchableOpacity style={styles.button} onPress={() => router.push('loginAcademicDevelopment')}>
+                <TouchableOpacity style={styles.button} onPress={() => router.push({ pathname: '/loginAcademicDevelopment' })}>
                     <MaterialCommunityIcons name="school" size={24} color="white" />
                     <Text style={styles.buttonText}>Desarrollo Académico</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={() => router.push('loginAcademicHeads')}>
+                <TouchableOpacity style={styles.button} onPress={() => router.push({ pathname: '/loginAcademicHeads' })}>
                     <MaterialCommunityIcons name="account-tie" size={24} color="white" />
                     <Text style={styles.buttonText}>Jefes Académicos</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={() => router.push('loginCoordinators')}>
+                <TouchableOpacity style={styles.button} onPress={() => router.push({ pathname: '/loginCoordinators' })}>
                     <MaterialCommunityIcons name="account-group" size={24} color="white" />
                     <Text style={styles.buttonText}>Coordinadores</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={() => router.push('loginProfessors')}>
+                <TouchableOpacity style={styles.button} onPress={() => router.push({ pathname: '/loginProfessors' })}>
                     <FontAwesome5 name="chalkboard-teacher" size={24} color="white" />
                     <Text style={styles.buttonText}>Profesores</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={() => router.push('loginAuthorizers')}>
+                <TouchableOpacity style={styles.button} onPress={() => router.push('/loginAuthorizers')}>
                     <MaterialCommunityIcons name="account-check" size={24} color="white" />
                     <Text style={styles.buttonText}>Autorizadores</Text>
                 </TouchableOpacity>

@@ -4,7 +4,7 @@ import Login_Base from '@/components/auth/Login';
 
 const LoginAuthorizers = () => {
     return (
-        <Login_Base route='authorizer'/>
+        <Login_Base route='/authorizer'/>
     );
   };
 

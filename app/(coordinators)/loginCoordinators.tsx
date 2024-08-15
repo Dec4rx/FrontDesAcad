@@ -4,7 +4,7 @@ import Login_Base from '@/components/auth/Login';
 
 const LoginCoordinators = () => {
     return (
-        <Login_Base route='coordinator'/>
+        <Login_Base route='/coordinator'/>
     );
   };
 

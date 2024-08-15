@@ -161,7 +161,7 @@ const AuthorizedCourses = () => {
             <CourseDetails
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
-                courseData={courseSpecific}//TO DO MODIFICAR ESTOOO ES TEMPORAL
+                courseData={courseSpecific}
             />
 
 

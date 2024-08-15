@@ -4,7 +4,7 @@ import Login_Base from '@/components/auth/Login';
 
 const LoginProfessors = () => {
     return (
-        <Login_Base route='professor'/>
+        <Login_Base route='/professor'/>
     );
   };
 

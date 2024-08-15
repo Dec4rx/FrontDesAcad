@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
 
 
+
 interface CoursesToAuthorizeDetails {
     modalVisible: boolean;
     setModalVisible: (visible: boolean) => void;
@@ -30,6 +31,9 @@ interface FormCourseState {
 }
 
 const CoursesToAuthorizeDetails: React.FC<CoursesToAuthorizeDetails> = ({ modalVisible, setModalVisible, courseData }) => {
+
+    const [modalVisibleAuthUnauth, setModalVisibleAuthUnauth] = useState(false);
+
     return (
         <Modal
             animationType="fade"

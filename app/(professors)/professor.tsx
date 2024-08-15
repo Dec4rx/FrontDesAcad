@@ -1,9 +1,10 @@
-import { View, SafeAreaView, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, Alert, Button } from 'react-native';
-import React, { useEffect, useState, useCallback } from 'react';
+import { View, SafeAreaView, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import React, { useState } from 'react';
 import { FontAwesome6 } from '@expo/vector-icons';
 import CurrentCourses from '@/components/professor/CurrentCourses';
 import CourseRegistration from '@/components/professor/CourseRegistration';
 import CompletedCourses from '@/components/professor/CompletedCourses';
+import SetStatus from '@/components/professor/modals/SetStatus';
 
 const Professor = () => {
   const professorInfo = {
@@ -13,15 +14,26 @@ const Professor = () => {
     department: 'IDK'
   }
 
-  const { width } = Dimensions.get('window'); // Get the width of the device window
+  const handleStatus = () => {
+    console.log('Status changed');
+  }
+
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState<'currentCourses' | 'courseRegistration' | 'completedCourses' | null>('currentCourses');
 
   const handleButtonPress = (component: 'currentCourses' | 'courseRegistration' | 'completedCourses') => {
     setSelectedOption(component);
   }
+
   return (
     <SafeAreaView style={styles.container}>
+
+      <SetStatus modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        onConfirm={handleStatus} />
+
       <Text style={styles.welcomeText}>
         Bienvenido Profesor
         <Text style={{ color: '#8B0000' }}>
@@ -39,7 +51,7 @@ const Professor = () => {
         Estatus:
         <Text style={{ color: '#8B0000' }}>
           {` Tiempo completo 40hrs `}
-          <TouchableOpacity style={styles.gearButton}>
+          <TouchableOpacity style={styles.gearButton} onPress={() => setModalVisible(!modalVisible)}>
             <FontAwesome6 name='gear' size={20} color={"#1B396A"} />
           </TouchableOpacity>
         </Text>
@@ -62,15 +74,14 @@ const Professor = () => {
         </TouchableOpacity>
       </View>
 
-      {selectedOption === 'currentCourses' && <CurrentCourses />}
-      {selectedOption === 'courseRegistration' && <CourseRegistration />}
-      {selectedOption === 'completedCourses' && <CompletedCourses />}
-
+      <View style={styles.contentContainer}>
+        {selectedOption === 'currentCourses' && <CurrentCourses />}
+        {selectedOption === 'courseRegistration' && <CourseRegistration />}
+        {selectedOption === 'completedCourses' && <CompletedCourses />}
+      </View>
     </SafeAreaView>
   )
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -123,7 +134,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  contentContainer: {
+    flex: 1,
+    width: '100%', // Ensure the content container takes up the full width
+    backgroundColor: '#fff', // Ensure the background is white
+  },
 });
 
-
-export default Professor
+export default Professor;

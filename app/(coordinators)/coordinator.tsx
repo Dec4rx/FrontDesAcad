@@ -45,9 +45,10 @@ const Coordinator = () => {
 
       </View>
 
-      {selectedOption === 'authorizedCourses' && <AuthorizedCourses />}
-      {selectedOption === 'registeredCourses' && <RegisteredCurses />}
-
+      <View style={styles.contentContainer}>
+        {selectedOption === 'authorizedCourses' && <AuthorizedCourses />}
+        {selectedOption === 'registeredCourses' && <RegisteredCurses />}
+      </View>
     </View>
   )
 }
@@ -100,5 +101,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
+  },
+  contentContainer: {
+    flex: 1,
+    width: '100%', // Ensure the content container takes up the full width
+    backgroundColor: '#fff', // Ensure the background is white
   },
 });

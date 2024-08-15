@@ -1,7 +1,9 @@
 import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import React, {useState} from 'react';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import React, { useState } from 'react';
 import CoursesToAuthorizeDetails from './modals/CoursesToAuthorizeDetails';
+import AuthorizeUnauthorize from './modals/AuthorizeUnauthorize';
 
 interface Course {
     id: number;
@@ -30,6 +32,7 @@ interface CourseProps {
 const CoursesToAuthorize = ({ courseData }: CourseProps) => {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalAuthorizeVisible, setModalAuthorizeVisible] = useState(false);
 
     const [courseSpecific, setCourseSpecific] = useState<Course>({
         id: 0,
@@ -66,6 +69,11 @@ const CoursesToAuthorize = ({ courseData }: CourseProps) => {
         }
     }
 
+    const hanldeOnAuthorizeCourse = (id: number) => {
+        console.log(id)
+        setModalAuthorizeVisible(!modalVisible)
+    }
+
     const Item: React.FC<Course> = ({
         id,
         departamentoAcademico,
@@ -95,13 +103,19 @@ const CoursesToAuthorize = ({ courseData }: CourseProps) => {
             <View style={styles.cell}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity style={styles.centeredView} onPress={() => handleSelectCourse(id)}>
-                        <MaterialIcons style={styles.innerText} name="more-horiz" size={35} color="#2f64ba" />
+                        <MaterialIcons style={styles.buttonDetails} name="more-horiz" size={35} color="#2f64ba" />
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.cell}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity style={styles.centeredView} onPress={() => hanldeOnAuthorizeCourse(id)}>
+                        <AntDesign style={styles.buttonAuthorize} name="checkcircleo" size={35} color="#2f64ba" />
                     </TouchableOpacity>
                 </View>
             </View>
         </View>
     );
-
     return (
         <ScrollView horizontal style={styles.container}>
 
@@ -111,6 +125,11 @@ const CoursesToAuthorize = ({ courseData }: CourseProps) => {
                 courseData={courseSpecific}
             />
 
+            <AuthorizeUnauthorize
+                modalVisible={modalAuthorizeVisible}
+                setModalVisible={setModalAuthorizeVisible}
+                onAuthorize={hanldeOnAuthorizeCourse}
+            />
 
             <View>
                 <View style={styles.rowHeader}>
@@ -121,6 +140,7 @@ const CoursesToAuthorize = ({ courseData }: CourseProps) => {
                     <Text style={styles.headerCell}>Número de Docente que la Requieren</Text>
                     <Text style={styles.headerCell}>Turno</Text>
                     <Text style={styles.headerCell}>Detalles</Text>
+                    <Text style={styles.headerCell}>Autorizar</Text>
                 </View>
                 <FlatList
                     data={courseData}
@@ -186,12 +206,17 @@ const styles = StyleSheet.create({
         alignItems: 'center', // Centra horizontalmente
         marginLeft: 0, // Asegura que no haya margen izquierdo
     },
-    innerText: {
+    buttonDetails: {
         borderWidth: 2,
         borderColor: "#2f64ba",
         backgroundColor: "white",
         textAlign: "center",
         borderRadius: 10,
+    },
+    buttonAuthorize: {
+        borderColor: "#2f64ba",
+        backgroundColor: "white",
+        textAlign: "center",
     },
 });
 

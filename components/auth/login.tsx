@@ -1,7 +1,7 @@
 // LoginDesarrolloAcademico.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar, KeyboardAvoidingView, Platform, Alert } from 'react-native';
-import { Link, router } from 'expo-router';
+import { Href, Link, router } from 'expo-router';
 import { RouteProp } from '@react-navigation/native';
 import { isLoading } from 'expo-font';
 
@@ -16,8 +16,10 @@ interface FormState {
 }
 
 
+import { ParamListBase } from '@react-navigation/native';
+
 interface LoginBaseProps {
-  route: string;
+  route: Href;
 }
 const Login_Base: React.FC<LoginBaseProps> = ({ route }) => {
   const [form, setForm] = useState<FormState>({
@@ -41,7 +43,11 @@ const Login_Base: React.FC<LoginBaseProps> = ({ route }) => {
       // await AsyncStorage.setItem('userData', JSON.stringify(logIn));
 
       //Por ahora a Profesores 
-      router.replace(route)
+      if (route) {
+        router.replace(route);
+      } else {
+        Alert.alert('Error', 'Invalid route');
+      }
     } catch (error: any) {
       Alert.alert('Error', error.message);
     } finally {
@@ -87,7 +93,7 @@ const Login_Base: React.FC<LoginBaseProps> = ({ route }) => {
 
       <View>
         <Text>¿No tienes una cuenta?</Text>
-        <Link href="/sign-up" >Sign Up</Link>
+        {/* <Link href="sign-up" >Sign Up</Link> */}
       </View>
 
     </KeyboardAvoidingView>

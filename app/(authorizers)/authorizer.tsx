@@ -48,12 +48,13 @@ const Authorizer = () => {
                     </Text>
                 </Text>
                 <Text style={styles.subtitleText}>
-                    Cursos por Autorizar:
+                    Cursos por Autorizar
                 </Text>
             </View>
 
-            <CoursesToAuthorize courseData={cursos}/>
-
+            <View style={styles.contentContainer}>
+                <CoursesToAuthorize courseData={cursos} />
+            </View>
         </SafeAreaView>
     )
 }
@@ -101,5 +102,10 @@ const styles = StyleSheet.create({
         color: '#1B396A',
         fontWeight: 'bold',
         textAlign: 'center'
-    }
+    },
+    contentContainer: {
+        flex: 1,
+        width: '100%', // Ensure the content container takes up the full width
+        backgroundColor: '#fff', // Ensure the background is white
+      },
 });
