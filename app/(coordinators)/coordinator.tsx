@@ -1,7 +1,8 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, Alert, Button } from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, Alert, Button } from 'react-native';
 import React, { useEffect, useState, useCallback } from 'react';
 import AuthorizedCourses from '@/components/coordinator/AuthorizedCourses';
 import RegisteredCurses from '@/components/coordinator/RegisteredCourses';
+
 
 const Coordinator = () => {
   const coordinatorInfo = {
@@ -18,6 +19,7 @@ const Coordinator = () => {
   }
   return (
     <View style={styles.container}>
+
       <Text style={styles.welcomeText}>
         Bienvenido Coordinador
         <Text style={{ color: '#8B0000' }}>
@@ -45,10 +47,12 @@ const Coordinator = () => {
 
       </View>
 
-      <View style={styles.contentContainer}>
-        {selectedOption === 'authorizedCourses' && <AuthorizedCourses />}
-        {selectedOption === 'registeredCourses' && <RegisteredCurses />}
-      </View>
+      <ScrollView>
+        <View style={styles.contentContainer}>
+          {selectedOption === 'authorizedCourses' && <AuthorizedCourses />}
+          {selectedOption === 'registeredCourses' && <RegisteredCurses />}
+        </View>
+      </ScrollView>
     </View>
   )
 }

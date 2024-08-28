@@ -156,7 +156,7 @@ const AuthorizedCourses = () => {
 
 
     return (
-        <ScrollView horizontal style={styles.container}>
+        <ScrollView style={styles.container}>
 
             <CourseDetails
                 modalVisible={modalVisible}
