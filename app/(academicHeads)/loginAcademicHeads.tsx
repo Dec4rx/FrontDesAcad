@@ -4,7 +4,7 @@ import Login_Base from '@/components/auth/Login';
 
 const LoginAcademicHeads = () => {
     return (
-        <Login_Base/>
+        <Login_Base route={"/academicHead"}/>
     );
   };
 

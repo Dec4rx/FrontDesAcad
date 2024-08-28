@@ -6,6 +6,7 @@ export default function AcademicHeadsLayout() {
         <Stack>
 
             <Stack.Screen name="loginAcademicHeads" options={{ headerShown: false }} />
+            <Stack.Screen name="academicHead" options={{headerShown: false}}/>
             {/* <Stack.Screen name="" options={{ headerShown: false }} /> */}
         </Stack>
     );
