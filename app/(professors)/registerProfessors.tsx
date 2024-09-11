@@ -1,17 +1,36 @@
-// RegistroProfesores.js
 import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  StatusBar,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView
+} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { router } from 'expo-router';
 
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Picker, StatusBar, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+type Props = {
+  navigation: NativeStackNavigationProp<any, any>;
+};
 
-const RegistroProfesores = ({ navigation }) => {
-  const [primerApellido, setPrimerApellido] = useState('');
-  const [segundoApellido, setSegundoApellido] = useState('');
-  const [nombres, setNombres] = useState('');
-  const [genero, setGenero] = useState('');
-  const [rfc, setRfc] = useState('');
-  const [curp, setCurp] = useState('');
+interface primerApellido{
 
-  const handleUpperCaseInput = (text, setter) => {
+}
+
+const RegistroProfesores: React.FC<Props> = ({ navigation }) => {
+  const [primerApellido, setPrimerApellido] = useState<string>('');
+  const [segundoApellido, setSegundoApellido] = useState<string>('');
+  const [nombres, setNombres] = useState<string>('');
+  const [genero, setGenero] = useState<string>('');
+  const [rfc, setRfc] = useState<string>('');
+  const [curp, setCurp] = useState<string>('');
+
+  const handleUpperCaseInput = (text: string, setter: React.Dispatch<React.SetStateAction<string>>) => {
     setter(text.replace(/[^a-zA-Z0-9]/g, '').toUpperCase());
   };
 
@@ -22,7 +41,7 @@ const RegistroProfesores = ({ navigation }) => {
     >
       <StatusBar backgroundColor="#8B0000" barStyle="light-content" />
       <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.title}>Registro de Profesores</Text>
+        <Text style={styles.title}>Registro</Text>
         <TextInput
           placeholder="Primer Apellido"
           value={primerApellido}
@@ -45,7 +64,7 @@ const RegistroProfesores = ({ navigation }) => {
         <Picker
           selectedValue={genero}
           style={styles.picker}
-          onValueChange={(itemValue, itemIndex) => setGenero(itemValue)}
+          onValueChange={(itemValue) => setGenero(itemValue)}
         >
           <Picker.Item label="Femenino" value="femenino" />
           <Picker.Item label="Masculino" value="masculino" />
@@ -66,10 +85,10 @@ const RegistroProfesores = ({ navigation }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={async () => {
-            console.log('Registrado'); 
+            console.log('Registrado');
 
-            
-            navigation.navigate('LoginProfesores');
+
+            router.replace('/loginProfessors');
           }}
         >
           <Text style={styles.buttonText}>Registrar</Text>
@@ -82,19 +101,20 @@ const RegistroProfesores = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'center', // Alinea el contenido verticalmente
+    alignItems: 'center',     // Alinea el contenido horizontalmente
     backgroundColor: '#fff',
     padding: 20
   },
   scrollContainer: {
-    width: '100%',
+    width: '100%'
   },
   title: {
     fontSize: 24,
     color: '#8B0000',
     fontWeight: 'bold',
-    marginBottom: 20
+    marginBottom: 20,
+    textAlign: 'center' // Asegura que el título también esté centrado
   },
   input: {
     height: 50,
@@ -106,24 +126,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     marginBottom: 10,
+    width: '45%', // Ajustado para mejorar la visualización
+    alignSelf: 'center' // Alinea individualmente al centro
   },
   picker: {
     height: 50,
-    width: '100%',
+    width: '45%', // Ajustado para mejorar la visualización
     color: '#333',
-    marginBottom: 20
+    marginBottom: 20,
+    alignSelf: 'center' // Alinea individualmente al centro
   },
   label: {
     fontSize: 16,
     color: '#333',
-    marginBottom: 5
+    marginBottom: 5,
+    alignSelf: 'center', // Asegura que las etiquetas también estén centradas
+    fontWeight: 'bold'
   },
   button: {
     backgroundColor: '#4169E1',
-    padding: 15,
+    padding: 10,
     borderRadius: 8,
     alignItems: 'center',
-    width: '100%'
+    width: '45%', // Ajustado para mejorar la visualización
+    alignSelf: 'center' // Alinea individualmente al centro
   },
   buttonText: {
     color: 'white',
@@ -132,4 +158,6 @@ const styles = StyleSheet.create({
   }
 });
 
+
 export default RegistroProfesores;
+

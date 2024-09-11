@@ -1,11 +1,9 @@
-import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Modal, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useState } from 'react';
 import DiagnosisOfNeedsDetails from './modals/DiagnosisOfNeedsDetails';
 
-
-interface Diagnosis {
+interface ItemProps{
     id: number;
     departamentoAcademico: string;
     fechaDiagnostico: string;
@@ -26,73 +24,77 @@ interface Diagnosis {
     facilitadores: string;
 }
 
-interface DiagnosisProps {
-    diagnosisData: Diagnosis[];
+interface ModalProps {
+    id: number,
 }
 
-const DiagnosisOfNeeds = ({ diagnosisData }: DiagnosisProps) => {
+const DiagnosisOfNeeds = () => {
+const diagnosis = [
+    {
+        id: 1,
+        departamentoAcademico: "Ciencias Exactas",
+        fechaDiagnostico: "2024-05-01",
+        titularDepartamento: "Dr. Juan Pérez",
+        presidenteAcademia: "Dra. Ana López",
+        titularSubdireccion: "Lic. Roberto Hernández",
+        asignaturasRequeridas: "Matemáticas Avanzadas, Física Cuántica",
+        contenidosTematicos: "Cálculo Integral, Mecánica Cuántica",
+        numeroDocentes: 10,
+        tipoAsignatura: "Asignatura Genérica",
+        actividadEvento: "Curso de Actualización",
+        objetivo: "Actualizar los conocimientos en física cuántica",
+        carrerasAtendidas: "Ingeniería Física, Ingeniería Matemática",
+        periodo: "E-J",
+        fechaCurso: "2024-06-15",
+        turno: "Matutino",
+        estado: "Aprobado",
+        facilitadores: "Dr. Carlos Sánchez, Dra. María García"
+    },
 
-    const [modalVisible, setModalVisible] = useState(false);
 
-    const [diagnosisSpecific, setDiagnosisSpecific] = useState<Diagnosis>({
-        id: 0,
-        departamentoAcademico: "",
-        fechaDiagnostico: "",
-        titularDepartamento: "",
-        presidenteAcademia: "",
-        titularSubdireccion: "",
-        asignaturasRequeridas: "",
-        contenidosTematicos: "",
-        numeroDocentes: 0,
-        tipoAsignatura: "",
-        actividadEvento: "",
-        objetivo: "",
-        carrerasAtendidas: "",
-        periodo: "",
-        fechaCurso: "",
-        turno: "",
-        estado:"",
-        facilitadores: ""
-    })
+    // Más cursos pueden ser añadidos aquí
+];
 
-    const handleSelectCourse = (id: number) => {
+const [diagnosisSpecific, setDiagnosisSpecific] = useState<ItemProps>({
+    id: 0,
+    departamentoAcademico: "",
+    fechaDiagnostico: "",
+    titularDepartamento: "",
+    presidenteAcademia: "",
+    titularSubdireccion: "",
+    asignaturasRequeridas: "",
+    contenidosTematicos: "",
+    numeroDocentes: 0,
+    tipoAsignatura: "",
+    actividadEvento: "",
+    objetivo: "",
+    carrerasAtendidas: "",
+    periodo: "",
+    fechaCurso: "",
+    turno: "",
+    estado: "",
+    facilitadores: ""
+})
 
-        console.log(id)
+const handleSelectCourse = (id: number) => {
 
-        const diagnosis = diagnosisData.find(diagnosis => diagnosis.id === id)
-        if (diagnosis) {
-            setDiagnosisSpecific(diagnosis)
-            console.log(diagnosisSpecific)
-            setModalVisible(!modalVisible)
-        }
-        else {
-            console.log("no encontrado")
-        }
+    console.log(id)
+
+    const diagnos = diagnosis.find(diagnosis => diagnosis.id === id)
+    if (diagnos) {
+        setDiagnosisSpecific(diagnos)
+        console.log(diagnosisSpecific)
+        setModalVisible(!modalVisible)
     }
+    else {
+        console.log("no encontrado")
+    }
+}
 
-    
+const [modalVisible, setModalVisible] = useState(false);
 
-    const Item: React.FC<Diagnosis> = ({
-        id,
-        departamentoAcademico,
-        fechaDiagnostico,
-        titularDepartamento,
-        presidenteAcademia,
-        titularSubdireccion,
-        asignaturasRequeridas,
-        contenidosTematicos,
-        numeroDocentes,
-        tipoAsignatura,
-        actividadEvento,
-        objetivo,
-        carrerasAtendidas,
-        periodo,
-        fechaCurso,
-        turno,
-        estado,
-        facilitadores,
-    }) => (
-        <View style={styles.row}>
+const Item: React.FC<ItemProps> = ({ id,departamentoAcademico, fechaDiagnostico,asignaturasRequeridas, numeroDocentes, tipoAsignatura, turno, estado }) => (
+    <View style={styles.row}>
             <Text style={styles.cell}>{departamentoAcademico}</Text>
             <Text style={styles.cell}>{fechaDiagnostico}</Text>
             <Text style={styles.cell}>{asignaturasRequeridas}</Text>
@@ -108,57 +110,58 @@ const DiagnosisOfNeeds = ({ diagnosisData }: DiagnosisProps) => {
                 </View>
             </View>
         </View>
-    );
-    return (
-        <ScrollView horizontal style={styles.container}>
+);
 
-            <DiagnosisOfNeedsDetails
-                modalVisible={modalVisible}
-                setModalVisible={setModalVisible}
-                diagnosisData={diagnosisSpecific}
+return(
+<ScrollView horizontal style={styles.container}>
+
+<DiagnosisOfNeedsDetails
+    modalVisible={modalVisible}
+    setModalVisible={setModalVisible}
+    diagnosisData={diagnosisSpecific}
+/>
+
+<View>
+    <View style={styles.rowHeader}>
+        <Text style={styles.headerCell}>Departamento Académico</Text>
+        <Text style={styles.headerCell}>Fecha del Diagnóstico</Text>
+        <Text style={styles.headerCell}>Asignaturas Requeridas</Text>
+        <Text style={styles.headerCell}>Tipo de Asignatura</Text>
+        <Text style={styles.headerCell}>Número de Docente que la Requieren</Text>
+        <Text style={styles.headerCell}>Turno</Text>
+        <Text style={styles.headerCell}>Estado</Text>
+        <Text style={styles.headerCell}>Detalles</Text>
+    </View>
+    
+    <FlatList
+        data={diagnosis}
+        renderItem={({ item }) => (
+            <Item
+                id={item.id}
+                departamentoAcademico={item.departamentoAcademico}
+                fechaDiagnostico={item.fechaDiagnostico}
+                titularDepartamento={item.titularDepartamento}
+                presidenteAcademia={item.presidenteAcademia}
+                titularSubdireccion={item.titularSubdireccion}
+                asignaturasRequeridas={item.asignaturasRequeridas}
+                contenidosTematicos={item.contenidosTematicos}
+                numeroDocentes={item.numeroDocentes}
+                tipoAsignatura={item.tipoAsignatura}
+                actividadEvento={item.actividadEvento}
+                objetivo={item.objetivo}
+                carrerasAtendidas={item.carrerasAtendidas}
+                periodo={item.periodo}
+                fechaCurso={item.fechaCurso}
+                turno={item.turno}
+                estado={item.estado}
+                facilitadores={item.facilitadores}
             />
-
-            <View>
-                <View style={styles.rowHeader}>
-                    <Text style={styles.headerCell}>Departamento Académico</Text>
-                    <Text style={styles.headerCell}>Fecha del Diagnóstico</Text>
-                    <Text style={styles.headerCell}>Asignaturas Requeridas</Text>
-                    <Text style={styles.headerCell}>Tipo de Asignatura</Text>
-                    <Text style={styles.headerCell}>Número de Docente que la Requieren</Text>
-                    <Text style={styles.headerCell}>Turno</Text>
-                    <Text style={styles.headerCell}>Estado</Text>
-                    <Text style={styles.headerCell}>Detalles</Text>
-                </View>
-                
-                <FlatList
-                    data={diagnosisData}
-                    renderItem={({ item }) => (
-                        <Item
-                            id={item.id}
-                            departamentoAcademico={item.departamentoAcademico}
-                            fechaDiagnostico={item.fechaDiagnostico}
-                            titularDepartamento={item.titularDepartamento}
-                            presidenteAcademia={item.presidenteAcademia}
-                            titularSubdireccion={item.titularSubdireccion}
-                            asignaturasRequeridas={item.asignaturasRequeridas}
-                            contenidosTematicos={item.contenidosTematicos}
-                            numeroDocentes={item.numeroDocentes}
-                            tipoAsignatura={item.tipoAsignatura}
-                            actividadEvento={item.actividadEvento}
-                            objetivo={item.objetivo}
-                            carrerasAtendidas={item.carrerasAtendidas}
-                            periodo={item.periodo}
-                            fechaCurso={item.fechaCurso}
-                            turno={item.turno}
-                            estado={item.estado}
-                            facilitadores={item.facilitadores}
-                        />
-                    )}
-                    keyExtractor={(item) => item.id.toString()}
-                />
-            </View>
-        </ScrollView>
-    );
+        )}
+        keyExtractor={(item) => item.id.toString()}
+    />
+</View>
+</ScrollView>
+);
 }
 
 const styles = StyleSheet.create({
