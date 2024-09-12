@@ -9,3 +9,8 @@ export interface Sing_up {
     curp: string;
     password: string;
 }
+
+export interface Login {
+    email: string;
+    password: string;
+}

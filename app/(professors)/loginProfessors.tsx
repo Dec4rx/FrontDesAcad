@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { router } from 'expo-router';
+import { login } from '@/services/authServices';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 interface FormState {
@@ -20,9 +22,12 @@ const LoginProfesor: React.FC = () => {
       Alert.alert('Error', 'Password must be at least 6 characters');
     } else {
       try {
+        setIsSubmitting(true);
         // Simulated login function
-        // const response = await login(form.email, form.password);
+        console.log(form)
+        const response = await login(form);
         console.log('Login success');
+        await AsyncStorage.setItem('userData', JSON.stringify(response));
         router.replace('/professor')
         // navigation.replace('HomeScreen'); // Navigate to home screen after login
       } catch (error) {

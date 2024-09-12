@@ -1,7 +1,9 @@
 import { Alert, Modal, View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import NewCourseRegistration from './modals/NewCourseRegistration';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router/build/useFocusEffect';
+import { UserData } from '@/services/interfaces/UserInterface';
 
 interface ItemProps {
     id: number,
@@ -14,12 +16,14 @@ interface ItemProps {
     requerimientos: string
 }
 
+
 interface ModalProps {
     id: number,
     nombreCurso: string,
 }
 
-const CourseRegistration = () => {
+const CourseRegistration = (props: UserData) => {
+    
     const cursos = [
         {
             id: 1,
