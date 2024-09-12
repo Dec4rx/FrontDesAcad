@@ -1,10 +1,13 @@
 import { View, SafeAreaView, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FontAwesome6 } from '@expo/vector-icons';
 import CurrentCourses from '@/components/professor/CurrentCourses';
 import CourseRegistration from '@/components/professor/CourseRegistration';
 import CompletedCourses from '@/components/professor/CompletedCourses';
 import SetStatus from '@/components/professor/modals/SetStatus';
+import { useFocusEffect } from 'expo-router/build/useFocusEffect';
+import { UserData } from '@/services/interfaces/UserInterface';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Professor = () => {
   const professorInfo = {
@@ -13,7 +16,35 @@ const Professor = () => {
     lastName2: 'Rodriguez',
     department: 'IDK'
   }
+  const [userData, setUserData] = useState<UserData>({
+    id: 0,
+    lastName: '',
+    middleName: '',
+    name: '',
+    gender: '',
+    status: ''
+  });
 
+  const getUserData = async () => {
+    try {
+      const jsonUser = await AsyncStorage.getItem('userData');
+      if (jsonUser != null) {
+        console.log(jsonUser);
+        const parsedUser: UserData = JSON.parse(jsonUser);
+        setUserData(parsedUser);
+        console.log("USER INFO:", userData)
+      }
+    } catch (e) {
+      console.error('Error reading value:', e);
+    }
+  };
+
+
+  useFocusEffect(
+    useCallback(() => {
+        getUserData(); // Esta función se ejecutaría cuando la pantalla esté enfocada
+    }, [])
+);
 
   const handleStatus = () => {
     console.log('Status changed');
@@ -77,7 +108,7 @@ const Professor = () => {
 
       <View style={styles.contentContainer}>
         {selectedOption === 'currentCourses' && <CurrentCourses />}
-        {selectedOption === 'courseRegistration' && <CourseRegistration />}
+        {selectedOption === 'courseRegistration' && <CourseRegistration {...userData} />}
         {selectedOption === 'completedCourses' && <CompletedCourses />}
       </View>
     </SafeAreaView>
@@ -143,3 +174,7 @@ const styles = StyleSheet.create({
 });
 
 export default Professor;
+
+export interface CourseRegistrationProps {
+  props: UserData;
+}

@@ -35,6 +35,7 @@ type Props = {
 
 const RegistroProfesores: React.FC<Props> = ({ navigation }) => {
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [gender, setGender] = useState<string>('');
   const [form, setForm] = useState<Sing_up>({
     lastName: '',
@@ -73,6 +74,7 @@ const RegistroProfesores: React.FC<Props> = ({ navigation }) => {
      const preparedForm = prepareFormForSubmission();
 
     try {
+      setIsSubmitting(true);
       console.log(preparedForm)
       const singUp = await sing_up(preparedForm)
 
@@ -83,7 +85,9 @@ const RegistroProfesores: React.FC<Props> = ({ navigation }) => {
     } catch (error: any) {
       console.error(error)
       Alert.alert('Error', error.message)
-    } 
+    } finally{
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -151,6 +155,7 @@ const RegistroProfesores: React.FC<Props> = ({ navigation }) => {
         />
 
         <TouchableOpacity
+          disabled={isSubmitting}
           style={styles.button}
           onPress={handleOnRegister}
         >
