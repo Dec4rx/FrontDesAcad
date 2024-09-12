@@ -4,6 +4,8 @@ import NewCourseRegistration from './modals/NewCourseRegistration';
 import React, { useCallback, useState } from 'react';
 import { useFocusEffect } from 'expo-router/build/useFocusEffect';
 import { UserData } from '@/services/interfaces/UserInterface';
+import { getInfoCourseRegistration } from '@/services/CoursesRegistration';
+import { registerCourse } from '@/services/CoursesRegistration';
 
 interface ItemProps {
     id: number,
@@ -16,6 +18,18 @@ interface ItemProps {
     requerimientos: string
 }
 
+interface courseData {
+    id: number;
+    courseName: string;
+    startDate: string;
+    endDate: string;
+    shift: string;
+    schedule: string;
+    capacity: number;
+    requirements: string;
+    enabler: boolean;
+}
+
 
 interface ModalProps {
     id: number,
@@ -23,37 +37,45 @@ interface ModalProps {
 }
 
 const CourseRegistration = (props: UserData) => {
-    
-    const cursos = [
-        {
-            id: 1,
-            nombreCurso: "Introducción a React",
-            fechaInicio: "2024-09-01",
-            fechaFin: "2024-10-01",
-            turno: "Matutino",
-            horario: "08:00 - 10:00 AM",
-            cupo: 20,
-            requerimientos: "Conocimientos básicos de JavaScript"
-        },
-        {
-            id: 2,
-            nombreCurso: "Desarrollo Avanzado con Node.js",
-            fechaInicio: "2024-10-15",
-            fechaFin: "2024-12-15",
-            turno: "Vespertino",
-            horario: "03:00 - 05:00 PM",
-            cupo: 15,
-            requerimientos: "Experiencia previa con Node.js y bases de datos"
-        },
 
-        // Más cursos pueden ser añadidos aquí
-    ];
+    const [courseData, setCourseData] = useState<courseData[]>([]);
+
+    const handleGetCourses = async () => {
+        try {
+            const courses = await getInfoCourseRegistration();
+            console.log(courses);
+            setCourseData(courses);
+        }
+        catch (error) {
+            console.error('Error reading value:', error);
+        }
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            handleGetCourses();
+        }, [])
+    );
 
     const [modalVisible, setModalVisible] = useState(false);
-
-    const handleConfirm = () => {
+    const [id, setId] = useState(0);
+    const handleOnRegister = (id: number) => {
         // Lógica para inscribir el curso
-        console.log('Curso inscrito');
+        setId(id)
+        setModalVisible(!modalVisible)
+        console.log("inscribiendo curso")
+    };
+
+    const handleConfirm = async () => {
+        try {
+            // Lógica para inscribir el curso
+            console.log('Inscribiendo curso:', id, props.id, false);
+            await registerCourse({ professorId: props.id, courseId: id, isFinished: false });
+            console.log('Curso inscrito');
+        }
+        catch (error) {
+            console.error('Error reading value:', error);
+        }
     };
 
     const Item: React.FC<ItemProps> = ({ id, nombreCurso, fechaInicio, fechaFin, turno, horario, cupo, requerimientos }) => (
@@ -67,7 +89,7 @@ const CourseRegistration = (props: UserData) => {
             <Text style={styles.cell}>{requerimientos}</Text>
             <View style={styles.cell}>
                 {/* <TouchableOpacity style={styles.buttonInscribir} onPress={() => ModalRegister(id, nombreCurso)}> */}
-                <TouchableOpacity style={styles.buttonInscribir} onPress={() => setModalVisible(!modalVisible)}>
+                <TouchableOpacity style={styles.buttonInscribir} onPress={() => handleOnRegister(id)}>
                     <Ionicons name='add-circle-outline' size={35} color="#2f64ba" />
                 </TouchableOpacity>
             </View>
@@ -81,6 +103,7 @@ const CourseRegistration = (props: UserData) => {
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 onConfirm={handleConfirm}
+                id={id} // Aquí se debe pasar el id del curso seleccionado
             />
 
             <View>
@@ -95,17 +118,17 @@ const CourseRegistration = (props: UserData) => {
                     <Text style={styles.headerCell}>Inscribir</Text>
                 </View>
                 <FlatList
-                    data={cursos}
+                    data={courseData}
                     renderItem={({ item }) => (
                         <Item
                             id={item.id}
-                            nombreCurso={item.nombreCurso}
-                            fechaInicio={item.fechaInicio}
-                            fechaFin={item.fechaFin}
-                            turno={item.turno}
-                            horario={item.horario}
-                            cupo={item.cupo}
-                            requerimientos={item.requerimientos}
+                            nombreCurso={item.courseName}
+                            fechaInicio={item.startDate}
+                            fechaFin={item.endDate}
+                            turno={item.shift}
+                            horario={item.schedule}
+                            cupo={item.capacity}
+                            requerimientos={item.requirements}
                         />
                     )}
                     keyExtractor={(item) => item.id.toString()}

@@ -42,9 +42,9 @@ const Professor = () => {
 
   useFocusEffect(
     useCallback(() => {
-        getUserData(); // Esta función se ejecutaría cuando la pantalla esté enfocada
+      getUserData(); // Esta función se ejecutaría cuando la pantalla esté enfocada
     }, [])
-);
+  );
 
   const handleStatus = () => {
     console.log('Status changed');
@@ -109,7 +109,7 @@ const Professor = () => {
       <View style={styles.contentContainer}>
         {selectedOption === 'currentCourses' && <CurrentCourses />}
         {selectedOption === 'courseRegistration' && <CourseRegistration {...userData} />}
-        {selectedOption === 'completedCourses' && <CompletedCourses />}
+        {selectedOption === 'completedCourses' && <CompletedCourses{...userData} />}
       </View>
     </SafeAreaView>
   )
@@ -167,6 +167,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: 1,
     width: '100%', // Ensure the content container takes up the full width
     backgroundColor: '#fff', // Ensure the background is white

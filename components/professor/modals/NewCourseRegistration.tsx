@@ -6,10 +6,11 @@ interface NewCourseRegistration {
     modalVisible: boolean;
     onConfirm: () => void;
     setModalVisible: (visible: boolean) => void;
+    id: number;
 }
 
 
-const NewCourseRegistration: React.FC<NewCourseRegistration> = ({ modalVisible, setModalVisible, onConfirm }) => {
+const NewCourseRegistration: React.FC<NewCourseRegistration> = ({ modalVisible, setModalVisible, onConfirm, id }) => {
     return (
         <Modal
             animationType="fade"

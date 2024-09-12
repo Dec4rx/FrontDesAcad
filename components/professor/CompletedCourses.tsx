@@ -1,7 +1,22 @@
 import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { getCompletedCourses } from '@/services/CompletedCourses';
 
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import { UserData } from '@/services/interfaces/UserInterface';
+import { useFocusEffect } from 'expo-router';
+
+interface courseData {
+    id: number;
+    courseName: string;
+    startDate: string;
+    endDate: string;
+    shift: string;
+    schedule: string;
+    capacity: number;
+    requirements: string;
+    enabler: boolean;
+}
 
 interface ItemProps {
     nombreCurso: string;
@@ -12,33 +27,32 @@ interface ItemProps {
     requerimientos: string;
 }
 
-const CompletedCourses = () => {
-    const cursos = [
-        {
-            id: 1,
-            nombreCurso: "Introducción a React",
-            fechaInicio: "2024-09-01",
-            fechaFin: "2024-10-01",
-            turno: "Matutino",
-            horario: "08:00 - 10:00 AM",
-            requerimientos: "Conocimientos básicos de JavaScript"
-        },
-        {
-            id: 2,
-            nombreCurso: "Desarrollo Avanzado con Node.js",
-            fechaInicio: "2024-10-15",
-            fechaFin: "2024-12-15",
-            turno: "Vespertino",
-            horario: "03:00 - 05:00 PM",
-            requerimientos: "Experiencia previa con Node.js y bases de datos"
-        },
+const CompletedCourses = (props: UserData) => {
 
-        // Más cursos pueden ser añadidos aquí
-    ];
     const handleDownloadCertificate = () => {
         // Lógica para inscribir el curso
         console.log('Curso inscrito');
-      };
+    };
+
+    const [cursos, setCourseData] = useState<courseData[]>([]);
+    const handleGetCourses = async () => {
+        try {
+            console.log(props.id);
+            const courses = await getCompletedCourses(props.id);
+            console.log(courses);
+            setCourseData(courses);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            handleGetCourses();
+        }, [])
+    );
+
+    
 
     const Item: React.FC<ItemProps> = ({ nombreCurso, fechaInicio, fechaFin, turno, horario, requerimientos }) => (
         <View style={styles.row}>
@@ -72,12 +86,12 @@ const CompletedCourses = () => {
                     data={cursos}
                     renderItem={({ item }) => (
                         <Item
-                            nombreCurso={item.nombreCurso}
-                            fechaInicio={item.fechaInicio}
-                            fechaFin={item.fechaFin}
-                            turno={item.turno}
-                            horario={item.horario}
-                            requerimientos={item.requerimientos}
+                            nombreCurso={item.courseName}
+                            fechaInicio={item.startDate}
+                            fechaFin={item.endDate}
+                            turno={item.shift}
+                            horario={item.schedule}
+                            requerimientos={item.requirements}
                         />
                     )}
                     keyExtractor={(item) => item.id.toString()}
