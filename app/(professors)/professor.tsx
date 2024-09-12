@@ -39,7 +39,7 @@ const Professor = () => {
     }
   };
 
-
+  
   useFocusEffect(
     useCallback(() => {
       getUserData(); // Esta función se ejecutaría cuando la pantalla esté enfocada
@@ -69,7 +69,7 @@ const Professor = () => {
       <Text style={styles.welcomeText}>
         Bienvenido Profesor
         <Text style={{ color: '#8B0000' }}>
-          {` ${professorInfo.name} ${professorInfo.lastName} ${professorInfo.lastName2}`}
+          {` ${userData.name} ${userData.middleName} ${userData.lastName}`}
         </Text>
       </Text>
       <Text style={styles.departmentText}>
@@ -107,7 +107,7 @@ const Professor = () => {
       </View>
 
       <View style={styles.contentContainer}>
-        {selectedOption === 'currentCourses' && <CurrentCourses />}
+        {selectedOption === 'currentCourses' && <CurrentCourses {...userData} />}
         {selectedOption === 'courseRegistration' && <CourseRegistration {...userData} />}
         {selectedOption === 'completedCourses' && <CompletedCourses{...userData} />}
       </View>

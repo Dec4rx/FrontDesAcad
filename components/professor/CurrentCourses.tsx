@@ -1,54 +1,73 @@
 import { View, Text, ScrollView, FlatList, StyleSheet } from 'react-native';
+import { useState, useEffect } from 'react';
+import { UserData } from '@/services/interfaces/UserInterface';
 
 import React from 'react';
 
 interface ItemProps {
-    nombreCurso: string,
-    fechaInicio: string,
-    fechaFin: string,
-    turno: string,
-    horario: string,
-    cupo: number,
-    requerimientos: string
+    id: number,
+    courseName: string,
+    startDate: string,
+    endDate: string,
+    shift: string,
+    schedule: string,
+    capacity: number,
+    requirements: string
 }
 
-const CurrentCourses = () => {
-    const cursos = [
-        {
-            id: 1,
-            nombreCurso: "Introducción a React",
-            fechaInicio: "2024-09-01",
-            fechaFin: "2024-10-01",
-            turno: "Matutino",
-            horario: "08:00 - 10:00 AM",
-            cupo: 20,
-            requerimientos: "Conocimientos básicos de JavaScript"
-        },
-        {
-            id: 2,
-            nombreCurso: "Desarrollo Avanzado con Node.js",
-            fechaInicio: "2024-10-15",
-            fechaFin: "2024-12-15",
-            turno: "Vespertino",
-            horario: "03:00 - 05:00 PM",
-            cupo: 15,
-            requerimientos: "Experiencia previa con Node.js y bases de datos"
-        },
-        
-        // Más cursos pueden ser añadidos aquí
-    ];
+const CurrentCourses = (props: UserData) => {
+    const [cursos, setCursos] = useState<ItemProps[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const Item: React.FC<ItemProps> = ({ nombreCurso, fechaInicio, fechaFin, turno, horario, cupo, requerimientos }) => (
+    const professorId = props.id;
+    
+
+
+    useEffect(() => {
+        // Función para obtener los cursos desde el backend usando fetch
+        const fetchCourses = async () => {
+            try {
+                const response = await fetch(`http://localhost:4000/professor-course/${professorId}`);
+                
+                if (!response.ok) {
+                    throw new Error("Error en la respuesta del servidor");
+                }
+                const data = await response.json();
+                console.log(data)
+                setCursos(data); // Actualiza el estado con los cursos obtenidos
+                setLoading(false); // Cambia el estado de loading
+            } catch (error) {
+                console.error("Error fetching courses:", error);
+                setLoading(false); // Asegura que el estado de loading cambie incluso en caso de error
+            }
+        };
+    
+        // Llamamos a la función fetchCourses
+        fetchCourses();
+    }, [professorId]); // Se ejecuta cuando el professorId cambia
+    
+
+    
+
+    const Item: React.FC<ItemProps> = ({ courseName, startDate, endDate, shift, schedule, capacity, requirements }) => (
         <View style={styles.row}>
-            <Text style={styles.cell}>{nombreCurso}</Text>
-            <Text style={styles.cell}>{fechaInicio}</Text>
-            <Text style={styles.cell}>{fechaFin}</Text>
-            <Text style={styles.cell}>{turno}</Text>
-            <Text style={styles.cell}>{horario}</Text>
-            <Text style={styles.cell}>{cupo}</Text>
-            <Text style={styles.cell}>{requerimientos}</Text>
+            <Text style={styles.cell}>{courseName}</Text>
+            <Text style={styles.cell}>{startDate}</Text>
+            <Text style={styles.cell}>{endDate}</Text>
+            <Text style={styles.cell}>{shift}</Text>
+            <Text style={styles.cell}>{schedule}</Text>
+            <Text style={styles.cell}>{capacity}</Text>
+            <Text style={styles.cell}>{requirements}</Text>
         </View>
     );
+
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <Text>Cargando cursos...</Text>
+            </View>
+        );
+    }
 
     return (
         <ScrollView horizontal style={styles.container}>
@@ -66,13 +85,14 @@ const CurrentCourses = () => {
                     data={cursos}
                     renderItem={({ item }) => (
                         <Item
-                            nombreCurso={item.nombreCurso}
-                            fechaInicio={item.fechaInicio}
-                            fechaFin={item.fechaFin}
-                            turno={item.turno}
-                            horario={item.horario}
-                            cupo={item.cupo}
-                            requerimientos={item.requerimientos}
+                        id={item.id}
+                        courseName={item.courseName}
+                        startDate={item.startDate}
+                        endDate={item.endDate}
+                        shift={item.shift}
+                        schedule={item.schedule}
+                        capacity={item.capacity}
+                        requirements={item.requirements}
                         />
                     )}
                     keyExtractor={(item) => item.id.toString()}
@@ -109,6 +129,11 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
         textAlign: 'center',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 
