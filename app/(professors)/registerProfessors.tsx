@@ -8,31 +8,83 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   Platform,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
+import { sing_up } from '@/services/authServices';
+import { Sing_up } from '@/services/interfaces/AuthInterfaces';
 
 type Props = {
   navigation: NativeStackNavigationProp<any, any>;
 };
 
-interface primerApellido{
-
-}
+// interface FormValues {
+//   name: string;
+//   middleName: string;
+//   lastName: string;
+//   email: string;
+//   password: string;
+//   gender: string;
+//   rfc: string;
+//   curp: string;
+// }
 
 const RegistroProfesores: React.FC<Props> = ({ navigation }) => {
-  const [primerApellido, setPrimerApellido] = useState<string>('');
-  const [segundoApellido, setSegundoApellido] = useState<string>('');
-  const [nombres, setNombres] = useState<string>('');
-  const [genero, setGenero] = useState<string>('');
-  const [rfc, setRfc] = useState<string>('');
-  const [curp, setCurp] = useState<string>('');
+
+  const [gender, setGender] = useState<string>('');
+  const [form, setForm] = useState<Sing_up>({
+    lastName: '',
+    middleName: '',
+    name: '',
+    email: '',
+    password: '',
+    gender: '',
+    rfc: '',
+    curp: '',
+    status: 'Pendiente'
+  });
+
+  // Función para convertir los valores a mayúsculas
+  const prepareFormForSubmission = () => {
+    return {
+      ...form,
+      rfc: form.rfc.toUpperCase(),
+      curp: form.curp.toUpperCase(),
+      gender: gender
+    };
+  };
 
   const handleUpperCaseInput = (text: string, setter: React.Dispatch<React.SetStateAction<string>>) => {
     setter(text.replace(/[^a-zA-Z0-9]/g, '').toUpperCase());
   };
+
+  const handleOnRegister = async () => {
+    if (!form.email || !form.password || !form.lastName || !form.middleName || !form.name || !form.gender || !form.rfc || !form.curp) {
+      Alert.alert('Error', 'Please fill all fields')
+    } else if (form.password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters')
+    }
+
+     // Antes de enviar, convertimos RFC y CURP a mayúsculas
+     const preparedForm = prepareFormForSubmission();
+
+    try {
+      console.log(preparedForm)
+      const singUp = await sing_up(preparedForm)
+
+      //Save the data (id, fullName, email)
+      await AsyncStorage.setItem('userData', JSON.stringify(singUp));
+      console.log('Registradooooooooooooooooo');
+      router.replace('/professor')
+    } catch (error: any) {
+      console.error(error)
+      Alert.alert('Error', error.message)
+    } 
+  }
 
   return (
     <KeyboardAvoidingView
@@ -44,27 +96,27 @@ const RegistroProfesores: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.title}>Registro</Text>
         <TextInput
           placeholder="Primer Apellido"
-          value={primerApellido}
-          onChangeText={setPrimerApellido}
+          value={form.middleName}
+          onChangeText={(text) => setForm({ ...form, middleName: text })}
           style={styles.input}
         />
         <TextInput
           placeholder="Segundo Apellido"
-          value={segundoApellido}
-          onChangeText={setSegundoApellido}
+          value={form.lastName}
+          onChangeText={(text) => setForm({ ...form, lastName: text })}
           style={styles.input}
         />
         <TextInput
           placeholder="Nombre(s)"
-          value={nombres}
-          onChangeText={setNombres}
+          value={form.name}
+          onChangeText={(text) => setForm({ ...form, name: text })}
           style={styles.input}
         />
         <Text style={styles.label}>Género</Text>
         <Picker
-          selectedValue={genero}
+          selectedValue={gender}
           style={styles.picker}
-          onValueChange={(itemValue) => setGenero(itemValue)}
+          onValueChange={(itemValue) => setGender(itemValue)}
         >
           <Picker.Item label="Femenino" value="femenino" />
           <Picker.Item label="Masculino" value="masculino" />
@@ -72,24 +124,35 @@ const RegistroProfesores: React.FC<Props> = ({ navigation }) => {
         </Picker>
         <TextInput
           placeholder="RFC"
-          value={rfc}
-          onChangeText={(text) => handleUpperCaseInput(text, setRfc)}
+          value={form.rfc}
+          onChangeText={(itemValue) => setForm({ ...form, rfc: itemValue })}
           style={styles.input}
         />
         <TextInput
           placeholder="CURP"
-          value={curp}
-          onChangeText={(text) => handleUpperCaseInput(text, setCurp)}
+          value={form.curp}
+          onChangeText={(itemValue) => setForm({ ...form, curp: itemValue })}
           style={styles.input}
         />
+
+        <TextInput
+          placeholder="Email"
+          value={form.email}
+          onChangeText={(text) => setForm({ ...form, email: text })}
+          style={styles.input}
+        />
+
+        <TextInput
+          placeholder="Password"
+          value={form.password}
+          onChangeText={(text) => setForm({ ...form, password: text })}
+          style={styles.input}
+          secureTextEntry={true}
+        />
+
         <TouchableOpacity
           style={styles.button}
-          onPress={async () => {
-            console.log('Registrado');
-
-
-            router.replace('/loginProfessors');
-          }}
+          onPress={handleOnRegister}
         >
           <Text style={styles.buttonText}>Registrar</Text>
         </TouchableOpacity>
@@ -160,4 +223,6 @@ const styles = StyleSheet.create({
 
 
 export default RegistroProfesores;
+
+
 

@@ -14,6 +14,7 @@ const Professor = () => {
     department: 'IDK'
   }
 
+
   const handleStatus = () => {
     console.log('Status changed');
   }
