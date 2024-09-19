@@ -64,7 +64,8 @@ const Professor = () => {
 
       <SetStatus modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        onConfirm={handleStatus} />
+        onConfirm={handleStatus} 
+        professorId={userData.id}/>
 
       <Text style={styles.welcomeText}>
         Bienvenido Profesor

@@ -1,17 +1,48 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
+import { BASE_URL } from '@/constants/Services';
 
-interface SetStatus {
+
+interface SetStatusProps {
     modalVisible: boolean;
-    onConfirm: () => void;
+    onConfirm: (newStatus: string) => void;
     setModalVisible: (visible: boolean) => void;
+    professorId: number; // Añade el ID del profesor como prop
 }
 
-
-const SetStatus: React.FC<SetStatus> = ({ modalVisible, setModalVisible, onConfirm }) => {
+const SetStatus: React.FC<SetStatusProps> = ({ modalVisible, setModalVisible, onConfirm, professorId }) => {
     const [selectedValue, setSelectedValue] = useState('');
+
+    const updateStatus = async () => {
+        try {
+            // Aquí se hace la solicitud al backend para actualizar el status
+            const response = await fetch(`${BASE_URL}/professor/${professorId}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: selectedValue }),
+                
+            });
+            
+            if (response.ok) {
+                const updatedProfessor = await response.json();
+                onConfirm(updatedProfessor.status); // Actualiza la vista con el nuevo status
+                setModalVisible(false); // Cierra el modal
+                Alert.alert('Éxito', 'El status ha sido actualizado correctamente.');
+            } else {
+                // Manejo de errores según la respuesta del servidor
+                Alert.alert('Error', 'No se pudo actualizar el status. Inténtalo de nuevo.');
+            }
+        } catch (error) {
+            // Manejo de errores de conexión o petición
+            console.error('Error actualizando el status:', error);
+            Alert.alert('Error', 'Ocurrió un problema al conectar con el servidor.');
+        }
+    };
+
     return (
         <Modal
             animationType="fade"
@@ -19,9 +50,6 @@ const SetStatus: React.FC<SetStatus> = ({ modalVisible, setModalVisible, onConfi
             visible={modalVisible}
         >
             <View style={styles.centeredView}>
-
-
-
                 <View style={styles.modalView}>
                     <TouchableOpacity
                         style={{ alignSelf: 'flex-end' }}
@@ -33,20 +61,20 @@ const SetStatus: React.FC<SetStatus> = ({ modalVisible, setModalVisible, onConfi
                     <Picker
                         selectedValue={selectedValue}
                         style={styles.dropdown}
-                        
-                        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                        onValueChange={(itemValue) => setSelectedValue(itemValue)}
                     >
-                        <Picker.Item label="Option 1" value="option1" />
-                        <Picker.Item label="Option 2" value="option2" />
-                        <Picker.Item label="Option 3" value="option3" />
+                        <Picker.Item label="Tiempo completo 40 hrs." value="Tiempo completo 40 hrs." />
+                        <Picker.Item label="30 hrs." value="30 hrs." />
+                        <Picker.Item label="20 hrs." value="20 hrs." />
+                        <Picker.Item label="Asignatura" value="Asignatura" />
+                        <Picker.Item label="Honorarios" value="Honorarios" />
+                        <Picker.Item label="Interinato" value="Interinato" />
                     </Picker>
                     <View style={styles.buttonRow}>
                         <TouchableOpacity
                             style={[styles.button, styles.buttonRegister]}
-                            onPress={() => {
-                                onConfirm();
-                                setModalVisible(!modalVisible);
-                            }}>
+                            onPress={updateStatus} // Llama a la función para actualizar el status
+                        >
                             <Text style={styles.textStyle}>Actualizar</Text>
                         </TouchableOpacity>
 
@@ -60,10 +88,11 @@ const SetStatus: React.FC<SetStatus> = ({ modalVisible, setModalVisible, onConfi
             </View>
         </Modal>
     );
-}
+};
 
 export default SetStatus;
 
+// Estilos permanecen igual
 const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
