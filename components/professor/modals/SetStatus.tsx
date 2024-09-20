@@ -3,11 +3,13 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
 import { BASE_URL } from '@/constants/Services';
+
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Asegúrate de importar la función de fetch o axios
 // import axios from 'axios';
+
 
 interface SetStatusProps {
     modalVisible: boolean;
@@ -28,6 +30,7 @@ const SetStatus: React.FC<SetStatusProps> = ({ modalVisible, setModalVisible, on
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ status: selectedValue }),
+
             });
 
 
