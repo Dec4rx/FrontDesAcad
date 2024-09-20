@@ -22,27 +22,32 @@ export const getDiagnosis = async () => {
 
 export const registerDiagnostic = async (data: DiagnosisForm) => {
     try {
-        // const dataToSend = {
-        //     ...data, dateDiagnosis: new Date().toISOString().split('T')[0],
-        //     startDate: new Date().toISOString().split('T')[0],
-        //     endDate: new Date().toISOString().split('T')[0]
-        // };
-        const response = await fetch(`${BASE_URL}/diagnosis`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        if (response.ok) {
-            return await response.json();
-        } else {
-            console.error('Failed to register course->', await response.json());
-            throw new Error('Failed to register course');
-        }
+      const response = await fetch(`${BASE_URL}/diagnosis`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (response.ok) {
+        return await response.json();
+      } else {
+        // Captura el error de la respuesta del servidor
+        const errorData = await response.json();
+  
+        // Debug: Mostrar los errores capturados
+        console.error('Errores del servidor:', errorData);
+  
+        // Lanza los errores directamente para que puedan ser capturados en el frontend
+        throw errorData;
+      }
     } catch (error) {
-        console.error('Error during login:', error);
-        throw error;
+      // Mostrar el error completo para debugging
+      console.error('Error durante la creación del diagnóstico:', error);
+  
+      // Propaga el error para que el frontend lo maneje correctamente
+      throw error;
     }
-
-}
+  }
+  

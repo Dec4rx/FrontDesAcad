@@ -44,12 +44,12 @@ const AcademicHead = () => {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.button, selectedOption === 'diagnosisOfNeeds' && styles.buttonSelected]}
                     onPress={() => handleButtonPress('diagnosisOfNeeds')}>
-                    <Text style={styles.buttonText}>Cursos Actuales</Text>
+                    <Text style={styles.buttonText}>Diágnosticos</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={[styles.button, selectedOption === 'RegisterDiagnosis' && styles.buttonSelected]}
                     onPress={() => handleButtonPress('RegisterDiagnosis')}>
-                    <Text style={styles.buttonText}>Inscripción</Text>
+                    <Text style={styles.buttonText}>Registro de Diagnostico</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.contentContainer}>
