@@ -4,6 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
 import { BASE_URL } from '@/constants/Services';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Asegúrate de importar la función de fetch o axios
 // import axios from 'axios';
@@ -29,8 +30,20 @@ const SetStatus: React.FC<SetStatusProps> = ({ modalVisible, setModalVisible, on
                 body: JSON.stringify({ status: selectedValue }),
             });
 
+
             if (response.ok) {
                 const updatedProfessor = await response.json();
+
+                // Obtén los datos existentes del usuario
+                const existingUserData = await AsyncStorage.getItem('userData');
+                const userData = existingUserData ? JSON.parse(existingUserData) : {};
+
+                // Actualiza solo el status del usuario
+                userData.status = updatedProfessor.status;
+
+                // Guarda los datos actualizados en AsyncStorage
+                await AsyncStorage.setItem('userData', JSON.stringify(userData));
+
                 onConfirm(updatedProfessor.status); // Actualiza la vista con el nuevo status
                 setModalVisible(false); // Cierra el modal
                 Alert.alert('Éxito', 'El status ha sido actualizado correctamente.');
