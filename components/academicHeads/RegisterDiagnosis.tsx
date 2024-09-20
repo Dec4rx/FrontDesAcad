@@ -4,7 +4,9 @@ import DatePicker from 'react-datepicker'; // Importa react-datepicker
 import 'react-datepicker/dist/react-datepicker.css'; // Importa los estilos de react-datepicker
 import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
-import { DiagnosisForm } from '@/services/interfaces/AcademicHead';
+import { DiagnosisForm, DiagnosisFormString } from '@/services/interfaces/AcademicHead';
+import { registerDiagnostic } from '@/services/Diagnosis';
+// import { newDate } from 'react-datepicker/dist/date_utils';
 
 
 const AgregarDiagnostico = () => {
@@ -21,7 +23,7 @@ const AgregarDiagnostico = () => {
     objective: "",
     careersAttended: "",
     period: "",
-    status: "",
+    status: "Autorizado",
     facilitators: "",
     dateDiagnosis: new Date(),
     startDate: new Date(),
@@ -30,6 +32,13 @@ const AgregarDiagnostico = () => {
     shift: "",
   });
 
+  const [formString, setFormString] = useState<DiagnosisFormString>({
+    ...form,
+    dateDiagnosis: form.dateDiagnosis.toString(),
+    startDate: form.startDate.toString(),
+    endDate: form.endDate.toString()
+  })
+
   const handleInputChange = <K extends keyof DiagnosisForm>(prop: K, value: DiagnosisForm[K]) => {
     setForm({ ...form, [prop]: value });
   };
@@ -37,10 +46,15 @@ const AgregarDiagnostico = () => {
   const handleSaveDiagnosis = async () => {
     // Lógica para guardar los datos del diagnóstico
     try {
+      // setFormString({
+
+      // });
       console.log(form);
+      console.log("formString", formString);
       setIsLoading(true);
-      const diagnosis = await saveDiagnosis(form);
+      const diagnosis = await registerDiagnostic(form);
       console.log(diagnosis);
+
       console.log('Diagnóstico guardado exitosamente');
       router.navigate('/academicHead');
     } catch (error) {
@@ -52,13 +66,13 @@ const AgregarDiagnostico = () => {
 
   // Determina los límites de las fechas basados en el periodo seleccionado
   const getDateLimits = (periodo: string) => {
-    if (periodo === 'E-J') {
+    if (periodo === 'Enero-Junio') {
       // Permitir fechas entre el 18 de junio y el 16 de agosto
       return {
         minDate: new Date(new Date().getFullYear(), 5, 18), // 18 de junio
         maxDate: new Date(new Date().getFullYear(), 7, 16) // 16 de agosto
       };
-    } else if (periodo === 'A-D') {
+    } else if (periodo === 'Agosto-Diciembre') {
       // Permitir fechas entre el 10 de diciembre y el 10 de enero del siguiente año
       return {
         minDate: new Date(new Date().getFullYear(), 11, 10), // 10 de diciembre
@@ -120,6 +134,14 @@ const AgregarDiagnostico = () => {
         style={styles.input}
       />
 
+      <Text style={styles.label}>Titular de la Subdireción:</Text>
+      <TextInput
+        placeholder="Titular de la Subdireción"
+        value={form.titleSubdirectorate}
+        onChangeText={text => handleInputChange('titleSubdirectorate', text)}
+        style={styles.input}
+      />
+
       <Text style={styles.label}>Asignaturas Requeridas:</Text>
       <TextInput
         placeholder="Asignaturas Requeridas"
@@ -151,6 +173,7 @@ const AgregarDiagnostico = () => {
         style={styles.picker}
         onValueChange={(itemValue) => handleInputChange('typeSubject', itemValue)}
       >
+        <Picker.Item label="Seleccione el Tipo" value="" />
         <Picker.Item label="Carrera Genérica" value="generico" />
         <Picker.Item label="Módulo de Especialidad" value="especialidad" />
       </Picker>
@@ -186,8 +209,8 @@ const AgregarDiagnostico = () => {
         onValueChange={(itemValue) => handleInputChange('period', itemValue)}
       >
         <Picker.Item label="Selecciona un periodo" value="" />
-        <Picker.Item label="Enero - Junio" value="E-J" />
-        <Picker.Item label="Agosto - Diciembre" value="A-D" />
+        <Picker.Item label="Enero - Junio" value="Enero-Junio" />
+        <Picker.Item label="Agosto - Diciembre" value="Agosto-Diciembre" />
       </Picker>
 
       <Text style={styles.label}>Fecha inicio del Curso:</Text>
@@ -220,8 +243,9 @@ const AgregarDiagnostico = () => {
         style={styles.picker}
         onValueChange={(itemValue) => handleInputChange('shift', itemValue)}
       >
-        <Picker.Item label="Matutino" value="M" />
-        <Picker.Item label="Vespertino" value="V" />
+        <Picker.Item label="Selecciona un turno" value="" />
+        <Picker.Item label="Matutino" value="Matutino" />
+        <Picker.Item label="Vespertino" value="Vespertino" />
       </Picker>
 
       <Text style={styles.label}>Facilitadores Propuestos:</Text>
@@ -270,7 +294,7 @@ const styles = StyleSheet.create({
 });
 
 export default AgregarDiagnostico;
-function saveDiagnosis(form: DiagnosisForm) {
-  throw new Error('Function not implemented.');
-}
+
+
+
 

@@ -1,5 +1,5 @@
 import { BASE_URL } from "@/constants/Services";
-import { DiagnosisForm } from "./interfaces/AcademicHead";
+import { DiagnosisForm, DiagnosisFormString } from "./interfaces/AcademicHead";
 
 export const getDiagnosis = async () => {
     try {
@@ -20,8 +20,13 @@ export const getDiagnosis = async () => {
     }
 };
 
-export const registerCourse = async (data: DiagnosisForm) => {
+export const registerDiagnostic = async (data: DiagnosisForm) => {
     try {
+        // const dataToSend = {
+        //     ...data, dateDiagnosis: new Date().toISOString().split('T')[0],
+        //     startDate: new Date().toISOString().split('T')[0],
+        //     endDate: new Date().toISOString().split('T')[0]
+        // };
         const response = await fetch(`${BASE_URL}/diagnosis`, {
             method: 'POST',
             headers: {
