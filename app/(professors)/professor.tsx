@@ -16,14 +16,7 @@ const Professor = () => {
     lastName2: 'Rodriguez',
     department: 'IDK'
   }
-  const [userData, setUserData] = useState<UserData>({
-    id: 0,
-    lastName: '',
-    middleName: '',
-    name: '',
-    gender: '',
-    status: ''
-  });
+  const [userData, setUserData] = useState<UserData>();
 
   const getUserData = async () => {
     try {
@@ -39,7 +32,7 @@ const Professor = () => {
     }
   };
 
-  
+
   useFocusEffect(
     useCallback(() => {
       getUserData(); // Esta función se ejecutaría cuando la pantalla esté enfocada
@@ -64,12 +57,13 @@ const Professor = () => {
 
       <SetStatus modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        onConfirm={handleStatus} />
+        onConfirm={handleStatus}
+        professorId={userData?.id || 0} />
 
       <Text style={styles.welcomeText}>
         Bienvenido Profesor
         <Text style={{ color: '#8B0000' }}>
-          {` ${userData.name} ${userData.middleName} ${userData.lastName}`}
+          {` ${userData?.name || ''} ${userData?.middleName || ''} ${userData?.lastName || ''}`}
         </Text>
       </Text>
       <Text style={styles.departmentText}>
@@ -82,7 +76,7 @@ const Professor = () => {
       <Text style={styles.departmentText}>
         Estatus:
         <Text style={{ color: '#8B0000' }}>
-          {` Tiempo completo 40hrs `}
+          {` ${userData?.status || ''} `}
           <TouchableOpacity style={styles.gearButton} onPress={() => setModalVisible(!modalVisible)}>
             <FontAwesome6 name='gear' size={20} color={"#1B396A"} />
           </TouchableOpacity>
@@ -107,9 +101,9 @@ const Professor = () => {
       </View>
 
       <View style={styles.contentContainer}>
-        {selectedOption === 'currentCourses' && <CurrentCourses {...userData} />}
-        {selectedOption === 'courseRegistration' && <CourseRegistration {...userData} />}
-        {selectedOption === 'completedCourses' && <CompletedCourses{...userData} />}
+        {selectedOption === 'currentCourses' && userData && <CurrentCourses {...userData} />}
+        {selectedOption === 'courseRegistration' && userData && <CourseRegistration {...userData} />}
+        {selectedOption === 'completedCourses' && userData && <CompletedCourses{...userData} />}
       </View>
     </SafeAreaView>
   )
