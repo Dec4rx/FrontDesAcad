@@ -23,13 +23,15 @@ const AgregarDiagnostico = () => {
     objective: '',
     careersAttended: '',
     period: '',
-    status: 'Autorizado',
+    status: '',
     facilitators: '',
     dateDiagnosis: new Date(),
     startDate: new Date(),
     endDate: new Date(),
     numberProfessors: 0,
     shift: '',
+    is_authorized_by_first: false,
+    is_authorized_by_second: false
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -107,7 +109,7 @@ const AgregarDiagnostico = () => {
       />
       {errors.departament && <Text style={styles.errorText}>{errors.departament}</Text>}
 
-      <Text style={styles.label}>Fecha del Diagnóstico:</Text>
+      <Text style={styles.label}>Fecha de realización del Diagnóstico:</Text>
       <DatePicker
         selected={form.dateDiagnosis}
         onChange={(date: Date | null) => {
@@ -118,7 +120,7 @@ const AgregarDiagnostico = () => {
       />
       {errors.dateDiagnosis && <Text style={styles.errorText}>{errors.dateDiagnosis}</Text>}
 
-      <Text style={styles.label}>Titular del Departamento:</Text>
+      <Text style={styles.label}>Titular del Departamento Académico:</Text>
       <TextInput
         placeholder="Titular del Departamento"
         value={form.headDepartment}
@@ -127,7 +129,7 @@ const AgregarDiagnostico = () => {
       />
       {errors.headDepartment && <Text style={styles.errorText}>{errors.headDepartment}</Text>}
 
-      <Text style={styles.label}>Presidente de Academia:</Text>
+      <Text style={styles.label}>Presidente(a) de Academia:</Text>
       <TextInput
         placeholder="Presidente de Academia"
         value={form.presidentAcademy}
@@ -136,7 +138,7 @@ const AgregarDiagnostico = () => {
       />
       {errors.presidentAcademy && <Text style={styles.errorText}>{errors.presidentAcademy}</Text>}
 
-      <Text style={styles.label}>Titular de la Subdireción:</Text>
+      <Text style={styles.label}>Titular de la Subdireción Académica:</Text>
       <TextInput
         placeholder="Titular de la Subdireción"
         value={form.titleSubdirectorate}
@@ -145,7 +147,7 @@ const AgregarDiagnostico = () => {
       />
       {errors.titleSubdirectorate && <Text style={styles.errorText}>{errors.titleSubdirectorate}</Text>}
 
-      <Text style={styles.label}>Asignaturas Requeridas:</Text>
+      <Text style={styles.label}>Asignaturas en la que se requiere formación o actualización:</Text>
       <TextInput
         placeholder="Asignaturas Requeridas"
         value={form.requiredSubjects}
@@ -154,7 +156,7 @@ const AgregarDiagnostico = () => {
       />
       {errors.requiredSubjects && <Text style={styles.errorText}>{errors.requiredSubjects}</Text>}
 
-      <Text style={styles.label}>Contenidos Temáticos:</Text>
+      <Text style={styles.label}>Contenidos Temáticos en que se requiere la formación y actualización:</Text>
       <TextInput
         placeholder="Contenidos Temáticos"
         value={form.thematicContents}
@@ -163,7 +165,7 @@ const AgregarDiagnostico = () => {
       />
       {errors.thematicContents && <Text style={styles.errorText}>{errors.thematicContents}</Text>}
 
-      <Text style={styles.label}>Número de Docentes:</Text>
+      <Text style={styles.label}>Número de Docentes que la requieren:</Text>
       <TextInput
         placeholder="Número de Docentes"
         keyboardType="numeric"
@@ -173,19 +175,19 @@ const AgregarDiagnostico = () => {
       />
       {errors.numberProfessors && <Text style={styles.errorText}>{errors.numberProfessors}</Text>}
 
-      <Text style={styles.label}>Tipo de Asignatura:</Text>
+      <Text style={styles.label}>Tipo de Asignatura (Genérica o Especialidad):</Text>
       <Picker
         selectedValue={form.typeSubject}
         style={[styles.picker, errors.typeSubject ? styles.inputError : null]}
         onValueChange={(itemValue) => handleInputChange('typeSubject', itemValue)}
       >
         <Picker.Item label="Seleccione el Tipo" value="" />
-        <Picker.Item label="Carrera Genérica" value="generico" />
-        <Picker.Item label="Módulo de Especialidad" value="especialidad" />
+        <Picker.Item label="Carrera Genérica" value="Genérico" />
+        <Picker.Item label="Módulo de Especialidad" value="Especialidad" />
       </Picker>
       {errors.typeSubject && <Text style={styles.errorText}>{errors.typeSubject}</Text>}
 
-      <Text style={styles.label}>Tipo de Actividad o Evento:</Text>
+      <Text style={styles.label}>Tipo de Actividad o Evento (Cursos, Talleres, Conferencias, etc...):</Text>
       <TextInput
         placeholder="Actividad o Evento"
         value={form.activityEvent}
@@ -203,7 +205,7 @@ const AgregarDiagnostico = () => {
       />
       {errors.objective && <Text style={styles.errorText}>{errors.objective}</Text>}
 
-      <Text style={styles.label}>Carreras Atendidas:</Text>
+      <Text style={styles.label}>Carrera(s) Atendidas:</Text>
       <TextInput
         placeholder="Carreras Atendidas"
         value={form.careersAttended}
@@ -212,7 +214,7 @@ const AgregarDiagnostico = () => {
       />
       {errors.careersAttended && <Text style={styles.errorText}>{errors.careersAttended}</Text>}
 
-      <Text style={styles.label}>Periodo:</Text>
+      <Text style={styles.label}>Periodo en el que se requiere la formación o actualización:</Text>
       <Picker
         selectedValue={form.period}
         style={[styles.picker, errors.period ? styles.inputError : null]}
@@ -262,7 +264,7 @@ const AgregarDiagnostico = () => {
       </Picker>
       {errors.shift && <Text style={styles.errorText}>{errors.shift}</Text>}
 
-      <Text style={styles.label}>Facilitadores Propuestos:</Text>
+      <Text style={styles.label}>Facilitadores(as) Propuestos(as) (Nombre y datos para su localización):</Text>
       <TextInput
         placeholder="Facilitadores Propuestos"
         value={form.facilitators}

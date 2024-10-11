@@ -5,6 +5,7 @@ import DiagnosisOfNeedsDetails from './modals/DiagnosisOfNeedsDetails';
 import { Diagnosis } from '@/services/interfaces/AcademicHead';
 import { useFocusEffect } from 'expo-router';
 import { getDiagnosis } from '@/services/Diagnosis';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
@@ -30,6 +31,19 @@ const DiagnosisOfNeeds = () => {
         }, [])
     );
 
+    const getStatusStyle = (status: string) => {
+        switch (status) {
+            case 'Rechazado':
+                return { backgroundColor: '#ffcccb', color: '#d8000c' }; // rojo
+            case 'Parcialmente Autorizado':
+                return { backgroundColor: '#ffeb3b', color: '#cddc39' }; // amarillo
+            case 'Totalmente Autorizado':
+                return { backgroundColor: '#c8e6c9', color: '#388e3c' }; // verde
+            default:
+                return { backgroundColor: '#fff', color: '#000' }; // blanco por defecto
+        }
+    };
+
 
     const handleSelectCourse = (id: number) => {
 
@@ -48,15 +62,18 @@ const DiagnosisOfNeeds = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
 
-    const Item: React.FC<Diagnosis> = ({ id, departament, dateDiagnosis, requiredSubjects, numberProfessors, typeSubject, shift, status }) => (
+    const Item: React.FC<Diagnosis> = ({ id, departament, dateDiagnosis, requiredSubjects, numberProfessors, typeSubject, feedback, status }) => {
+        const isEditable = status !== 'Totalmente Autorizado' && status !== 'Parcialmente Autorizado';
+        const statusStyle = getStatusStyle(status);
+        return(
         <View style={styles.row}>
             <Text style={styles.cell}>{departament}</Text>
             <Text style={styles.cell}>{dateDiagnosis}</Text>
             <Text style={styles.cell}>{requiredSubjects}</Text>
             <Text style={styles.cell}>{typeSubject}</Text>
             <Text style={styles.cell}>{numberProfessors}</Text>
-            <Text style={styles.cell}>{shift}</Text>
-            <Text style={styles.cell}>{status}</Text>
+            <Text style={styles.cell}>{feedback}</Text>
+            <Text style={[styles.cell, statusStyle]}>{status}</Text>
             <View style={styles.cell}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity style={styles.centeredView} onPress={() => handleSelectCourse(id)}>
@@ -64,8 +81,17 @@ const DiagnosisOfNeeds = () => {
                     </TouchableOpacity>
                 </View>
             </View>
+            <View style={styles.cell}>
+                <TouchableOpacity 
+                    style={[styles.buttonGenerateRegistrationForm, { opacity: isEditable ? 1 : 0.5 }]} 
+                    onPress={isEditable ? () => console.log("Editar", id) : undefined}
+                    disabled={!isEditable}>
+                    <Ionicons name="create-outline" size={35} color={isEditable ? "#2f64ba" : "#ccc"} />
+                </TouchableOpacity>
+            </View>
         </View>
     );
+};
 
     if (isLoading) {
         return (
@@ -90,12 +116,13 @@ const DiagnosisOfNeeds = () => {
                 <View style={styles.rowHeader}>
                     <Text style={styles.headerCell}>Departamento Académico</Text>
                     <Text style={styles.headerCell}>Fecha del Diagnóstico</Text>
-                    <Text style={styles.headerCell}>Asignaturas Requeridas</Text>
-                    <Text style={styles.headerCell}>Tipo de Asignatura</Text>
+                    <Text style={styles.headerCell}>Asignaturas Requeridas en la que se requiere formación o actualización</Text>
+                    <Text style={styles.headerCell}>Tipo de Asignatura (Génerica o Especialidad)</Text>
                     <Text style={styles.headerCell}>Número de Docente que la Requieren</Text>
-                    <Text style={styles.headerCell}>Turno</Text>
+                    <Text style={styles.headerCell}>Feedback</Text>
                     <Text style={styles.headerCell}>Estado</Text>
                     <Text style={styles.headerCell}>Detalles</Text>
+                    <Text style={styles.headerCell}>Editar</Text>
                 </View>
 
                 <FlatList
@@ -119,6 +146,7 @@ const DiagnosisOfNeeds = () => {
                             startDate={item.startDate} //CHECK THIS
                             endDate={item.endDate}
                             shift={item.shift}
+                            feedback={item.feedback}
                             status={item.status}
                             facilitators={item.facilitators}
                         />
@@ -171,6 +199,24 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         textAlign: "center",
         borderRadius: 10,
+    },
+
+    buttonGenerateRegistrationForm: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10,
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: "#2f64ba",
+        backgroundColor: "white", // Fondo blanco para estado habilitado
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     }
 });
 

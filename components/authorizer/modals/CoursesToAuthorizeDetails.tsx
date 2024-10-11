@@ -1,13 +1,14 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
+import { Diagnosis } from '@/services/interfaces/AcademicHead';
 
 
 
 interface CoursesToAuthorizeDetails {
     modalVisible: boolean;
     setModalVisible: (visible: boolean) => void;
-    courseData: FormCourseState
+    diagnosisData: Diagnosis;
 }
 
 interface FormCourseState {
@@ -30,7 +31,7 @@ interface FormCourseState {
     facilitadores: string;
 }
 
-const CoursesToAuthorizeDetails: React.FC<CoursesToAuthorizeDetails> = ({ modalVisible, setModalVisible, courseData }) => {
+const CoursesToAuthorizeDetails: React.FC<CoursesToAuthorizeDetails> = ({ modalVisible, setModalVisible,  diagnosisData }) => {
 
     const [modalVisibleAuthUnauth, setModalVisibleAuthUnauth] = useState(false);
 
@@ -42,6 +43,15 @@ const CoursesToAuthorizeDetails: React.FC<CoursesToAuthorizeDetails> = ({ modalV
         >
             <View style={styles.centeredView}>
 
+            <ScrollView
+                    horizontal={true}
+                    contentContainerStyle={{ width: '100%' }}
+                >
+                    <ScrollView
+                        
+                        contentContainerStyle={styles.scrollViewContent}
+                    >
+
                 <View style={styles.modalView}>
                     <TouchableOpacity
                         style={{ alignSelf: 'flex-end' }}
@@ -51,70 +61,80 @@ const CoursesToAuthorizeDetails: React.FC<CoursesToAuthorizeDetails> = ({ modalV
 
                     <View style={styles.textRow}>
                         <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0}]}>Departamento Academico: </Text>
-                        <Text style={styles.modalText}>{courseData.departamentoAcademico}</Text>
+                        <Text style={styles.modalText}>{diagnosisData.departament}</Text>
                     </View>
                     <View style={styles.textRow}>
                         <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha del Diagnóstico: </Text>
-                        <Text style={styles.modalText}>{courseData.fechaDiagnostico}</Text>
+                        <Text style={styles.modalText}>{diagnosisData.dateDiagnosis}</Text>
                     </View>
                     <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular del Departamento: </Text>
-                        <Text style={styles.modalText}>{courseData.titularDepartamento}</Text>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular del Departamento Académico: </Text>
+                        <Text style={styles.modalText}>{diagnosisData.headDepartment}</Text>
                     </View>
                     <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Presidente de Academia: </Text>
-                        <Text style={styles.modalText}>{courseData.presidenteAcademia}</Text>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Presidente(a) de Academia: </Text>
+                        <Text style={styles.modalText}>{diagnosisData.presidentAcademy}</Text>
                     </View>
                     <View style={styles.textRow}>
                         <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular de la Subdirección Académica: </Text>
-                        <Text style={styles.modalText}>{courseData.titularSubdireccion}</Text>
+                        <Text style={styles.modalText}>{diagnosisData.titleSubdirectorate}</Text>
                     </View>
                     <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Asignaturas Requeridas: </Text>
-                        <Text style={styles.modalText}>{courseData.asignaturasRequeridas}</Text>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Asignaturas en las que se requiere formación o actualización: </Text>
+                        <Text style={styles.modalText}>{diagnosisData.requiredSubjects}</Text>
                     </View>
                     <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Contenidos Temáticos: </Text>
-                        <Text style={styles.modalText}>{courseData.contenidosTematicos}</Text>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Contenidos Temáticos en que se requiere la formación o actualización: </Text>
+                        <Text style={styles.modalText}>{diagnosisData.thematicContents}</Text>
                     </View>
                     <View style={styles.textRow}>
                         <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Número de Docente que la Requieren: </Text>
-                        <Text style={styles.modalText}>{courseData.numeroDocentes}</Text>
+                        <Text style={styles.modalText}>{diagnosisData.numberProfessors}</Text>
                     </View>
                     <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Tipo de Asignatura: </Text>
-                        <Text style={styles.modalText}>{courseData.tipoAsignatura}</Text>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Tipo de Asignatura (Génerica o Especialidad): </Text>
+                        <Text style={styles.modalText}>{diagnosisData.typeSubject}</Text>
                     </View>
                     <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Actividad o Evento: </Text>
-                        <Text style={styles.modalText}>{courseData.actividadEvento}</Text>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Actividad o Evento (Cursos, talleres, conferencias, etc...): </Text>
+                        <Text style={styles.modalText}>{diagnosisData.activityEvent}</Text>
                     </View>
                     <View style={styles.textRow}>
                         <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Objetivo: </Text>
-                        <Text style={styles.modalText}>{courseData.objetivo}</Text>
+                        <Text style={styles.modalText}>{diagnosisData.objective}</Text>
                     </View>
                     <View style={styles.textRow}>
                         <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Carreras Atendidas: </Text>
-                        <Text style={styles.modalText}>{courseData.carrerasAtendidas}</Text>
+                        <Text style={styles.modalText}>{diagnosisData.careersAttended}</Text>
                     </View>
                     <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Periodo: </Text>
-                        <Text style={styles.modalText}>{courseData.periodo}</Text>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Periodo en el que se requiere la formación o actualización: </Text>
+                        <Text style={styles.modalText}>{diagnosisData.period}</Text>
                     </View>
                     <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha del Curso: </Text>
-                        <Text style={styles.modalText}>{courseData.fechaCurso}</Text>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Inicio de la Actividad: </Text>
+                        <Text style={styles.modalText}>{diagnosisData.startDate}</Text>
+                    </View>
+                    <View style={styles.textRow}>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Finalización de la Actividad: </Text>
+                        <Text style={styles.modalText}>{diagnosisData.endDate}</Text>
                     </View>
                     <View style={styles.textRow}>
                         <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Turno: </Text>
-                        <Text style={styles.modalText}>{courseData.turno}</Text>
+                        <Text style={styles.modalText}>{diagnosisData.shift}</Text>
                     </View>
                     <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Facilitadores: </Text>
-                        <Text style={styles.modalText}>{courseData.facilitadores}</Text>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Feedback: </Text>
+                        <Text style={styles.modalText}>{diagnosisData.feedback}</Text>
+                    </View>
+                    <View style={styles.textRow}>
+                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Facilitadores(as) propuestos(as) (Nombre y datos para su localización): </Text>
+                        <Text style={styles.modalText}>{diagnosisData.facilitators}</Text>
                     </View>
 
                 </View>
+                </ScrollView>
+                </ScrollView>
             </View>
         </Modal>
     );
@@ -170,4 +190,8 @@ const styles = StyleSheet.create({
         // textAlign: 'center',
         fontSize: 16,
     },
+    scrollViewContent: {
+        flexGrow: 1,
+        justifyContent: 'center',
+    }
 });

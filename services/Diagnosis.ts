@@ -20,6 +20,25 @@ export const getDiagnosis = async () => {
     }
 };
 
+export const getDiagnosisAuth = async () => {
+  try {
+      const response = await fetch(`${BASE_URL}/diagnosis/authorized`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          }
+      });
+      if (response.ok) {
+          return await response.json();
+      } else {
+          throw new Error('Failed');
+      }
+  } catch (error) {
+      console.error('Error during login:', error);
+      throw error;
+  }
+};
+
 export const registerDiagnostic = async (data: DiagnosisForm) => {
     try {
       const response = await fetch(`${BASE_URL}/diagnosis`, {

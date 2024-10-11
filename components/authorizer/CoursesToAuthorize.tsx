@@ -1,67 +1,50 @@
 import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import CoursesToAuthorizeDetails from './modals/CoursesToAuthorizeDetails';
 import AuthorizeUnauthorize from './modals/AuthorizeUnauthorize';
+import { Diagnosis } from '@/services/interfaces/AcademicHead';
+import { useFocusEffect } from 'expo-router';
+import { getDiagnosis } from '@/services/Diagnosis';
+import { onAuthorize, onReject } from '@/services/Authorizer';
 
-interface Course {
-    id: number;
-    departamentoAcademico: string;
-    fechaDiagnostico: string;
-    titularDepartamento: string;
-    presidenteAcademia: string;
-    titularSubdireccion: string;
-    asignaturasRequeridas: string;
-    contenidosTematicos: string;
-    numeroDocentes: number;
-    tipoAsignatura: string;
-    actividadEvento: string;
-    objetivo: string;
-    carrerasAtendidas: string;
-    periodo: string;
-    fechaCurso: string;
-    turno: string;
-    facilitadores: string;
-}
+const CoursesToAuthorize = () => {
+    const [diagnosisSpecific, setDiagnosisSpecific] = useState<Diagnosis>()
+    const [diagnostics, setDiagnosis] = useState<Diagnosis[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-interface CourseProps {
-    courseData: Course[];
-}
+    const handleGetDiagnosis = async () => {
+        try {
+            const diagnosis = await getDiagnosis();
+            setDiagnosis(diagnosis);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
-const CoursesToAuthorize = ({ courseData }: CourseProps) => {
+    useFocusEffect(
+        useCallback(() => {
+            handleGetDiagnosis();
+
+        }, [])
+    );
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalAuthorizeVisible, setModalAuthorizeVisible] = useState(false);
 
-    const [courseSpecific, setCourseSpecific] = useState<Course>({
-        id: 0,
-        departamentoAcademico: "",
-        fechaDiagnostico: "",
-        titularDepartamento: "",
-        presidenteAcademia: "",
-        titularSubdireccion: "",
-        asignaturasRequeridas: "",
-        contenidosTematicos: "",
-        numeroDocentes: 0,
-        tipoAsignatura: "",
-        actividadEvento: "",
-        objetivo: "",
-        carrerasAtendidas: "",
-        periodo: "",
-        fechaCurso: "",
-        turno: "",
-        facilitadores: ""
-    })
+    
 
     const handleSelectCourse = (id: number) => {
 
         console.log(id)
 
-        const curso = courseData.find(curso => curso.id === id)
-        if (curso) {
-            setCourseSpecific(curso)
-            console.log(courseSpecific)
+        const diagnos = diagnostics.find(diagnostics => diagnostics.id === id)
+        if (diagnos) {
+            setDiagnosisSpecific(diagnos)
+            console.log(diagnosisSpecific)
             setModalVisible(!modalVisible)
         }
         else {
@@ -69,37 +52,24 @@ const CoursesToAuthorize = ({ courseData }: CourseProps) => {
         }
     }
 
+    
+
     const hanldeOnAuthorizeCourse = (id: number) => {
         console.log(id)
         setModalAuthorizeVisible(!modalVisible)
     }
 
-    const Item: React.FC<Course> = ({
-        id,
-        departamentoAcademico,
-        fechaDiagnostico,
-        titularDepartamento,
-        presidenteAcademia,
-        titularSubdireccion,
-        asignaturasRequeridas,
-        contenidosTematicos,
-        numeroDocentes,
-        tipoAsignatura,
-        actividadEvento,
-        objetivo,
-        carrerasAtendidas,
-        periodo,
-        fechaCurso,
-        turno,
-        facilitadores,
-    }) => (
+    
+    const Item: React.FC<Diagnosis> = ({ id, departament, dateDiagnosis, requiredSubjects, numberProfessors, typeSubject, feedback, status }) => (
+        
+   
         <View style={styles.row}>
-            <Text style={styles.cell}>{departamentoAcademico}</Text>
-            <Text style={styles.cell}>{fechaDiagnostico}</Text>
-            <Text style={styles.cell}>{asignaturasRequeridas}</Text>
-            <Text style={styles.cell}>{tipoAsignatura}</Text>
-            <Text style={styles.cell}>{numeroDocentes}</Text>
-            <Text style={styles.cell}>{turno}</Text>
+            <Text style={styles.cell}>{departament}</Text>
+            <Text style={styles.cell}>{dateDiagnosis}</Text>
+            <Text style={styles.cell}>{requiredSubjects}</Text>
+            <Text style={styles.cell}>{typeSubject}</Text>
+            <Text style={styles.cell}>{feedback}</Text>
+            <Text style={[styles.cell]}>{status}</Text>
             <View style={styles.cell}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity style={styles.centeredView} onPress={() => handleSelectCourse(id)}>
@@ -116,53 +86,63 @@ const CoursesToAuthorize = ({ courseData }: CourseProps) => {
             </View>
         </View>
     );
+    
     return (
         <ScrollView horizontal style={styles.container}>
 
-            <CoursesToAuthorizeDetails
-                modalVisible={modalVisible}
-                setModalVisible={setModalVisible}
-                courseData={courseSpecific}
-            />
+            {diagnosisSpecific && (
+                <CoursesToAuthorizeDetails
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    diagnosisData={diagnosisSpecific}
+                />
+            )}
 
+    {diagnosisSpecific && (
             <AuthorizeUnauthorize
                 modalVisible={modalAuthorizeVisible}
                 setModalVisible={setModalAuthorizeVisible}
-                onAuthorize={hanldeOnAuthorizeCourse}
+                onAuthorize={onAuthorize}
+                onReject={onReject}
+                diagnosisData={diagnosisSpecific}
             />
+    )}
 
             <View>
                 <View style={styles.rowHeader}>
                     <Text style={styles.headerCell}>Departamento Académico</Text>
                     <Text style={styles.headerCell}>Fecha del Diagnóstico</Text>
-                    <Text style={styles.headerCell}>Asignaturas Requeridas</Text>
-                    <Text style={styles.headerCell}>Tipo de Asignatura</Text>
-                    <Text style={styles.headerCell}>Número de Docente que la Requieren</Text>
-                    <Text style={styles.headerCell}>Turno</Text>
+                    <Text style={styles.headerCell}>Asignaturas en el que se requiere la formación o actualización</Text>
+                    <Text style={styles.headerCell}>Tipo de Asignatura (Génerica o Especialidad)</Text>
+                    <Text style={styles.headerCell}>Feedback</Text>
+                    <Text style={styles.headerCell}>Status</Text>
                     <Text style={styles.headerCell}>Detalles</Text>
                     <Text style={styles.headerCell}>Autorizar</Text>
                 </View>
                 <FlatList
-                    data={courseData}
+                    data={diagnostics}
                     renderItem={({ item }) => (
                         <Item
-                            id={item.id}
-                            departamentoAcademico={item.departamentoAcademico}
-                            fechaDiagnostico={item.fechaDiagnostico}
-                            titularDepartamento={item.titularDepartamento}
-                            presidenteAcademia={item.presidenteAcademia}
-                            titularSubdireccion={item.titularSubdireccion}
-                            asignaturasRequeridas={item.asignaturasRequeridas}
-                            contenidosTematicos={item.contenidosTematicos}
-                            numeroDocentes={item.numeroDocentes}
-                            tipoAsignatura={item.tipoAsignatura}
-                            actividadEvento={item.actividadEvento}
-                            objetivo={item.objetivo}
-                            carrerasAtendidas={item.carrerasAtendidas}
-                            periodo={item.periodo}
-                            fechaCurso={item.fechaCurso}
-                            turno={item.turno}
-                            facilitadores={item.facilitadores}
+                        id={item.id}
+                        departament={item.departament}
+                        dateDiagnosis={item.dateDiagnosis}
+                        headDepartment={item.headDepartment}
+                        presidentAcademy={item.presidentAcademy}
+                        titleSubdirectorate={item.titleSubdirectorate}
+                        requiredSubjects={item.requiredSubjects}
+                        thematicContents={item.thematicContents}
+                        numberProfessors={item.numberProfessors}
+                        typeSubject={item.typeSubject}
+                        activityEvent={item.activityEvent}
+                        objective={item.objective}
+                        careersAttended={item.careersAttended}
+                        period={item.period}
+                        startDate={item.startDate} //CHECK THIS
+                        endDate={item.endDate}
+                        shift={item.shift}
+                        feedback={item.feedback}
+                        status={item.status}
+                        facilitators={item.facilitators}
                         />
                     )}
                     keyExtractor={(item) => item.id.toString()}

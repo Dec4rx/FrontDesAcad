@@ -18,6 +18,7 @@ export interface Diagnosis {
     endDate: string;
     numberProfessors: number;
     shift: string;
+    feedback: string;
 }
 
 
@@ -40,6 +41,8 @@ export interface DiagnosisForm {
   endDate: Date;
   numberProfessors: number;
   shift: string;
+  is_authorized_by_first: boolean;
+  is_authorized_by_second: boolean;
 }
 
 export interface DiagnosisFormString {

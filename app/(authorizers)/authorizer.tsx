@@ -9,29 +9,7 @@ const Authorizer = () => {
         lastName2: 'Rodriguez',
         department: 'TIC\'s'
     }
-    const cursos = [
-        {
-            id: 1,
-            departamentoAcademico: "Ciencias Exactas",
-            fechaDiagnostico: "2024-05-01",
-            titularDepartamento: "Dr. Juan Pérez",
-            presidenteAcademia: "Dra. Ana López",
-            titularSubdireccion: "Lic. Roberto Hernández",
-            asignaturasRequeridas: "Matemáticas Avanzadas, Física Cuántica",
-            contenidosTematicos: "Cálculo Integral, Mecánica Cuántica",
-            numeroDocentes: 10,
-            tipoAsignatura: "Carrera Genérica",
-            actividadEvento: "Curso de Actualización",
-            objetivo: "Actualizar los conocimientos en física cuántica",
-            carrerasAtendidas: "Ingeniería Física, Ingeniería Matemática",
-            periodo: "E-J",
-            fechaCurso: "2024-06-15",
-            turno: "Matutino",
-            facilitadores: "Dr. Carlos Sánchez, Dra. María García"
-        },
-
-        // Más cursos pueden ser añadidos aquí
-    ];
+    
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.headerContainer}>
@@ -53,7 +31,7 @@ const Authorizer = () => {
             </View>
 
             <View style={styles.contentContainer}>
-                <CoursesToAuthorize courseData={cursos} />
+                <CoursesToAuthorize/>
             </View>
         </SafeAreaView>
     )

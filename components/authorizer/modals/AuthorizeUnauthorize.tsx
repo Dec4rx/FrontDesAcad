@@ -1,15 +1,21 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import React, { useState } from 'react';
+import { Diagnosis } from '@/services/interfaces/AcademicHead';
+import { onAuthorize, onReject } from '@/services/Authorizer'
 
 interface AuthorizeUnauthorize {
     modalVisible: boolean;
-    onAuthorize: (id: number) => void;
     setModalVisible: (visible: boolean) => void;
+    onAuthorize: (id: number, authKey:string) => void;
+    onReject: (id: number, feedback: string) => void;
+    diagnosisData: Diagnosis;
 }
 
+const AuthorizeUnauthorize: React.FC<AuthorizeUnauthorize> = ({ modalVisible, setModalVisible, onAuthorize, onReject, diagnosisData}) => {
+    const [feedback, setFeedback] = useState('');
+    const [authKey, setAuthKey] = useState('');
 
-const AuthorizeUnauthorize: React.FC<AuthorizeUnauthorize> = ({ modalVisible, setModalVisible, onAuthorize }) => {
     return (
         <Modal
             animationType="fade"
@@ -24,15 +30,43 @@ const AuthorizeUnauthorize: React.FC<AuthorizeUnauthorize> = ({ modalVisible, se
                         <Entypo name="cross" size={35} color="black" />
                     </TouchableOpacity>
 
-                    <Text style={styles.modalText}>¿Está seguro de Autorizar este curso?</Text>
-                    <View style={styles.buttonRow}>
+                    <Text style={styles.modalText}>¿Está seguro de Autorizar este diagnóstico?</Text>
+                    {/* Input field for authKey */}
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={setAuthKey}
+                        value={authKey}
+                        placeholder="Ingrese su clave aquí"
+                    />
+                    
+                    
                         <TouchableOpacity
                             style={[styles.button, styles.buttonRegister]}
                             onPress={() => {
-                                // onAuthorize(); TODO: Add the id of the course
+                                onAuthorize(diagnosisData.id, authKey);
                                 setModalVisible(!modalVisible);
                             }}>
                             <Text style={styles.textStyle}>Autorizar</Text>
+                        </TouchableOpacity>
+                    
+                    {/* Input field for feedback */}
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={setFeedback}
+                        value={feedback}
+                        placeholder="Ingrese su feedback aquí"
+                        multiline
+                    />
+
+                    
+                        <View style={styles.buttonRow}>
+                        <TouchableOpacity
+                            style={[styles.button, styles.buttonReject]}
+                            onPress={() => {
+                                onReject(diagnosisData.id, feedback);
+                                setModalVisible(!modalVisible);
+                            }}>
+                            <Text style={styles.textStyle}>Rechazar/Retroalimentar</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -60,7 +94,7 @@ const styles = StyleSheet.create({
         margin: 20,
         backgroundColor: 'white',
         borderRadius: 20,
-        padding: 5,
+        padding: 20,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -70,6 +104,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+        width: '80%',
     },
     buttonRow: {
         flexDirection: 'row',
@@ -80,10 +115,15 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 10,
         elevation: 2,
-        marginHorizontal: 10,
+        marginHorizontal: 5,
+        minWidth: 100,
+        marginBottom: 15
     },
     buttonRegister: {
         backgroundColor: '#2f64ba',
+    },
+    buttonReject: {
+        backgroundColor: '#ffa500',
     },
     buttonClose: {
         backgroundColor: '#8B0000',
@@ -97,5 +137,13 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
         fontSize: 18,
+    },
+    input: {
+        width: '100%',
+        minHeight: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        padding: 10,
+        marginBottom: 10,
     },
 });
