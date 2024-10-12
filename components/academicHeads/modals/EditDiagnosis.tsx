@@ -1,96 +1,328 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { Diagnosis } from '@/services/interfaces/AcademicHead';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, Button, TextInput, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import Entypo from '@expo/vector-icons/Entypo';
+import { Diagnosis, DiagnosisForm } from '@/services/interfaces/AcademicHead';
+import { router } from 'expo-router';
+import { Picker } from '@react-native-picker/picker';
+import DatePicker from 'react-datepicker';
+import { parseISO, set } from 'date-fns';
 
-// Definiendo un tipo para las props
-interface EditarDiagnosticoModalProps {
-    visible: boolean;
-    onClose: () => void;
-    diagnosis: Diagnosis | null; // Suponiendo que tienes un tipo 'Diagnosis' definido
-    onSave: (diagnosis: Diagnosis) => void;
+
+
+interface DiagnosisOfNeedsDetails {
+    modalVisible: boolean;
+    setModalVisible: (visible: boolean) => void;
+    diagnosisData: Diagnosis;
 }
 
-const EditarDiagnosticoModal: React.FC<EditarDiagnosticoModalProps> = ({ visible, onClose, diagnosis, onSave }) => {
-    const [form, setForm] = useState<Diagnosis>({
-        id: 0,
-        departament: '',
-        headDepartment: '',
-        presidentAcademy: '',
-        titleSubdirectorate: '',
-        requiredSubjects: '',
-        thematicContents: '',
-        typeSubject: '',
-        activityEvent: '',
-        objective: '',
-        careersAttended: '',
-        period: '',
-        status: '',
-        facilitators: '',
-        dateDiagnosis: '',
-        startDate: '',
-        endDate: '',
-        numberProfessors: 0,
-        feedback: '',
-        shift: '',
+
+const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setModalVisible, diagnosisData: diagnosisData }) => {
+
+    // const [modalVisibleAuthUnauth, setModalVisibleAuthUnauth] = useState(false);
+
+    const [isLoading, setIsLoading] = useState(false);
+    console.log(diagnosisData)
+    const [form, setForm] = useState<DiagnosisForm>({
+        departament: diagnosisData.departament,
+        headDepartment: diagnosisData.headDepartment,
+        presidentAcademy: diagnosisData.presidentAcademy,
+        titleSubdirectorate: diagnosisData.titleSubdirectorate,
+        requiredSubjects: diagnosisData.requiredSubjects,
+        thematicContents: diagnosisData.thematicContents,
+        typeSubject: diagnosisData.typeSubject,
+        activityEvent: diagnosisData.activityEvent,
+        objective: diagnosisData.objective,
+        careersAttended: diagnosisData.careersAttended,
+        period: diagnosisData.period,
+        status: diagnosisData.status,
+        facilitators: diagnosisData.facilitators,
+        dateDiagnosis: parseISO(diagnosisData.dateDiagnosis),
+        startDate: parseISO(diagnosisData.startDate),
+        endDate: parseISO(diagnosisData.endDate),
+        numberProfessors: diagnosisData.numberProfessors,
+        shift: diagnosisData.shift,
+        is_authorized_by_first: false,
+        is_authorized_by_second: false,
     });
+    console.log(form.dateDiagnosis)
 
-    // Cargar los datos iniciales cuando el componente recibe un diagnóstico para editar
-    useEffect(() => {
-        if (diagnosis) {
-            setForm({ ...diagnosis });
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    const handleInputChange = <K extends keyof DiagnosisForm>(prop: K, value: DiagnosisForm[K]) => {
+        setForm({ ...form, [prop]: value });
+        setErrors({ ...errors, [prop]: '' }); // Limpiar el error del campo modificado
+    };
+
+    const handleSaveDiagnosis = async () => {
+        setIsLoading(true);
+        setErrors({}); // Limpiar errores antes de enviar
+        try {
+            // const diagnosis = await registerDiagnostic(form); // TO DO: Implementar función de UPDATE
+            // console.log('Diagnóstico guardado exitosamente:', diagnosis);
+            setModalVisible(false);
+        } catch (error: any) {
+            // Revisar la estructura del error capturado
+            console.error('Error al guardar el diagnóstico:', error);
+
+            // Si el error capturado tiene una estructura con errores específicos
+            if (error && typeof error === 'object') {
+                setErrors(error); // Ajustar la estructura si es necesario según el formato del servidor
+            } else {
+                setErrors({ general: 'Error al guardar el diagnóstico. Inténtalo de nuevo.' });
+            }
+        } finally {
+            setIsLoading(false);
         }
-    }, [diagnosis]);
-
-    const handleChange = (name: keyof Diagnosis, value: any) => {
-        setForm(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = () => {
-        onSave(form);
-        onClose();  // Cierra el modal después de guardar
+
+    // Determina los límites de las fechas basados en el periodo seleccionado
+    const getDateLimits = (periodo: string) => {
+        if (periodo === 'Enero-Junio') {
+            // Permitir fechas entre el 18 de junio y el 16 de agosto
+            return {
+                minDate: new Date(new Date().getFullYear(), 5, 18), // 18 de junio
+                maxDate: new Date(new Date().getFullYear(), 7, 16) // 16 de agosto
+            };
+        } else if (periodo === 'Agosto-Diciembre') {
+            // Permitir fechas entre el 10 de diciembre y el 10 de enero del siguiente año
+            return {
+                minDate: new Date(new Date().getFullYear(), 11, 10), // 10 de diciembre
+                maxDate: new Date(new Date().getFullYear() + 1, 0, 10) // 10 de enero
+            };
+        }
+        // Si no hay periodo seleccionado, no limitar fechas
+        return {
+            minDate: undefined,
+            maxDate: undefined
+        };
     };
+
+    const { minDate, maxDate } = getDateLimits(form.period);
+
+    if (isLoading) {
+        return (
+            <div>
+                <div>Cargando...</div>
+            </div>
+        );
+    }
 
     return (
         <Modal
-            animationType="slide"
+            animationType="fade"
             transparent={true}
-            visible={visible}
-            onRequestClose={onClose}
+            visible={modalVisible}
         >
-            <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Editar Diagnóstico</Text>
-                    {/* Campos del formulario */}
-                    <TextInput
-                        style={styles.input}
-                        value={form.departament}
-                        onChangeText={(text) => handleChange('departament', text)}
-                        placeholder="Departamento Académico"
-                    />
-                    
-                    
-                    
-                    <Button title="Guardar Cambios" onPress={handleSubmit} />
-                    <Button title="Cerrar" onPress={onClose} color="red" />
+            <ScrollView>
+                <View style={styles.centeredView}>
+
+                    <View style={styles.modalView}>
+
+                        <TouchableOpacity
+                            style={{ alignSelf: 'flex-end' }}
+                            onPress={() => setModalVisible(!modalVisible)}>
+                            <Entypo name="cross" size={35} color="black" />
+                        </TouchableOpacity>
+                        <Text style={styles.title}>Modificar Diagnóstico</Text>
+
+                        <Text style={styles.label}>Departamento Académico:</Text>
+                        <TextInput
+                            placeholder="Departamento Académico"
+                            value={form.departament}
+                            onChangeText={text => handleInputChange('departament', text)}
+                            style={[styles.input, errors.departament ? styles.inputError : null]}
+                        />
+                        {errors.departament && <Text style={styles.errorText}>{errors.departament}</Text>}
+
+                        <Text style={styles.label}>Fecha del Diagnóstico:</Text>
+                        <DatePicker
+                            selected={form.dateDiagnosis}
+                            onChange={(date: Date | null) => {
+                                if (date) handleInputChange('dateDiagnosis', date);
+                            }}
+                            dateFormat="dd/MM/yyyy"
+                            className={`date-picker-input ${errors.dateDiagnosis ? 'input-error' : ''}`}
+                        />
+                        {errors.dateDiagnosis && <Text style={styles.errorText}>{errors.dateDiagnosis}</Text>}
+
+                        <Text style={styles.label}>Titular del Departamento:</Text>
+                        <TextInput
+                            placeholder="Titular del Departamento"
+                            value={form.headDepartment}
+                            onChangeText={text => handleInputChange('headDepartment', text)}
+                            style={[styles.input, errors.headDepartment ? styles.inputError : null]}
+                        />
+                        {errors.headDepartment && <Text style={styles.errorText}>{errors.headDepartment}</Text>}
+
+                        <Text style={styles.label}>Presidente de Academia:</Text>
+                        <TextInput
+                            placeholder="Presidente de Academia"
+                            value={form.presidentAcademy}
+                            onChangeText={text => handleInputChange('presidentAcademy', text)}
+                            style={[styles.input, errors.presidentAcademy ? styles.inputError : null]}
+                        />
+                        {errors.presidentAcademy && <Text style={styles.errorText}>{errors.presidentAcademy}</Text>}
+
+                        <Text style={styles.label}>Titular de la Subdireción:</Text>
+                        <TextInput
+                            placeholder="Titular de la Subdireción"
+                            value={form.titleSubdirectorate}
+                            onChangeText={text => handleInputChange('titleSubdirectorate', text)}
+                            style={[styles.input, errors.titleSubdirectorate ? styles.inputError : null]}
+                        />
+                        {errors.titleSubdirectorate && <Text style={styles.errorText}>{errors.titleSubdirectorate}</Text>}
+
+                        <Text style={styles.label}>Asignaturas Requeridas:</Text>
+                        <TextInput
+                            placeholder="Asignaturas Requeridas"
+                            value={form.requiredSubjects}
+                            onChangeText={text => handleInputChange('requiredSubjects', text)}
+                            style={[styles.input, errors.requiredSubjects ? styles.inputError : null]}
+                        />
+                        {errors.requiredSubjects && <Text style={styles.errorText}>{errors.requiredSubjects}</Text>}
+
+                        <Text style={styles.label}>Contenidos Temáticos:</Text>
+                        <TextInput
+                            placeholder="Contenidos Temáticos"
+                            value={form.thematicContents}
+                            onChangeText={text => handleInputChange('thematicContents', text)}
+                            style={[styles.input, errors.thematicContents ? styles.inputError : null]}
+                        />
+                        {errors.thematicContents && <Text style={styles.errorText}>{errors.thematicContents}</Text>}
+
+                        <Text style={styles.label}>Número de Docentes:</Text>
+                        <TextInput
+                            placeholder="Número de Docentes"
+                            keyboardType="numeric"
+                            value={form.numberProfessors.toString()}
+                            onChangeText={text => handleInputChange('numberProfessors', Number(text))}
+                            style={[styles.input, errors.numberProfessors ? styles.inputError : null]}
+                        />
+                        {errors.numberProfessors && <Text style={styles.errorText}>{errors.numberProfessors}</Text>}
+
+                        <Text style={styles.label}>Tipo de Asignatura:</Text>
+                        <Picker
+                            selectedValue={form.typeSubject}
+                            style={[styles.picker, errors.typeSubject ? styles.inputError : null]}
+                            onValueChange={(itemValue) => handleInputChange('typeSubject', itemValue)}
+                        >
+                            <Picker.Item label="Seleccione el Tipo (en caso de desear modificarlo)" value="" />
+                            <Picker.Item label="Carrera Genérica" value="generico" />
+                            <Picker.Item label="Módulo de Especialidad" value="especialidad" />
+                        </Picker>
+                        {errors.typeSubject && <Text style={styles.errorText}>{errors.typeSubject}</Text>}
+
+                        <Text style={styles.label}>Tipo de Actividad o Evento:</Text>
+                        <TextInput
+                            placeholder="Actividad o Evento"
+                            value={form.activityEvent}
+                            onChangeText={text => handleInputChange('activityEvent', text)}
+                            style={[styles.input, errors.activityEvent ? styles.inputError : null]}
+                        />
+                        {errors.activityEvent && <Text style={styles.errorText}>{errors.activityEvent}</Text>}
+
+                        <Text style={styles.label}>Objetivo:</Text>
+                        <TextInput
+                            placeholder="Objetivo"
+                            value={form.objective}
+                            onChangeText={text => handleInputChange('objective', text)}
+                            style={[styles.input, errors.objective ? styles.inputError : null]}
+                        />
+                        {errors.objective && <Text style={styles.errorText}>{errors.objective}</Text>}
+
+                        <Text style={styles.label}>Carreras Atendidas:</Text>
+                        <TextInput
+                            placeholder="Carreras Atendidas"
+                            value={form.careersAttended}
+                            onChangeText={text => handleInputChange('careersAttended', text)}
+                            style={[styles.input, errors.careersAttended ? styles.inputError : null]}
+                        />
+                        {errors.careersAttended && <Text style={styles.errorText}>{errors.careersAttended}</Text>}
+
+                        <Text style={styles.label}>Periodo:</Text>
+                        <Picker
+                            selectedValue={form.period}
+                            style={[styles.picker, errors.period ? styles.inputError : null]}
+                            onValueChange={(itemValue) => handleInputChange('period', itemValue)}
+                        >
+                            <Picker.Item label="Selecciona un periodo (en caso de desear modificarlo)" value="" />
+                            <Picker.Item label="Enero - Junio" value="Enero-Junio" />
+                            <Picker.Item label="Agosto - Diciembre" value="Agosto-Diciembre" />
+                        </Picker>
+                        {errors.period && <Text style={styles.errorText}>{errors.period}</Text>}
+
+                        <Text style={styles.label}>Fecha inicio del Curso: {form.startDate.toLocaleDateString('es-ES')}</Text>
+                        <DatePicker
+                            selected={form.startDate}
+                            onChange={(date: Date | null) => {
+                                if (date) handleInputChange('startDate', date);
+                            }}
+                            dateFormat="dd/MM/yyyy"
+                            className={`date-picker-input ${errors.startDate ? 'input-error' : ''}`}
+                            minDate={minDate}
+                            maxDate={maxDate}
+                        />
+                        {errors.startDate && <Text style={styles.errorText}>{errors.startDate}</Text>}
+
+                        <Text style={styles.label}>Fecha fin del Curso:</Text>
+                        <DatePicker
+                            selected={form.endDate}
+                            onChange={(date: Date | null) => {
+                                if (date) handleInputChange('endDate', date);
+                            }}
+                            dateFormat="dd/MM/yyyy"
+                            className={`date-picker-input ${errors.endDate ? 'input-error' : ''}`}
+                            minDate={minDate}
+                            maxDate={maxDate}
+                            placeholderText={form.endDate ? form.endDate.toLocaleDateString('es-ES') : 'Selecciona una fecha'}
+                        />
+                        {errors.endDate && <Text style={styles.errorText}>{errors.endDate}</Text>}
+
+                        <Text style={styles.label}>Turno:</Text>
+                        <Picker
+                            selectedValue={form.shift}//TODO: Check this
+                            style={[styles.picker, errors.shift ? styles.inputError : null]}
+                            onValueChange={(itemValue) => handleInputChange('shift', itemValue)}
+                        >
+                            <Picker.Item label="Selecciona un turno (en caso de desear modificarlo)" value="" />
+                            <Picker.Item label="Matutino" value="Matutino" />
+                            <Picker.Item label="Vespertino" value="Vespertino" />
+                        </Picker>
+                        {errors.shift && <Text style={styles.errorText}>{errors.shift}</Text>}
+
+                        <Text style={styles.label}>Facilitadores Propuestos:</Text>
+                        <TextInput
+                            placeholder="Facilitadores Propuestos"
+                            value={form.facilitators}
+                            onChangeText={text => handleInputChange('facilitators', text)}
+                            style={[styles.input, errors.facilitators ? styles.inputError : null]}
+                        />
+                        {errors.facilitators && <Text style={styles.errorText}>{errors.facilitators}</Text>}
+
+                        <Button title="Actualizar Diagnóstico" onPress={handleSaveDiagnosis} />
+
+                    </View>
                 </View>
-            </View>
-        </Modal>
+            </ScrollView>
+        </Modal >
     );
-};
+}
+
+export default EditDiagnosis;
 
 const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
+        // alignItems: 'center',
         marginTop: 22,
     },
     modalView: {
         margin: 20,
         backgroundColor: 'white',
         borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
+        padding: 5,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -100,19 +332,69 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
+    textRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
+        overflow: 'hidden', // Asegura que el contenido no se desborde
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        marginHorizontal: 10,
+    },
+    buttonRegister: {
+        backgroundColor: '#2196F3',
+    },
+    buttonClose: {
+        backgroundColor: '#f44336',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
     modalText: {
         marginBottom: 15,
-        textAlign: 'center',
+        fontSize: 16,
+    },
+
+
+    container: {
+        flex: 1,
+        padding: 20,
+    },
+    title: {
+        fontSize: 24,
         fontWeight: 'bold',
-        fontSize: 18,
+        marginBottom: 20
     },
     input: {
-        height: 40,
-        margin: 12,
+        height: 50,
+        backgroundColor: '#F0F0F0',
         borderWidth: 1,
-        padding: 10,
-        width: 300,
+        borderColor: '#DDD',
+        borderRadius: 8,
+        paddingHorizontal: 15,
+        fontSize: 16,
+        marginBottom: 10,
+    },
+    label: {
+        fontSize: 16,
+        color: '#333',
+        marginBottom: 5
+    },
+    picker: {
+        height: 50,
+        width: '100%',
+        marginBottom: 20
+    },
+    inputError: {
+        borderColor: 'red',
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 14,
+        marginBottom: 10,
     }
 });
-
-export default EditarDiagnosticoModal;

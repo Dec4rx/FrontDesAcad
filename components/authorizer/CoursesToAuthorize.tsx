@@ -35,7 +35,7 @@ const CoursesToAuthorize = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalAuthorizeVisible, setModalAuthorizeVisible] = useState(false);
 
-    
+
 
     const handleSelectCourse = (id: number) => {
 
@@ -52,17 +52,22 @@ const CoursesToAuthorize = () => {
         }
     }
 
-    
+
 
     const hanldeOnAuthorizeCourse = (id: number) => {
         console.log(id)
-        setModalAuthorizeVisible(!modalVisible)
+        const diagnos = diagnostics.find(diagnostics => diagnostics.id === id)
+        if (diagnos) {
+            setDiagnosisSpecific(diagnos)
+            console.log(diagnosisSpecific)
+            setModalAuthorizeVisible(!modalVisible)
+        }
     }
 
-    
+
     const Item: React.FC<Diagnosis> = ({ id, departament, dateDiagnosis, requiredSubjects, numberProfessors, typeSubject, feedback, status }) => (
-        
-   
+
+
         <View style={styles.row}>
             <Text style={styles.cell}>{departament}</Text>
             <Text style={styles.cell}>{dateDiagnosis}</Text>
@@ -86,7 +91,7 @@ const CoursesToAuthorize = () => {
             </View>
         </View>
     );
-    
+
     return (
         <ScrollView horizontal style={styles.container}>
 
@@ -98,15 +103,15 @@ const CoursesToAuthorize = () => {
                 />
             )}
 
-    {diagnosisSpecific && (
-            <AuthorizeUnauthorize
-                modalVisible={modalAuthorizeVisible}
-                setModalVisible={setModalAuthorizeVisible}
-                onAuthorize={onAuthorize}
-                onReject={onReject}
-                diagnosisData={diagnosisSpecific}
-            />
-    )}
+            {diagnosisSpecific && (
+                <AuthorizeUnauthorize
+                    modalVisible={modalAuthorizeVisible}
+                    setModalVisible={setModalAuthorizeVisible}
+                    onAuthorize={onAuthorize}
+                    onReject={onReject}
+                    diagnosisData={diagnosisSpecific}
+                />
+            )}
 
             <View>
                 <View style={styles.rowHeader}>
@@ -123,26 +128,26 @@ const CoursesToAuthorize = () => {
                     data={diagnostics}
                     renderItem={({ item }) => (
                         <Item
-                        id={item.id}
-                        departament={item.departament}
-                        dateDiagnosis={item.dateDiagnosis}
-                        headDepartment={item.headDepartment}
-                        presidentAcademy={item.presidentAcademy}
-                        titleSubdirectorate={item.titleSubdirectorate}
-                        requiredSubjects={item.requiredSubjects}
-                        thematicContents={item.thematicContents}
-                        numberProfessors={item.numberProfessors}
-                        typeSubject={item.typeSubject}
-                        activityEvent={item.activityEvent}
-                        objective={item.objective}
-                        careersAttended={item.careersAttended}
-                        period={item.period}
-                        startDate={item.startDate} //CHECK THIS
-                        endDate={item.endDate}
-                        shift={item.shift}
-                        feedback={item.feedback}
-                        status={item.status}
-                        facilitators={item.facilitators}
+                            id={item.id}
+                            departament={item.departament}
+                            dateDiagnosis={item.dateDiagnosis}
+                            headDepartment={item.headDepartment}
+                            presidentAcademy={item.presidentAcademy}
+                            titleSubdirectorate={item.titleSubdirectorate}
+                            requiredSubjects={item.requiredSubjects}
+                            thematicContents={item.thematicContents}
+                            numberProfessors={item.numberProfessors}
+                            typeSubject={item.typeSubject}
+                            activityEvent={item.activityEvent}
+                            objective={item.objective}
+                            careersAttended={item.careersAttended}
+                            period={item.period}
+                            startDate={item.startDate} //CHECK THIS
+                            endDate={item.endDate}
+                            shift={item.shift}
+                            feedback={item.feedback}
+                            status={item.status}
+                            facilitators={item.facilitators}
                         />
                     )}
                     keyExtractor={(item) => item.id.toString()}
@@ -179,6 +184,8 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
         textAlign: 'center',
+        flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
+        overflow: 'hidden', // Asegura que el contenido no se desborde
     },
     centeredView: {
         flex: 1,

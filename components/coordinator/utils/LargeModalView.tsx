@@ -101,6 +101,8 @@ export default LargeModalView;
 const styles = StyleSheet.create({
     textRow: {
         flexDirection: 'row',
+        flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
+        overflow: 'hidden', // Asegura que el contenido no se desborde
         // justifyContent: 'center',
     },
     modalText: {

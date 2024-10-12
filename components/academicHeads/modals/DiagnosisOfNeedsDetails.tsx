@@ -22,102 +22,92 @@ const DiagnosisOfNeedsDetails: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisib
             transparent={true}
             visible={modalVisible}
         >
-            <View style={styles.centeredView}>
+            <ScrollView>
+                <View style={styles.centeredView}>
 
-            <ScrollView
-                    horizontal={true}
-                    contentContainerStyle={{ width: '100%' }}
-                >
-                    <ScrollView
-                        
-                        contentContainerStyle={styles.scrollViewContent}
-                    >
+                    <View style={styles.modalView}>
 
-                <View style={styles.modalView}>
-                    <TouchableOpacity
-                        style={{ alignSelf: 'flex-end' }}
-                        onPress={() => setModalVisible(!modalVisible)}>
-                        <Entypo name="cross" size={35} color="black" />
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{ alignSelf: 'flex-end' }}
+                            onPress={() => setModalVisible(!modalVisible)}>
+                            <Entypo name="cross" size={35} color="black" />
+                        </TouchableOpacity>
 
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0}]}>Departamento Academico: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.departament}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha del Diagnóstico: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.dateDiagnosis}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular del Departamento Académico: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.headDepartment}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Presidente(a) de Academia: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.presidentAcademy}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular de la Subdirección Académica: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.titleSubdirectorate}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Asignaturas en las que se requiere formación o actualización: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.requiredSubjects}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Contenidos Temáticos en que se requiere la formación o actualización: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.thematicContents}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Número de Docente que la Requieren: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.numberProfessors}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Tipo de Asignatura (Génerica o Especialidad): </Text>
-                        <Text style={styles.modalText}>{diagnosisData.typeSubject}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Actividad o Evento (Cursos, talleres, conferencias, etc...): </Text>
-                        <Text style={styles.modalText}>{diagnosisData.activityEvent}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Objetivo: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.objective}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Carreras Atendidas: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.careersAttended}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Periodo en el que se requiere la formación o actualización: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.period}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Inicio de la Actividad: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.startDate}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Finalización de la Actividad: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.endDate}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Turno: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.shift}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Feedback: </Text>
-                        <Text style={styles.modalText}>{diagnosisData.feedback}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Facilitadores(as) propuestos(as) (Nombre y datos para su localización): </Text>
-                        <Text style={styles.modalText}>{diagnosisData.facilitators}</Text>
-                    </View>
 
+
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0 }]}>Departamento Academico: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.departament}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha del Diagnóstico: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.dateDiagnosis}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular del Departamento: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.headDepartment}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Presidente de Academia: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.presidentAcademy}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular de la Subdirección Académica: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.titleSubdirectorate}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Asignaturas Requeridas: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.requiredSubjects}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Contenidos Temáticos: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.thematicContents}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Número de Docente que la Requieren: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.numberProfessors}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Tipo de Asignatura: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.typeSubject}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Actividad o Evento: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.activityEvent}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Objetivo: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.objective}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Carreras Atendidas: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.careersAttended}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Periodo: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.period}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Inicio: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.startDate}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Finalización: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.endDate}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Turno: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.shift}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Facilitadores: </Text>
+                            <Text style={styles.modalText}>{diagnosisData.facilitators}</Text>
+                        </View>
+
+                    </View>
                 </View>
-                </ScrollView>
-                </ScrollView>
-            </View>
-        </Modal>
+            </ScrollView>
+        </Modal >
     );
 }
 
@@ -135,7 +125,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 5,
-        alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -147,7 +136,8 @@ const styles = StyleSheet.create({
     },
     textRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
+        overflow: 'hidden', // Asegura que el contenido no se desborde
     },
     button: {
         borderRadius: 20,
@@ -168,7 +158,6 @@ const styles = StyleSheet.create({
     },
     modalText: {
         marginBottom: 15,
-        // textAlign: 'center',
         fontSize: 16,
     },
     scrollViewContent: {

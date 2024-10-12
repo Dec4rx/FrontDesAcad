@@ -28,53 +28,85 @@ interface CourseDetails {
 const SmallModalView: React.FC<CourseDetails> = ({ courseData }) => {
     return (
         <View>
-            <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0 }]}>Departamento Academico: </Text>
-            <Text style={styles.modalText}>{courseData.departamentoAcademico}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0 }]}>Departamento Academico: </Text>
+                <Text style={styles.modalText}>{courseData.departamentoAcademico}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Realización del Diagnóstico: </Text>
-            <Text style={styles.modalText}>{courseData.fechaCurso}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Realización del Diagnóstico: </Text>
+                <Text style={styles.modalText}>{courseData.fechaCurso}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular del Departamento: </Text>
-            <Text style={styles.modalText}>{courseData.titularDepartamento}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular del Departamento: </Text>
+                <Text style={styles.modalText}>{courseData.titularDepartamento}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Presidente de Academia: </Text>
-            <Text style={styles.modalText}>{courseData.presidenteAcademia}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Presidente de Academia: </Text>
+                <Text style={styles.modalText}>{courseData.presidenteAcademia}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular de la Subdirección Académica: </Text>
-            <Text style={styles.modalText}>{courseData.titularSubdireccion}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular de la Subdirección Académica: </Text>
+                <Text style={styles.modalText}>{courseData.titularSubdireccion}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Asignaturas Requeridas: </Text>
-            <Text style={styles.modalText}>{courseData.asignaturasRequeridas}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Asignaturas Requeridas: </Text>
+                <Text style={styles.modalText}>{courseData.asignaturasRequeridas}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Contenidos Temáticos: </Text>
-            <Text style={styles.modalText}>{courseData.contenidosTematicos}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Contenidos Temáticos: </Text>
+                <Text style={styles.modalText}>{courseData.contenidosTematicos}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Número de Docente que la Requieren: </Text>
-            <Text style={styles.modalText}>{courseData.numeroDocentes}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Número de Docente que la Requieren: </Text>
+                <Text style={styles.modalText}>{courseData.numeroDocentes}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Tipo de Asignatura: </Text>
-            <Text style={styles.modalText}>{courseData.tipoAsignatura}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Tipo de Asignatura: </Text>
+                <Text style={styles.modalText}>{courseData.tipoAsignatura}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Actividad o Evento: </Text>
-            <Text style={styles.modalText}>{courseData.actividadEvento}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Actividad o Evento: </Text>
+                <Text style={styles.modalText}>{courseData.actividadEvento}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Objetivo: </Text>
-            <Text style={styles.modalText}>{courseData.objetivo}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Objetivo: </Text>
+                <Text style={styles.modalText}>{courseData.objetivo}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Carreras Atendidas: </Text>
-            <Text style={styles.modalText}>{courseData.carrerasAtendidas}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Carreras Atendidas: </Text>
+                <Text style={styles.modalText}>{courseData.carrerasAtendidas}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Periodo: </Text>
-            <Text style={styles.modalText}>{courseData.periodo}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Periodo: </Text>
+                <Text style={styles.modalText}>{courseData.periodo}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha del Curso: </Text>
-            <Text style={styles.modalText}>{courseData.fechaCurso}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha del Curso: </Text>
+                <Text style={styles.modalText}>{courseData.fechaCurso}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Turno: </Text>
-            <Text style={styles.modalText}>{courseData.turno}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Turno: </Text>
+                <Text style={styles.modalText}>{courseData.turno}</Text>
+            </View>
 
-            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Facilitadores: </Text>
-            <Text style={styles.modalText}>{courseData.facilitadores}</Text>
+            <View style={styles.textRow}>
+                <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Facilitadores: </Text>
+                <Text style={styles.modalText}>{courseData.facilitadores}</Text>
+            </View>
         </View>
     );
 };
@@ -82,6 +114,12 @@ const SmallModalView: React.FC<CourseDetails> = ({ courseData }) => {
 export default SmallModalView;
 
 const styles = StyleSheet.create({
+    textRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
+        overflow: 'hidden', // Asegura que el contenido no se desborde
+        // justifyContent: 'center',
+    },
     modalText: {
         marginBottom: 5,
         fontSize: 16,

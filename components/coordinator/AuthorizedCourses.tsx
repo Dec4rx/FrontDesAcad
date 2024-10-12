@@ -22,6 +22,7 @@ const AuthorizedCourses = () => {
         try {
             const diagnosis = await getDiagnosisAuth();
             setDiagnosis(diagnosis);
+            console.log(diagnosis)
         } catch (error) {
             console.error(error);
         } finally {
@@ -90,6 +91,12 @@ const AuthorizedCourses = () => {
     
     return (
         <ScrollView horizontal style={styles.container}>
+
+            {/* <CourseDetails
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                courseData={courseSpecific}
+            /> */}
 
             {diagnosisSpecific && (
                 <DiagnosisOfNeedsDetails
@@ -171,6 +178,8 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
         textAlign: 'center',
+        flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
+        overflow: 'hidden', // Asegura que el contenido no se desborde
     },
     centeredView: {
         flex: 1,

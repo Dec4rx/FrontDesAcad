@@ -2,17 +2,24 @@ import { View, Modal, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity }
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React, { useCallback, useState } from 'react';
 import DiagnosisOfNeedsDetails from './modals/DiagnosisOfNeedsDetails';
+import Feather from '@expo/vector-icons/Feather';
 import { Diagnosis } from '@/services/interfaces/AcademicHead';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { getDiagnosis } from '@/services/Diagnosis';
-import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { set } from 'date-fns';
+import EditDiagnosis from './modals/EditDiagnosis';
 
 
 
 const DiagnosisOfNeeds = () => {
+    const navigation = useNavigation();
     const [diagnosisSpecific, setDiagnosisSpecific] = useState<Diagnosis>()
     const [diagnostics, setDiagnosis] = useState<Diagnosis[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalEditVisible, setModalEditVisible] = useState(false);
 
     const handleGetDiagnosis = async () => {
         try {
@@ -27,7 +34,7 @@ const DiagnosisOfNeeds = () => {
     useFocusEffect(
         useCallback(() => {
             handleGetDiagnosis();
-            
+
         }, [])
     );
 
@@ -52,6 +59,7 @@ const DiagnosisOfNeeds = () => {
         const diagnos = diagnostics.find(diagnostics => diagnostics.id === id)
         if (diagnos) {
             setDiagnosisSpecific(diagnos)
+            console.log("los diagnosticos son->")
             console.log(diagnosisSpecific)
             setModalVisible(!modalVisible)
         }
@@ -60,7 +68,20 @@ const DiagnosisOfNeeds = () => {
         }
     }
 
-    const [modalVisible, setModalVisible] = useState(false);
+    const handleEditCourse = (id: number) => {
+        console.log(id)
+
+        const diagnos = diagnostics.find(diagnostics => diagnostics.id === id)
+        if (diagnos) {
+            setDiagnosisSpecific(diagnos)
+            console.log("los diagnosticos son->")
+            console.log(diagnosisSpecific)
+            setModalEditVisible(!modalEditVisible)
+        }
+        else {
+            console.log("no encontrado")
+        }
+    }
 
     const Item: React.FC<Diagnosis> = ({ id, departament, dateDiagnosis, requiredSubjects, numberProfessors, typeSubject, feedback, status }) => {
         const isEditable = status !== 'Totalmente Autorizado' && status !== 'Parcialmente Autorizado';
@@ -84,14 +105,42 @@ const DiagnosisOfNeeds = () => {
             <View style={styles.cell}>
                 <TouchableOpacity 
                     style={[styles.buttonGenerateRegistrationForm, { opacity: isEditable ? 1 : 0.5 }]} 
-                    onPress={isEditable ? () => console.log("Editar", id) : undefined}
+                    onPress={isEditable ? () =>  handleEditCourse(id) : undefined}
                     disabled={!isEditable}>
-                    <Ionicons name="create-outline" size={35} color={isEditable ? "#2f64ba" : "#ccc"} />
+                    <Feather name="edit" size={35} color={isEditable ? "#2f64ba" : "#ccc"} />
                 </TouchableOpacity>
             </View>
         </View>
     );
 };
+
+
+    // const Item: React.FC<Diagnosis> = ({ id, departament, dateDiagnosis, requiredSubjects, numberProfessors, typeSubject, shift, status }) => (
+        
+    //     <View style={styles.row}>
+    //         <Text style={styles.cell}>{departament}</Text>
+    //         <Text style={styles.cell}>{dateDiagnosis}</Text>
+    //         <Text style={styles.cell}>{requiredSubjects}</Text>
+    //         <Text style={styles.cell}>{typeSubject}</Text>
+    //         <Text style={styles.cell}>{numberProfessors}</Text>
+    //         <Text style={styles.cell}>{feedback}</Text>
+    //         <Text style={[styles.cell, statusStyle]}>{status}</Text>
+    //         <View style={styles.cell}>
+    //             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    //                 <TouchableOpacity style={styles.centeredView} onPress={() => handleSelectCourse(id)}>
+    //                     <MaterialIcons style={styles.buttonDetails} name="more-horiz" size={35} color="#2f64ba" />
+    //                 </TouchableOpacity>
+    //             </View>
+    //         </View>
+    //         <View style={styles.cell}>
+    //             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    //                 <TouchableOpacity style={styles.centeredView} onPress={() => handleEditCourse(id)}>
+    //                     <Feather style={styles.buttonEdit} name="edit" size={35} color="#2f64ba" />
+    //                 </TouchableOpacity>
+    //             </View>
+    //         </View>
+    //     </View>
+    // );
 
     if (isLoading) {
         return (
@@ -108,6 +157,14 @@ const DiagnosisOfNeeds = () => {
                 <DiagnosisOfNeedsDetails
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
+                    diagnosisData={diagnosisSpecific}
+                />
+            )}
+
+            {diagnosisSpecific && (
+                <EditDiagnosis
+                    modalVisible={modalEditVisible}
+                    setModalVisible={setModalEditVisible}
                     diagnosisData={diagnosisSpecific}
                 />
             )}
@@ -186,6 +243,8 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
         textAlign: 'center',
+        flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
+        overflow: 'hidden', // Asegura que el contenido no se desborde
     },
     centeredView: {
         flex: 1,
@@ -200,23 +259,24 @@ const styles = StyleSheet.create({
         textAlign: "center",
         borderRadius: 10,
     },
-
+    buttonEdit: {
+        backgroundColor: "white",
+        textAlign: "center",
+    },
     buttonGenerateRegistrationForm: {
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
-        borderRadius: 5,
-        borderWidth: 2,
         borderColor: "#2f64ba",
         backgroundColor: "white", // Fondo blanco para estado habilitado
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        // shadowColor: "#000",
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 2,
+        // // },
+        // shadowOpacity: 0.25,
+        // shadowRadius: 3.84,
+        // elevation: 5,
     }
 });
 

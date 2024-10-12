@@ -41,6 +41,7 @@ const CoursesToAuthorizeDetails: React.FC<CoursesToAuthorizeDetails> = ({ modalV
             transparent={true}
             visible={modalVisible}
         >
+            <ScrollView>
             <View style={styles.centeredView}>
 
             <ScrollView
@@ -136,6 +137,7 @@ const CoursesToAuthorizeDetails: React.FC<CoursesToAuthorizeDetails> = ({ modalV
                 </ScrollView>
                 </ScrollView>
             </View>
+            </ScrollView>
         </Modal>
     );
 }
@@ -154,7 +156,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 5,
-        alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -166,7 +167,8 @@ const styles = StyleSheet.create({
     },
     textRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
+        overflow: 'hidden', // Asegura que el contenido no se desborde
     },
     button: {
         borderRadius: 20,
@@ -187,7 +189,6 @@ const styles = StyleSheet.create({
     },
     modalText: {
         marginBottom: 15,
-        // textAlign: 'center',
         fontSize: 16,
     },
     scrollViewContent: {
