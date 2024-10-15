@@ -2,10 +2,11 @@ import { Modal, View, Text, StyleSheet, TouchableOpacity, Button, TextInput, Scr
 import React, { useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
 import { Diagnosis, DiagnosisForm } from '@/services/interfaces/AcademicHead';
-import { router } from 'expo-router';
+import { router, Href } from 'expo-router';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-datepicker';
 import { parseISO, set } from 'date-fns';
+import { updateDiagnosis } from '@/services/Diagnosis';
 
 
 
@@ -44,7 +45,7 @@ const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setMod
         is_authorized_by_first: false,
         is_authorized_by_second: false,
     });
-    console.log(form.dateDiagnosis)
+    // console.log(form.dateDiagnosis)
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -56,10 +57,27 @@ const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setMod
     const handleSaveDiagnosis = async () => {
         setIsLoading(true);
         setErrors({}); // Limpiar errores antes de enviar
+        const diagnosisDataFormattedDate = {
+            ...diagnosisData,
+            dateDiagnosis: parseISO(diagnosisData.dateDiagnosis),
+            startDate: parseISO(diagnosisData.startDate),
+            endDate: parseISO(diagnosisData.endDate)
+        };
+        // console.log(diagnosisDataFormattedDate)
+        const fieldsToUpdate = Object.entries(form).filter(([key, value]) => {
+            if (key === 'dateDiagnosis' || key === 'startDate' || key === 'endDate') {
+                return value.getTime() !== diagnosisDataFormattedDate[key].getTime();
+            }
+            return value !== diagnosisData[key as keyof Diagnosis];
+        });
+        // console.log(fieldsToUpdate)
+        const fieldsToUpdateJSON = JSON.parse(JSON.stringify(Object.fromEntries(fieldsToUpdate)));
+        // console.log(tempJson);
         try {
-            // const diagnosis = await registerDiagnostic(form); // TO DO: Implementar función de UPDATE
-            // console.log('Diagnóstico guardado exitosamente:', diagnosis);
+            const diagnosis = await updateDiagnosis(diagnosisData.id, fieldsToUpdateJSON); // TO DO: Implementar función de UPDATE
+            console.log('Diagnóstico guardado exitosamente:', diagnosis);
             setModalVisible(false);
+            router.replace('/academicHead');
         } catch (error: any) {
             // Revisar la estructura del error capturado
             console.error('Error al guardar el diagnóstico:', error);
@@ -208,8 +226,8 @@ const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setMod
                             onValueChange={(itemValue) => handleInputChange('typeSubject', itemValue)}
                         >
                             <Picker.Item label="Seleccione el Tipo (en caso de desear modificarlo)" value="" />
-                            <Picker.Item label="Carrera Genérica" value="generico" />
-                            <Picker.Item label="Módulo de Especialidad" value="especialidad" />
+                            <Picker.Item label="Carrera Genérica" value="Generico" />
+                            <Picker.Item label="Módulo de Especialidad" value="Especialidad" />
                         </Picker>
                         {errors.typeSubject && <Text style={styles.errorText}>{errors.typeSubject}</Text>}
 

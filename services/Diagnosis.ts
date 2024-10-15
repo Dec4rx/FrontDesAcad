@@ -69,4 +69,35 @@ export const registerDiagnostic = async (data: DiagnosisForm) => {
       throw error;
     }
   }
+
+  export const updateDiagnosis = async (id: number, data: JSON) => {
+    try {
+      const response = await fetch(`${BASE_URL}/diagnosis/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (response.ok) {
+        return await response.json();
+      } else {
+        // Captura el error de la respuesta del servidor
+        const errorData = await response.json();
+  
+        // Debug: Mostrar los errores capturados
+        console.error('Errores del servidor:', errorData);
+  
+        // Lanza los errores directamente para que puedan ser capturados en el frontend
+        throw errorData;
+      }
+    } catch (error) {
+      // Mostrar el error completo para debugging
+      console.error('Error durante la creación del diagnóstico:', error);
+  
+      // Propaga el error para que el frontend lo maneje correctamente
+      throw error;
+    }
+  }
   

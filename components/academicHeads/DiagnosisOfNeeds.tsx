@@ -24,7 +24,12 @@ const DiagnosisOfNeeds = () => {
     const handleGetDiagnosis = async () => {
         try {
             const diagnosis = await getDiagnosis();
-            setDiagnosis(diagnosis);
+            const modifiedDiagnosis = diagnosis.map((d: { is_authorized_by_first: number; is_authorized_by_second: number; }) => ({
+                ...d,
+                is_authorized_by_first: d.is_authorized_by_first === 1,
+                is_authorized_by_second: d.is_authorized_by_second === 1
+            }));
+            setDiagnosis(modifiedDiagnosis);
         } catch (error) {
             console.error(error);
         } finally {
