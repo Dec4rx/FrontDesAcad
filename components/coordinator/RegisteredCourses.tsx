@@ -3,123 +3,99 @@ import RegisteredCourseDetails from './modals/RegisteredCourseDetails';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React, { useState } from 'react';
+import { CourseRegistered } from '@/services/interfaces/Coordinators';
 
-interface ItemProps {
-    id: number;
-    fechaRegistro: string;
-    departamentoPropone: string;
-    coordinador: string;
-    nombreCurso: string;
-    dirigidoA: string;
-    tipoCurso: string;
-    enfoqueCurso: string;
-    personaImparte: string;
-    institucionPertenece: string;
-    fechaInicio: string;
-    fechaTermino: string;
-    numeroHoras: string;
-    horario: string;
-    lugarImparticion: string;
-    requisitos: string;
-    justificacion: string;
-    objetivo: string;
-    contenidoTematico:
-    {
-        tema: string;
-        duracion: string;
-        actividades: string;
-        competencias: string;
-        criterioEvaluacion: string;
-        recursosDidacticos: string;
-        fuentesInformacion: string;
-    }[],
-    autorizadoPor: string;
-    revisadoPor: string;
-}
 
 
 const RegisteredCourses = () => {
 
     // Datos de ejemplo para los cursos
-    const cursos = [
-        {
-            id: 0,
-            fechaRegistro: '2024-01-15',
-            departamentoPropone: 'Ciencias Básicas',
-            coordinador: 'Juan Pérez',
-            nombreCurso: 'Introducción a la Física Cuántica',
-            dirigidoA: 'Ingeniería y Física',
-            tipoCurso: 'Formación Docente',
-            enfoqueCurso: 'Actualización',
-            personaImparte: 'Dra. Ana López',
-            institucionPertenece: 'ITA',
-            fechaInicio: '2024-02-01',
-            fechaTermino: '2024-03-01',
-            numeroHoras: '30',
-            horario: 'Matutino',
-            lugarImparticion: 'Aula 101',
-            requisitos: 'Conocimientos básicos de física',
-            justificacion: 'Actualizar metodologías de enseñanza',
-            objetivo: 'Mejorar competencias docentes en física moderna',
-            contenidoTematico: [
-                {
-                    tema: 'Principios de mecánica cuántica',
-                    duracion: '5 horas',
-                    actividades: 'Lecturas y ejercicios',
-                    competencias: 'Análisis de problemas cuánticos',
-                    criterioEvaluacion: 'Pruebas escritas',
-                    recursosDidacticos: 'Libros y presentaciones',
-                    fuentesInformacion: 'Artículos científicos relevantes'
-                },
-                // Otros temas/subtemas pueden ser añadidos aquí
-            ],
-            autorizadoPor: 'Dr. Carlos Ruiz, Coordinador de Ciencias',
-            revisadoPor: 'Lic. María González, Director Académico'
-        }
-        // Otros cursos pueden ser añadidos aquí
+    const cursos: CourseRegistered[] = [{
+        "id": 1,
+        "diagnosis_id": 12345,
+        "coordinator_id": 1,
+        "dateRegistration": new Date(),
+        "departament": "Computer Science",
+        "name": "Intro to AI Workshop",
+        "aimedAt": "Students",
+        "type": "Workshop",
+        "approach": "Hands-on",
+        "personToTeach": "Dr. John Doe",
+        "institutionOrAcademic": "Tech University",
+        "startDate": new Date(),
+        "endDate": new Date(),
+        "numberHours": 40,
+        "shift": "Morning",
+        "place": "Room 202, Main Building",
+        "requirements": "Basic programming knowledge",
+        "justification": "Increase AI literacy among students",
+        "objective": "Teach the fundamentals of AI and machine learning",
+        "thematicContents": "Introduction to AI, Machine Learning Algorithms, Neural Networks",
+        "resources": "Computers, Projector, Notebooks",
+        "informationSources": "AI Textbook, Research Papers",
+        "autoriazation": "Juan Pérez",
+        "review": "María González"
+    },
+    {
+        "id": 2,
+        "diagnosis_id": 12346,
+        "coordinator_id": 2,
+        "dateRegistration": new Date(),
+        "departament": "Data Science",
+        "name": "Advanced Data Analysis Seminar",
+        "aimedAt": "Graduate Students",
+        "type": "Seminar",
+        "approach": "Lecture",
+        "personToTeach": "Dr. Jane Smith",
+        "institutionOrAcademic": "Data Science Institute",
+        "startDate": new Date(),
+        "endDate": new Date(),
+        "numberHours": 30,
+        "shift": "Afternoon",
+        "place": "Room 305, Data Science Building",
+        "requirements": "Basic knowledge of statistics",
+        "justification": "Enhance data analysis skills",
+        "objective": "Teach advanced data analysis techniques using Python and R",
+        "thematicContents": "Data Cleaning, Statistical Models, Machine Learning",
+        "resources": "Laptops, Statistical Software",
+        "informationSources": "Data Science Journals, Online Courses",
+        "autoriazation": "Carlos Rodríguez",
+        "review": "Ana Martínez"
+    },
+    {
+        "id": 3,
+        "diagnosis_id": 12347,
+        "coordinator_id": 3,
+        "dateRegistration": new Date(),
+        "departament": "Software Engineering",
+        "name": "Agile Methodologies Workshop",
+        "aimedAt": "Developers",
+        "type": "Workshop",
+        "approach": "Interactive",
+        "personToTeach": "Eng. Michael Brown",
+        "institutionOrAcademic": "Software Development Academy",
+        "startDate": new Date(),
+        "endDate": new Date(),
+        "numberHours": 20,
+        "shift": "Evening",
+        "place": "Room 101, Engineering Building",
+        "requirements": "Basic programming skills",
+        "justification": "Improve project management skills",
+        "objective": "Teach the fundamentals of Agile and Scrum methodologies",
+        "thematicContents": "Agile Principles, Scrum Framework, Project Management",
+        "resources": "Whiteboards, Markers, Laptops",
+        "informationSources": "Agile Manifesto, Scrum Guide",
+        "autoriazation": "Laura Sánchez",
+        "review": "Pedro Hernández"
+    }
     ];
 
 
     const [selectId, setSelectId] = useState(0)
 
-    const defaultCourse: ItemProps = {
-        id: 0,
-        fechaRegistro: '',
-        departamentoPropone: '',
-        coordinador: '',
-        nombreCurso: '',
-        dirigidoA: '',
-        tipoCurso: '',
-        enfoqueCurso: '',
-        personaImparte: '',
-        institucionPertenece: '',
-        fechaInicio: '',
-        fechaTermino: '',
-        numeroHoras: '',
-        horario: '',
-        lugarImparticion: '',
-        requisitos: '',
-        justificacion: '',
-        objetivo: '',
-        contenidoTematico: [
-            {
-                tema: '',
-                duracion: '',
-                actividades: '',
-                competencias: '',
-                criterioEvaluacion: '',
-                recursosDidacticos: '',
-                fuentesInformacion: ''
-            },
-            // Otros temas/subtemas pueden ser añadidos aquí, ahora vacíos
-        ],
-        autorizadoPor: '',
-        revisadoPor: ''
-    };
 
-    const [courseSpecific, setCourseSpecific] = useState<ItemProps>({
-        ...defaultCourse
-    })
+
+    const [courseSpecific, setCourseSpecific] = useState<CourseRegistered>()
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -138,58 +114,47 @@ const RegisteredCourses = () => {
         }
     }
 
-    const Item: React.FC<ItemProps> = ({
+    const Item: React.FC<CourseRegistered> = ({
         id,
-        fechaRegistro,
-        departamentoPropone,
-        coordinador,
-        nombreCurso,
-        dirigidoA,
-        tipoCurso,
-        enfoqueCurso,
-        personaImparte,
-        institucionPertenece,
-        fechaInicio,
-        fechaTermino,
-        numeroHoras,
-        horario,
-        lugarImparticion,
-        requisitos,
-        justificacion,
-        objetivo,
-        contenidoTematico: [
-            {
-                tema,
-                duracion,
-                actividades,
-                competencias,
-                criterioEvaluacion,
-                recursosDidacticos,
-                fuentesInformacion
-            },
-            // Otros temas/subtemas pueden ser añadidos aquí, ahora vacíos
-        ],
-        autorizadoPor,
-        revisadoPor
+        diagnosis_id,
+        dateRegistration,
+        departament,
+        coordinator_id,
+        name,
+        aimedAt,
+        type,
+        approach,
+        personToTeach,
+        institutionOrAcademic,
+        startDate,
+        endDate,
+        numberHours,
+        shift,
+        place,
+        requirements,
+        justification,
+        objective,
+        thematicContents,
+        resources,
+        informationSources,
+        autoriazation,
+        review
     }) => (
         <View style={styles.row}>
-            <Text style={styles.cell}>{departamentoPropone}</Text>
-            <Text style={styles.cell}>{nombreCurso}</Text>
-            <Text style={styles.cell}>{dirigidoA}</Text>
-            <Text style={styles.cell}>{institucionPertenece}</Text>
-            <Text style={styles.cell}>{numeroHoras}</Text>
-            <Text style={styles.cell}>{horario}</Text>
+            <Text style={styles.cell}>{name}</Text>
+            <Text style={styles.cell}>{departament}</Text>
+            <Text style={styles.cell}>{type}</Text>
+            <Text style={styles.cell}>{approach}</Text>
+            <Text style={styles.cell}>{aimedAt}</Text>
+            <Text style={styles.cell}>{shift}</Text>
+            <Text style={styles.cell}>{startDate.toISOString().split('T')[0]}</Text>
+            <Text style={styles.cell}>{endDate.toISOString().split('T')[0]}</Text>
             <View style={styles.cell}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity style={styles.centeredView} onPress={() => handleSelectCourse(id)}>
                         <MaterialIcons style={styles.innerText} name="more-horiz" size={35} color="#2f64ba" />
                     </TouchableOpacity>
                 </View>
-            </View>
-            <View style={styles.cell}>
-                <TouchableOpacity style={styles.buttonGenerateRegistrationForm} onPress={() => (console.log("Descargar"))}>
-                    <Ionicons name="create-outline" size={35} color="#2f64ba" />
-                </TouchableOpacity>
             </View>
 
         </View>
@@ -199,49 +164,53 @@ const RegisteredCourses = () => {
     return (
         <ScrollView horizontal style={styles.container}>
 
-            <RegisteredCourseDetails
+            {courseSpecific && <RegisteredCourseDetails
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 courseData={courseSpecific}//TO DO MODIFICAR ESTOOO ES TEMPORAL
-            />
+            />}
 
 
             <View>
                 <View style={styles.rowHeader}>
-                    <Text style={styles.headerCell}>Departamento Académico</Text>
-                    <Text style={styles.headerCell}>Nombre</Text>
+                    <Text style={styles.headerCell}>Nombre del curso</Text>
+                    <Text style={styles.headerCell}>Departamento o Academia que Propone</Text>
+                    <Text style={styles.headerCell}>Tipo de Curso</Text>
+                    <Text style={styles.headerCell}>Enfoque del Curso</Text>
                     <Text style={styles.headerCell}>Dirigido a</Text>
-                    <Text style={styles.headerCell}>Institucion a la que pertenece</Text>
-                    <Text style={styles.headerCell}>Número de Docente que la Requieren</Text>
-                    <Text style={styles.headerCell}>Numero de horas</Text>
                     <Text style={styles.headerCell}>Horario</Text>
-                    <Text style={styles.headerCell}>Generar Ficha de Registro</Text>
+                    <Text style={styles.headerCell}>Fecha de Inicio</Text>
+                    <Text style={styles.headerCell}>Fecha de Término</Text>
+                    <Text style={styles.headerCell}>Detalles</Text>
                 </View>
                 <FlatList
                     data={cursos}
                     renderItem={({ item }) => (
                         <Item
-                        id={item.id}
-                        fechaRegistro={item.fechaRegistro}
-                        departamentoPropone={item.departamentoPropone}
-                        coordinador={item.coordinador}
-                        nombreCurso={item.nombreCurso}
-                        dirigidoA={item.dirigidoA}
-                        tipoCurso={item.tipoCurso}
-                        enfoqueCurso={item.enfoqueCurso}
-                        personaImparte={item.personaImparte}
-                        institucionPertenece={item.institucionPertenece}
-                        fechaInicio={item.fechaInicio}
-                        fechaTermino={item.fechaTermino}
-                        numeroHoras={item.numeroHoras}
-                        horario={item.horario}
-                        lugarImparticion={item.lugarImparticion}
-                        requisitos={item.requisitos}
-                        justificacion={item.justificacion}
-                        objetivo={item.objetivo}
-                        contenidoTematico={item.contenidoTematico}
-                        autorizadoPor={item.autorizadoPor}
-                        revisadoPor={item.revisadoPor}
+                            id={item.id}
+                            diagnosis_id={item.diagnosis_id}
+                            dateRegistration={item.dateRegistration}
+                            departament={item.departament}
+                            coordinator_id={item.coordinator_id}
+                            name={item.name}
+                            aimedAt={item.aimedAt}
+                            type={item.type}
+                            approach={item.approach}
+                            personToTeach={item.personToTeach}
+                            institutionOrAcademic={item.institutionOrAcademic}
+                            startDate={item.startDate}
+                            endDate={item.endDate}
+                            numberHours={item.numberHours}
+                            shift={item.shift}
+                            place={item.place}
+                            requirements={item.requirements}
+                            justification={item.justification}
+                            objective={item.objective}
+                            thematicContents={item.thematicContents}
+                            resources={item.resources}
+                            informationSources={item.informationSources}
+                            autoriazation={item.autoriazation}
+                            review={item.review}
                         />
                     )}
                     keyExtractor={(item) => item.id.toString()}

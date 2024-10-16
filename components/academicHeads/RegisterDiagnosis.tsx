@@ -51,7 +51,7 @@ const AgregarDiagnostico = () => {
     } catch (error: any) {
       // Revisar la estructura del error capturado
       console.error('Error al guardar el diagnóstico:', error);
-  
+
       // Si el error capturado tiene una estructura con errores específicos
       if (error && typeof error === 'object') {
         setErrors(error); // Ajustar la estructura si es necesario según el formato del servidor
@@ -62,7 +62,7 @@ const AgregarDiagnostico = () => {
       setIsLoading(false);
     }
   };
-  
+
 
   // Determina los límites de las fechas basados en el periodo seleccionado
   const getDateLimits = (periodo: string) => {
@@ -150,18 +150,20 @@ const AgregarDiagnostico = () => {
       <Text style={styles.label}>Asignaturas en la que se requiere formación o actualización:</Text>
       <TextInput
         placeholder="Asignaturas Requeridas"
+        multiline
         value={form.requiredSubjects}
         onChangeText={text => handleInputChange('requiredSubjects', text)}
-        style={[styles.input, errors.requiredSubjects ? styles.inputError : null]}
+        style={[styles.input, errors.requiredSubjects ? styles.inputError : null, styles.largeInput]}
       />
       {errors.requiredSubjects && <Text style={styles.errorText}>{errors.requiredSubjects}</Text>}
 
       <Text style={styles.label}>Contenidos Temáticos en que se requiere la formación y actualización:</Text>
       <TextInput
         placeholder="Contenidos Temáticos"
+        multiline
         value={form.thematicContents}
         onChangeText={text => handleInputChange('thematicContents', text)}
-        style={[styles.input, errors.thematicContents ? styles.inputError : null]}
+        style={[styles.input, errors.thematicContents ? styles.inputError : null, styles.largeInput]}
       />
       {errors.thematicContents && <Text style={styles.errorText}>{errors.thematicContents}</Text>}
 
@@ -199,18 +201,20 @@ const AgregarDiagnostico = () => {
       <Text style={styles.label}>Objetivo:</Text>
       <TextInput
         placeholder="Objetivo"
+        multiline
         value={form.objective}
         onChangeText={text => handleInputChange('objective', text)}
-        style={[styles.input, errors.objective ? styles.inputError : null]}
+        style={[styles.input, errors.objective ? styles.inputError : null, styles.largeInput]}
       />
       {errors.objective && <Text style={styles.errorText}>{errors.objective}</Text>}
 
       <Text style={styles.label}>Carrera(s) Atendidas:</Text>
       <TextInput
         placeholder="Carreras Atendidas"
+        multiline
         value={form.careersAttended}
         onChangeText={text => handleInputChange('careersAttended', text)}
-        style={[styles.input, errors.careersAttended ? styles.inputError : null]}
+        style={[styles.input, errors.careersAttended ? styles.inputError : null, styles.largeInput]}
       />
       {errors.careersAttended && <Text style={styles.errorText}>{errors.careersAttended}</Text>}
 
@@ -250,7 +254,7 @@ const AgregarDiagnostico = () => {
         minDate={minDate}
         maxDate={maxDate}
       />
-      {errors.endDate&& <Text style={styles.errorText}>{errors.endDate}</Text>}
+      {errors.endDate && <Text style={styles.errorText}>{errors.endDate}</Text>}
 
       <Text style={styles.label}>Turno:</Text>
       <Picker
@@ -267,9 +271,10 @@ const AgregarDiagnostico = () => {
       <Text style={styles.label}>Facilitadores(as) Propuestos(as) (Nombre y datos para su localización):</Text>
       <TextInput
         placeholder="Facilitadores Propuestos"
+        multiline
         value={form.facilitators}
         onChangeText={text => handleInputChange('facilitators', text)}
-        style={[styles.input, errors.facilitators ? styles.inputError : null]}
+        style={[styles.input, errors.facilitators ? styles.inputError : null, styles.largeInput]}
       />
       {errors.facilitators && <Text style={styles.errorText}>{errors.facilitators}</Text>}
 
@@ -297,6 +302,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     fontSize: 16,
     marginBottom: 10,
+  },
+  largeInput: {
+    minHeight: 100
   },
   label: {
     fontSize: 16,

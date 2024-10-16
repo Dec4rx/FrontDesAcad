@@ -17,7 +17,7 @@ interface DiagnosisOfNeedsDetails {
 }
 
 
-const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setModalVisible, diagnosisData: diagnosisData }) => {
+const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setModalVisible, diagnosisData}) => {
 
     // const [modalVisibleAuthUnauth, setModalVisibleAuthUnauth] = useState(false);
 
@@ -194,18 +194,20 @@ const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setMod
                         <Text style={styles.label}>Asignaturas Requeridas:</Text>
                         <TextInput
                             placeholder="Asignaturas Requeridas"
+                            multiline
                             value={form.requiredSubjects}
                             onChangeText={text => handleInputChange('requiredSubjects', text)}
-                            style={[styles.input, errors.requiredSubjects ? styles.inputError : null]}
+                            style={[styles.input, errors.requiredSubjects ? styles.inputError : null, styles.largeInput]}
                         />
                         {errors.requiredSubjects && <Text style={styles.errorText}>{errors.requiredSubjects}</Text>}
 
                         <Text style={styles.label}>Contenidos Temáticos:</Text>
                         <TextInput
                             placeholder="Contenidos Temáticos"
+                            multiline
                             value={form.thematicContents}
                             onChangeText={text => handleInputChange('thematicContents', text)}
-                            style={[styles.input, errors.thematicContents ? styles.inputError : null]}
+                            style={[styles.input, errors.thematicContents ? styles.inputError : null, styles.largeInput]}
                         />
                         {errors.thematicContents && <Text style={styles.errorText}>{errors.thematicContents}</Text>}
 
@@ -243,18 +245,20 @@ const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setMod
                         <Text style={styles.label}>Objetivo:</Text>
                         <TextInput
                             placeholder="Objetivo"
+                            multiline
                             value={form.objective}
                             onChangeText={text => handleInputChange('objective', text)}
-                            style={[styles.input, errors.objective ? styles.inputError : null]}
+                            style={[styles.input, errors.objective ? styles.inputError : null, styles.largeInput]}
                         />
                         {errors.objective && <Text style={styles.errorText}>{errors.objective}</Text>}
 
                         <Text style={styles.label}>Carreras Atendidas:</Text>
                         <TextInput
                             placeholder="Carreras Atendidas"
+                            multiline
                             value={form.careersAttended}
                             onChangeText={text => handleInputChange('careersAttended', text)}
-                            style={[styles.input, errors.careersAttended ? styles.inputError : null]}
+                            style={[styles.input, errors.careersAttended ? styles.inputError : null, styles.largeInput]}
                         />
                         {errors.careersAttended && <Text style={styles.errorText}>{errors.careersAttended}</Text>}
 
@@ -312,9 +316,10 @@ const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setMod
                         <Text style={styles.label}>Facilitadores Propuestos:</Text>
                         <TextInput
                             placeholder="Facilitadores Propuestos"
+                            multiline
                             value={form.facilitators}
                             onChangeText={text => handleInputChange('facilitators', text)}
-                            style={[styles.input, errors.facilitators ? styles.inputError : null]}
+                            style={[styles.input, errors.facilitators ? styles.inputError : null, styles.largeInput]}
                         />
                         {errors.facilitators && <Text style={styles.errorText}>{errors.facilitators}</Text>}
 
@@ -396,6 +401,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         fontSize: 16,
         marginBottom: 10,
+    },
+    largeInput: {
+        minHeight: 100
     },
     label: {
         fontSize: 16,

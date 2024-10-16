@@ -1,7 +1,8 @@
-import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, Alert, Button } from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, Alert, Button, SafeAreaView } from 'react-native';
 import React, { useEffect, useState, useCallback } from 'react';
-import AuthorizedCourses from '@/components/coordinator/AuthorizedCourses';
-import RegisteredCurses from '@/components/coordinator/RegisteredCourses';
+import RegisteredDiagnosis from '@/components/coordinator/RegisteredCourses';
+import RegisteredCourses from '@/components/coordinator/RegisteredCourses';
+import AuthorizedDiagnosis from '@/components/coordinator/AuthorizedDiagnosis';
 
 
 const Coordinator = () => {
@@ -12,13 +13,13 @@ const Coordinator = () => {
     department: 'TIC\'s'
   }
 
-  const [selectedOption, setSelectedOption] = useState<'authorizedCourses' | 'registeredCourses' | null>('authorizedCourses');
+  const [selectedOption, setSelectedOption] = useState<'authorizedCourses' | 'registeredDiagnosis' | null>('authorizedCourses');
 
-  const handleButtonPress = (component: 'authorizedCourses' | 'registeredCourses') => {
+  const handleButtonPress = (component: 'authorizedCourses' | 'registeredDiagnosis') => {
     setSelectedOption(component);
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
 
       <Text style={styles.welcomeText}>
         Bienvenido Coordinador
@@ -37,23 +38,22 @@ const Coordinator = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={[styles.button, selectedOption === 'authorizedCourses' && styles.buttonSelected]}
           onPress={() => handleButtonPress('authorizedCourses')}>
-          <Text style={styles.buttonText}>Cursos Autorizados</Text>
+          <Text style={styles.buttonText}>Diagnosticos Autorizados</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.button, selectedOption === 'registeredCourses' && styles.buttonSelected]}
-          onPress={() => handleButtonPress('registeredCourses')}>
+        <TouchableOpacity style={[styles.button, selectedOption === 'registeredDiagnosis' && styles.buttonSelected]}
+          onPress={() => handleButtonPress('registeredDiagnosis')}>
           <Text style={styles.buttonText}>Cursos Registrados</Text>
         </TouchableOpacity>
 
       </View>
 
-      <ScrollView>
-        <View style={styles.contentContainer}>
-          {selectedOption === 'authorizedCourses' && <AuthorizedCourses />}
-          {selectedOption === 'registeredCourses' && <RegisteredCurses />}
-        </View>
-      </ScrollView>
-    </View>
+
+      <View style={styles.contentContainer}>
+        {selectedOption === 'authorizedCourses' && <AuthorizedDiagnosis />}
+        {selectedOption === 'registeredDiagnosis' && <RegisteredDiagnosis />}
+      </View>
+    </SafeAreaView>
   )
 }
 
@@ -106,9 +106,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
+  gearButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   contentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: 1,
     width: '100%', // Ensure the content container takes up the full width
     backgroundColor: '#fff', // Ensure the background is white
-  },
+  },  
 });

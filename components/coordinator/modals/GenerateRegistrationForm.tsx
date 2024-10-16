@@ -6,49 +6,52 @@ import { router } from 'expo-router';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-datepicker';
 import { parseISO, set } from 'date-fns';
+import { FormCourseRegistration } from '@/services/interfaces/Coordinators';
 
 
 
 interface DiagnosisOfNeedsDetails {
     modalVisible: boolean;
     setModalVisible: (visible: boolean) => void;
+    diagnosisData: Diagnosis;
 }
 
 
-const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setModalVisible }) => {
+const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setModalVisible, diagnosisData }) => {
 
-    // const [modalVisibleAuthUnauth, setModalVisibleAuthUnauth] = useState(false);
 
+    
     const [isLoading, setIsLoading] = useState(false);
-    const [form, setForm] = useState<RegistrationForm>({
-        dateRegistration: new Date(),
-        departament: '',
-        coordinator: '',
+    const [form, setForm] = useState<FormCourseRegistration>({
+        diagnosis_id: diagnosisData.id,
+        coordinator_id: 1,//TO DO: Check this and changue for the real id
+        dateRegistration: parseISO(new Date().toISOString()), 
+        departament: diagnosisData.departament,
         name: '',
         aimedAt: '',
         type: '',
         approach: '',
         personToTeach: '',
         institutionOrAcademic: '',
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: parseISO(diagnosisData.startDate),
+        endDate: parseISO(diagnosisData.endDate),
         numberHours: 0,
-        shift: '',
+        shift: diagnosisData.shift,
         place: '',
         requirements: '',
         justification: '',
-        objective: '',
-        thematicContents: '',
+        objective: diagnosisData.objective,
+        thematicContents: diagnosisData.thematicContents,
         resources: '',
         informationSources: '',
-        autoriazation: '',
-        review: ''
+        autoriazation: '', // TO DO: Check this, maybe is the boolean is_authorized_by_first
+        review: '' // TO DO: Check this, maybe is the boolean is_authorized_by_second
     });
 
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const handleInputChange = <K extends keyof RegistrationForm>(prop: K, value: RegistrationForm[K]) => {
+    const handleInputChange = <K extends keyof FormCourseRegistration>(prop: K, value: FormCourseRegistration[K]) => {
         setForm({ ...form, [prop]: value });
         setErrors({ ...errors, [prop]: '' }); // Limpiar el error del campo modificado
     };
@@ -74,6 +77,8 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
             setIsLoading(false);
         }
     };
+
+    
 
     if (isLoading) {
         return (
@@ -101,48 +106,28 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
                         </TouchableOpacity>
                         <Text style={styles.title}>Registro de Curso</Text>
 
-                        <Text style={styles.label}>Departamento Académico:</Text>
+                        <Text style={styles.label}>Nombre del curso:</Text>
                         <TextInput
-                            placeholder="Departamento Académico"
-                            value={form.departament}
-                            onChangeText={text => handleInputChange('departament', text)}
-                            style={[styles.input, errors.departament ? styles.inputError : null]}
+                            placeholder="Nombre del curso"
+                            value={form.name}
+                            onChangeText={text => handleInputChange('name', text)}
+                            style={[styles.input, errors.name ? styles.inputError : null]}
                         />
-                        {errors.departament && <Text style={styles.errorText}>{errors.departament}</Text>}
-
-                        <Text style={styles.label}>Fecha de Registro:</Text>
-                        <DatePicker
-                            selected={form.dateRegistration}
-                            onChange={(date: Date | null) => {
-                                if (date) handleInputChange('dateRegistration', date);
-                            }}
-                            dateFormat="dd/MM/yyyy"
-                            className={`date-picker-input ${errors.dateDiagnosis ? 'input-error' : ''}`}
-                        />
-                        {errors.dateDiagnosis && <Text style={styles.errorText}>{errors.dateDiagnosis}</Text>}
-
-                        <Text style={styles.label}>Coordinador del Curso o Academia:</Text>
-                        <TextInput
-                            placeholder="Coordinador"
-                            value={form.coordinator}
-                            onChangeText={text => handleInputChange('coordinator', text)}
-                            style={[styles.input, errors.headDepartment ? styles.inputError : null]}
-                        />
-                        {errors.headDepartment && <Text style={styles.errorText}>{errors.headDepartment}</Text>}
-
+                        {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+                       
                         <Text style={styles.label}>Dirigido a:</Text>
                         <TextInput
                             placeholder="Dirigido a"
                             value={form.aimedAt}
                             onChangeText={text => handleInputChange('aimedAt', text)}
-                            style={[styles.input, errors.presidentAcademy ? styles.inputError : null]}
+                            style={[styles.input, errors.aimedAt ? styles.inputError : null]}
                         />
-                        {errors.presidentAcademy && <Text style={styles.errorText}>{errors.presidentAcademy}</Text>}
+                        {errors.aimedAt && <Text style={styles.errorText}>{errors.aimedAt}</Text>}
 
                         <Text style={styles.label}>Tipo de Curso:</Text>
                         <Picker
                             selectedValue={form.type}
-                            style={[styles.picker, errors.typeSubject ? styles.inputError : null]}
+                            style={[styles.picker, errors.type ? styles.inputError : null]}
                             onValueChange={(itemValue) => handleInputChange('type', itemValue)}
                         >
                             <Picker.Item label="Seleccione el Tipo" value="" />
@@ -150,21 +135,21 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
                             <Picker.Item label="Desarrollo Profesional" value="Desarrollo Profesional" />
                             <Picker.Item label="Superación Personal" value="Superación Personal" />
                         </Picker>
-                        {errors.typeSubject && <Text style={styles.errorText}>{errors.typeSubject}</Text>}
+                        {errors.type && <Text style={styles.errorText}>{errors.type}</Text>}
 
 
                         <Text style={styles.label}>Enfoque del Curso:</Text>
                         <Picker
-                            selectedValue={form.type}
-                            style={[styles.picker, errors.typeSubject ? styles.inputError : null]}
-                            onValueChange={(itemValue) => handleInputChange('type', itemValue)}
+                            selectedValue={form.approach}
+                            style={[styles.picker, errors.approach ? styles.inputError : null]}
+                            onValueChange={(itemValue) => handleInputChange('approach', itemValue)}
                         >
                             <Picker.Item label="Seleccione el Enfoque" value="" />
                             <Picker.Item label="Reforzamiento" value="Reforzamiento" />
                             <Picker.Item label="Nivel" value="Nivel" />
                             <Picker.Item label="Actualización" value="Actualización" />
                         </Picker>
-                        {errors.typeSubject && <Text style={styles.errorText}>{errors.typeSubject}</Text>}
+                        {errors.approach && <Text style={styles.errorText}>{errors.approach}</Text>}
 
 
                         <Text style={styles.label}>Persona a Impartir el Curso:</Text>
@@ -174,43 +159,16 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
                             onChangeText={text => handleInputChange('personToTeach', text)}
                             style={[styles.input, errors.titleSubdirectorate ? styles.inputError : null]}
                         />
-                        {errors.titleSubdirectorate && <Text style={styles.errorText}>{errors.titleSubdirectorate}</Text>}
+                        {errors.personToTeach && <Text style={styles.errorText}>{errors.personToTeach}</Text>}
 
                         <Text style={styles.label}>Institución o Academia a la que pertenece:</Text>
                         <TextInput
                             placeholder="Institución o Academia"
                             value={form.institutionOrAcademic}
                             onChangeText={text => handleInputChange('institutionOrAcademic', text)}
-                            style={[styles.input, errors.requiredSubjects ? styles.inputError : null]}
+                            style={[styles.input, errors.institutionOrAcademic ? styles.inputError : null]}
                         />
-                        {errors.requiredSubjects && <Text style={styles.errorText}>{errors.requiredSubjects}</Text>}
-
-                        <Text style={styles.label}>Fecha inicio del Curso: {form.startDate.toLocaleDateString('es-ES')}</Text>
-                        <DatePicker
-                            selected={form.startDate}
-                            onChange={(date: Date | null) => {
-                                if (date) handleInputChange('startDate', date);
-                            }}
-                            dateFormat="dd/MM/yyyy"
-                            className={`date-picker-input ${errors.startDate ? 'input-error' : ''}`}
-                            minDate={new Date(new Date().getFullYear(), 5, 18)}//TO DO: Check this
-                            maxDate={new Date(new Date().getFullYear() + 1, 0, 10)}
-                        />
-                        {errors.startDate && <Text style={styles.errorText}>{errors.startDate}</Text>}
-
-                        <Text style={styles.label}>Fecha fin del Curso:</Text>
-                        <DatePicker
-                            selected={form.endDate}
-                            onChange={(date: Date | null) => {
-                                if (date) handleInputChange('endDate', date);
-                            }}
-                            dateFormat="dd/MM/yyyy"
-                            className={`date-picker-input ${errors.endDate ? 'input-error' : ''}`}
-                            minDate={new Date(new Date().getFullYear(), 5, 18)}//TO DO: Check this
-                            maxDate={new Date(new Date().getFullYear() + 1, 0, 10)}
-                            // placeholderText={form.endDate ? form.endDate.toLocaleDateString('es-ES') : 'Selecciona una fecha'}
-                        />
-                        {errors.endDate && <Text style={styles.errorText}>{errors.endDate}</Text>}
+                        {errors.institutionOrAcademic && <Text style={styles.errorText}>{errors.institutionOrAcademic}</Text>}
 
                         <Text style={styles.label}>Numero de horas:</Text>
                         <TextInput
@@ -220,62 +178,37 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
                             onChangeText={text => handleInputChange('numberHours', Number(text))}
                             style={[styles.input, errors.numberProfessors ? styles.inputError : null]}
                         />
-                        {errors.numberProfessors && <Text style={styles.errorText}>{errors.numberProfessors}</Text>}
-
-                       
-                        <Text style={styles.label}>Horario:</Text>
-                        <TextInput
-                            placeholder="Horario"
-                            value={form.shift}
-                            onChangeText={text => handleInputChange('shift', text)} //TO DO: Check this
-                            style={[styles.input, errors.activityEvent ? styles.inputError : null]}
-                        />
-                        {errors.activityEvent && <Text style={styles.errorText}>{errors.activityEvent}</Text>}
+                        {errors.numberHours && <Text style={styles.errorText}>{errors.numberHours}</Text>}
 
                         <Text style={styles.label}>Justificación:</Text>
                         <TextInput
                             placeholder="Justificación"
+                            multiline
                             value={form.justification}
                             onChangeText={text => handleInputChange('justification', text)}
-                            style={[styles.input, errors.objective ? styles.inputError : null]}
+                            style={[styles.input, errors.justification ? styles.inputError : null, styles.largeInput]}
                         />
-                        {errors.objective && <Text style={styles.errorText}>{errors.objective}</Text>}
+                        {errors.justification && <Text style={styles.errorText}>{errors.justification}</Text>}
 
-                        <Text style={styles.label}>Objetivo:</Text>
-                        <TextInput
-                            placeholder="Objetivo"
-                            value={form.objective}
-                            onChangeText={text => handleInputChange('objective', text)}
-                            style={[styles.input, errors.objective ? styles.inputError : null]}
-                        />
-                        {errors.objective && <Text style={styles.errorText}>{errors.objective}</Text>}
-
-                        <Text style={styles.label}>Contenidos Temáticos:</Text>
-                        <TextInput
-                            placeholder="Contenidos Temáticos"
-                            value={form.thematicContents}
-                            onChangeText={text => handleInputChange('thematicContents', text)}
-                            style={[styles.input, errors.thematicContents ? styles.inputError : null]}
-                        />
-                        {errors.thematicContents && <Text style={styles.errorText}>{errors.thematicContents}</Text>}
-                        
                         <Text style={styles.label}>Recursos Didácticos:</Text>
                         <TextInput
                             placeholder="Recursos Didácticos"
+                            multiline
                             value={form.resources}
                             onChangeText={text => handleInputChange('resources', text)}
-                            style={[styles.input, errors.thematicContents ? styles.inputError : null]}
+                            style={[styles.input, errors.resources ? styles.inputError : null, styles.largeInput]}
                         />
-                        {errors.thematicContents && <Text style={styles.errorText}>{errors.thematicContents}</Text>}
+                        {errors.resources && <Text style={styles.errorText}>{errors.resources}</Text>}
 
                         <Text style={styles.label}>Fuentes de Información:</Text>
                         <TextInput
-                            placeholder="Facilitadores Propuestos"
+                            placeholder="Fuentes de Información"
+                            multiline
                             value={form.informationSources}
                             onChangeText={text => handleInputChange('informationSources', text)}
-                            style={[styles.input, errors.facilitators ? styles.inputError : null]}
+                            style={[styles.input, errors.informationSources ? styles.inputError : null, styles.largeInput]}
                         />
-                        {errors.facilitators && <Text style={styles.errorText}>{errors.facilitators}</Text>}
+                        {errors.informationSources && <Text style={styles.errorText}>{errors.informationSources}</Text>}
 
                         <Button title="Crear Registro" onPress={handleSaveRegister} />
 
@@ -355,6 +288,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         fontSize: 16,
         marginBottom: 10,
+    },
+    largeInput: {
+        minHeight: 100
     },
     label: {
         fontSize: 16,

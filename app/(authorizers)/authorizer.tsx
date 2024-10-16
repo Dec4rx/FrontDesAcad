@@ -82,8 +82,10 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     contentContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
         flex: 1,
         width: '100%', // Ensure the content container takes up the full width
         backgroundColor: '#fff', // Ensure the background is white
-      },
+      },  
 });

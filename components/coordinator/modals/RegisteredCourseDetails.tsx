@@ -1,43 +1,12 @@
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
+import { CourseRegistered } from '@/services/interfaces/Coordinators';
+import { ScrollView } from 'react-native-gesture-handler';
 interface RegisteredCourseDetails {
     modalVisible: boolean;
     setModalVisible: (visible: boolean) => void;
-    courseData: FormCourseState
-}
-
-interface FormCourseState {
-    id: number;
-    fechaRegistro: string;
-    departamentoPropone: string;
-    coordinador: string;
-    nombreCurso: string;
-    dirigidoA: string;
-    tipoCurso: string;
-    enfoqueCurso: string;
-    personaImparte: string;
-    institucionPertenece: string;
-    fechaInicio: string;
-    fechaTermino: string;
-    numeroHoras: string;
-    horario: string;
-    lugarImparticion: string;
-    requisitos: string;
-    justificacion: string;
-    objetivo: string;
-    contenidoTematico:
-    {
-        tema: string;
-        duracion: string;
-        actividades: string;
-        competencias: string;
-        criterioEvaluacion: string;
-        recursosDidacticos: string;
-        fuentesInformacion: string;
-    }[],
-    autorizadoPor: string;
-    revisadoPor: string;
+    courseData: CourseRegistered;
 }
 
 
@@ -48,86 +17,97 @@ const RegisteredCourseDetails: React.FC<RegisteredCourseDetails> = ({ modalVisib
             transparent={true}
             visible={modalVisible}
         >
-            <View style={styles.centeredView}>
+            <ScrollView>
+                <View style={styles.centeredView}>
 
-                <View style={styles.modalView}>
-                    <TouchableOpacity
-                        style={{ alignSelf: 'flex-end' }}
-                        onPress={() => setModalVisible(!modalVisible)}>
-                        <Entypo name="cross" size={35} color="black" />
-                    </TouchableOpacity>
+                    <View style={styles.modalView}>
+                        <TouchableOpacity
+                            style={{ alignSelf: 'flex-end' }}
+                            onPress={() => setModalVisible(!modalVisible)}>
+                            <Entypo name="cross" size={35} color="black" />
+                        </TouchableOpacity>
 
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0}]}>Nombre del Curso: </Text>
-                        <Text style={styles.modalText}>xd</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0}]}>Departamento Academico: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Realización del Diagnóstico: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular del Departamento: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Presidente de Academia: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Titular de la Subdirección Académica: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Asignaturas Requeridas: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Contenidos Temáticos: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Número de Docente que la Requieren: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Tipo de Asignatura: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Actividad o Evento: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Objetivo: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Carreras Atendidas: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Periodo: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha del Curso: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Turno: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
-                    <View style={styles.textRow}>
-                        <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Facilitadores: </Text>
-                        <Text style={styles.modalText}>{}</Text>
-                    </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0 }]}>Nombre del Curso: </Text>
+                            <Text style={styles.modalText}>{courseData.name}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0 }]}>Departamento o Academia que Propone: </Text>
+                            <Text style={styles.modalText}>{courseData.departament}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Coordinador del Curso o Academia: </Text>
+                            <Text style={styles.modalText}>{courseData.coordinator_id}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Dirigido a: </Text>
+                            <Text style={styles.modalText}>{courseData.aimedAt}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Tipo de Curso: </Text>
+                            <Text style={styles.modalText}>{courseData.type}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Enfoque del Curso: </Text>
+                            <Text style={styles.modalText}>{courseData.approach}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Persona a Impartir el curso: </Text>
+                            <Text style={styles.modalText}>{courseData.personToTeach}</Text>
+                            <Text style={styles.modalText}>({courseData.institutionOrAcademic})</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Inicio: </Text>
+                            <Text style={styles.modalText}>{courseData.startDate.toISOString().split('T')[0]}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Término: </Text>
+                            <Text style={styles.modalText}>{courseData.endDate.toISOString().split('T')[0]}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Lugar donde se Impartirá el Curso: </Text>
+                            <Text style={styles.modalText}>{courseData.place}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Requisitos a Considerar: </Text>
+                            <Text style={styles.modalText}>{courseData.requirements}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Justificación: </Text>
+                            <Text style={styles.modalText}>{courseData.justification}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Objetivo: </Text>
+                            <Text style={styles.modalText}>{courseData.objective}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Contenido Temático: </Text>
+                            <Text style={styles.modalText}>{courseData.thematicContents}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Recursos Didácticos: </Text>
+                            <Text style={styles.modalText}>{courseData.resources}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fuentes de Información: </Text>
+                            <Text style={styles.modalText}>{courseData.resources}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Fecha de Registro: </Text>
+                            <Text style={styles.modalText}>{courseData.dateRegistration.toISOString().split('T')[0]}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Revisó: </Text>
+                            <Text style={styles.modalText}>{courseData.review}</Text>
+                        </View>
+                        <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Autorizó: </Text>
+                            <Text style={styles.modalText}>{courseData.autoriazation}</Text>
+                        </View>
 
+                    </View>
                 </View>
-            </View>
+            </ScrollView>
         </Modal>
     );
 }
@@ -142,11 +122,11 @@ const styles = StyleSheet.create({
         marginTop: 22,
     },
     modalView: {
-        margin: 20,
+        margin: 0,
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 5,
-        alignItems: 'center',
+        // alignItems: 'flex-start',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -158,7 +138,9 @@ const styles = StyleSheet.create({
     },
     textRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
+        overflow: 'hidden', // Asegura que el contenido no se desborde
+        // justifyContent: 'center',
     },
     button: {
         borderRadius: 20,
@@ -178,7 +160,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     modalText: {
-        marginBottom: 15,
+        marginBottom: 5,
         // textAlign: 'center',
         fontSize: 16,
     },

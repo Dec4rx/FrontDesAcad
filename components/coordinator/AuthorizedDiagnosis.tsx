@@ -9,13 +9,17 @@ import { getDiagnosisAuth } from '@/services/Diagnosis';
 import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 import DiagnosisOfNeedsDetails from '../academicHeads/modals/DiagnosisOfNeedsDetails';
+import { set } from 'date-fns';
+import GenerateRegistrationForm from './modals/GenerateRegistrationForm';
 
 
 
 
-const AuthorizedCourses = () => {
+const AuthorizedDiagnosis = () => {
     const [diagnosisSpecific, setDiagnosisSpecific] = useState<Diagnosis>()
     const [diagnostics, setDiagnosis] = useState<Diagnosis[]>([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalRegistrationFormVisible, setModalRegistrationFormVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     const handleGetDiagnosis = async () => {
@@ -32,15 +36,13 @@ const AuthorizedCourses = () => {
     useFocusEffect(
         useCallback(() => {
             handleGetDiagnosis();
-            
+
         }, [])
     );
 
 
     const handleSelectCourse = (id: number) => {
-
         console.log(id)
-
         const diagnos = diagnostics.find(diagnostics => diagnostics.id === id)
         if (diagnos) {
             setDiagnosisSpecific(diagnos)
@@ -52,11 +54,24 @@ const AuthorizedCourses = () => {
         }
     }
 
-    const [modalVisible, setModalVisible] = useState(false);
-    
 
-    const Item: React.FC<Diagnosis> = ({ id, departament, dateDiagnosis, requiredSubjects, numberProfessors, typeSubject, feedback, status } ) => (
-        
+    const handleOnRegistrationForm = (id: number) => {
+        console.log(id)
+        const diagnos = diagnostics.find(diagnostics => diagnostics.id === id)
+        if (diagnos) {
+            setDiagnosisSpecific(diagnos)
+            console.log(diagnosisSpecific)
+            setModalRegistrationFormVisible(!modalRegistrationFormVisible)
+        }
+        else {
+            console.log("no encontrado")
+        }
+    }
+
+
+
+    const Item: React.FC<Diagnosis> = ({ id, departament, dateDiagnosis, requiredSubjects, numberProfessors, typeSubject, feedback, status }) => (
+
         <View style={styles.row}>
             <Text style={styles.cell}>{departament}</Text>
             <Text style={styles.cell}>{dateDiagnosis}</Text>
@@ -72,13 +87,13 @@ const AuthorizedCourses = () => {
                 </View>
             </View>
             <View style={styles.cell}>
-                <TouchableOpacity style={styles.buttonGenerateRegistrationForm} onPress={() => (console.log("Descargar"))}>
+                <TouchableOpacity style={styles.buttonGenerateRegistrationForm} onPress={() => handleOnRegistrationForm(id)}>
                     <Ionicons name="create-outline" size={35} color="#2f64ba" />
                 </TouchableOpacity>
             </View>
         </View>
     );
-    
+
 
     if (isLoading) {
         return (
@@ -88,20 +103,22 @@ const AuthorizedCourses = () => {
         );
     }
 
-    
+
     return (
         <ScrollView horizontal style={styles.container}>
-
-            {/* <CourseDetails
-                modalVisible={modalVisible}
-                setModalVisible={setModalVisible}
-                courseData={courseSpecific}
-            /> */}
 
             {diagnosisSpecific && (
                 <DiagnosisOfNeedsDetails
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
+                    diagnosisData={diagnosisSpecific}
+                />
+            )}
+
+            {diagnosisSpecific && (
+                <GenerateRegistrationForm
+                    modalVisible={modalRegistrationFormVisible}
+                    setModalVisible={setModalRegistrationFormVisible}
                     diagnosisData={diagnosisSpecific}
                 />
             )}
@@ -151,10 +168,13 @@ const AuthorizedCourses = () => {
     );
 }
 
+export default AuthorizedDiagnosis;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+        margin: 50
     },
     rowHeader: {
         flexDirection: 'row',
@@ -200,5 +220,3 @@ const styles = StyleSheet.create({
         display: 'flex'
     }
 });
-
-export default AuthorizedCourses;
