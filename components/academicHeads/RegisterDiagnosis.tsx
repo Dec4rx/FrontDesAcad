@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import DatePicker from 'react-datepicker'; // Importa react-datepicker
 import 'react-datepicker/dist/react-datepicker.css'; // Importa los estilos de react-datepicker
 import { Picker } from '@react-native-picker/picker';
@@ -7,6 +7,14 @@ import { router } from 'expo-router';
 import { DiagnosisForm, DiagnosisFormString } from '@/services/interfaces/AcademicHead';
 import { registerDiagnostic } from '@/services/Diagnosis';
 // import { newDate } from 'react-datepicker/dist/date_utils';
+
+//TO DO IMPORTANTE es para la fecha que sea de la hora del centro de mx
+// import { utcToZonedTime } from 'date-fns-tz';
+// // Obtener la fecha actual en UTC 
+// const now = new Date();
+// // Convertirla a la zona horaria de México
+// const dateDiagnosis = utcToZonedTime(now, 'America/Mexico_City');
+// console.log(dateDiagnosis);
 
 
 const AgregarDiagnostico = () => {
@@ -25,7 +33,7 @@ const AgregarDiagnostico = () => {
     period: '',
     status: '',
     facilitators: '',
-    dateDiagnosis: new Date(),
+    dateDiagnosis: new Date(),// TO DO modificar para que tenga la fecha del centro
     startDate: new Date(),
     endDate: new Date(),
     numberProfessors: 0,
@@ -90,9 +98,9 @@ const AgregarDiagnostico = () => {
 
   if (isLoading) {
     return (
-      <div>
-        <div>Cargando...</div>
-      </div>
+      <View style={styles.centeredLoading}>
+        <ActivityIndicator size="large" color="#2f64ba" />
+      </View>
     );
   }
 
@@ -287,6 +295,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    width: '100%',
+  },
+  centeredLoading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
   title: {
     fontSize: 24,

@@ -1,4 +1,4 @@
-import { View, Modal, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Modal, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React, { useCallback, useState } from 'react';
 import DiagnosisOfNeedsDetails from './modals/DiagnosisOfNeedsDetails';
@@ -120,43 +120,17 @@ const DiagnosisOfNeeds = () => {
 };
 
 
-    // const Item: React.FC<Diagnosis> = ({ id, departament, dateDiagnosis, requiredSubjects, numberProfessors, typeSubject, shift, status }) => (
-        
-    //     <View style={styles.row}>
-    //         <Text style={styles.cell}>{departament}</Text>
-    //         <Text style={styles.cell}>{dateDiagnosis}</Text>
-    //         <Text style={styles.cell}>{requiredSubjects}</Text>
-    //         <Text style={styles.cell}>{typeSubject}</Text>
-    //         <Text style={styles.cell}>{numberProfessors}</Text>
-    //         <Text style={styles.cell}>{feedback}</Text>
-    //         <Text style={[styles.cell, statusStyle]}>{status}</Text>
-    //         <View style={styles.cell}>
-    //             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-    //                 <TouchableOpacity style={styles.centeredView} onPress={() => handleSelectCourse(id)}>
-    //                     <MaterialIcons style={styles.buttonDetails} name="more-horiz" size={35} color="#2f64ba" />
-    //                 </TouchableOpacity>
-    //             </View>
-    //         </View>
-    //         <View style={styles.cell}>
-    //             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-    //                 <TouchableOpacity style={styles.centeredView} onPress={() => handleEditCourse(id)}>
-    //                     <Feather style={styles.buttonEdit} name="edit" size={35} color="#2f64ba" />
-    //                 </TouchableOpacity>
-    //             </View>
-    //         </View>
-    //     </View>
-    // );
 
     if (isLoading) {
         return (
-            <div>
-                <div>Cargando...</div>
-            </div>
+            <View style={styles.centeredView}>
+                <ActivityIndicator size="large" color="#2f64ba" />
+            </View>
         );
     }
 
     return (
-        <ScrollView horizontal style={styles.container}>
+        <ScrollView horizontal style={styles.container} centerContent>
 
             {diagnosisSpecific && (
                 <DiagnosisOfNeedsDetails
@@ -225,6 +199,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+        width: '100%',
     },
     rowHeader: {
         flexDirection: 'row',
@@ -251,12 +226,6 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
         overflow: 'hidden', // Asegura que el contenido no se desborde
     },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center', // Centra verticalmente
-        alignItems: 'center', // Centra horizontalmente
-        marginLeft: 0, // Asegura que no haya margen izquierdo
-    },
     buttonDetails: {
         borderWidth: 2,
         borderColor: "#2f64ba",
@@ -274,15 +243,12 @@ const styles = StyleSheet.create({
         padding: 10,
         borderColor: "#2f64ba",
         backgroundColor: "white", // Fondo blanco para estado habilitado
-        // shadowColor: "#000",
-        // shadowOffset: {
-        //     width: 0,
-        //     height: 2,
-        // // },
-        // shadowOpacity: 0.25,
-        // shadowRadius: 3.84,
-        // elevation: 5,
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center', // Centra verticalmente
+        alignItems: 'center', // Centra horizontalmente
+    },
 });
 
 export default DiagnosisOfNeeds;

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { getCompletedCourses } from '@/services/CompletedCourses';
 
@@ -35,6 +35,7 @@ const CompletedCourses = (props: UserData) => {
     };
 
     const [cursos, setCourseData] = useState<courseData[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const handleGetCourses = async () => {
         try {
             console.log(props.id);
@@ -43,6 +44,8 @@ const CompletedCourses = (props: UserData) => {
             setCourseData(courses);
         } catch (error) {
             console.error(error);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -70,8 +73,16 @@ const CompletedCourses = (props: UserData) => {
         </View>
     );
 
+    if (isLoading) {
+        return (
+            <View style={styles.centeredView}>
+                <ActivityIndicator size="large" color="#2f64ba" />
+            </View>
+        );
+    }
+
     return (
-        <ScrollView horizontal style={styles.container}>
+        <ScrollView horizontal style={styles.container} centerContent>
             <View>
                 <View style={styles.rowHeader}>
                     <Text style={styles.headerCell}>Nombre del Curso</Text>
@@ -105,7 +116,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#fff', // Asegúrate de que el fondo sea blanco
     },
     rowHeader: {
         flexDirection: 'row',
@@ -136,7 +146,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex'
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
 
 export default CompletedCourses;

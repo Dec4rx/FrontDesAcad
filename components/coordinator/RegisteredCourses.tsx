@@ -162,7 +162,7 @@ const RegisteredCourses = () => {
 
 
     return (
-        <ScrollView horizontal style={styles.container}>
+        <ScrollView horizontal style={styles.container} centerContent>
 
             {courseSpecific && <RegisteredCourseDetails
                 modalVisible={modalVisible}

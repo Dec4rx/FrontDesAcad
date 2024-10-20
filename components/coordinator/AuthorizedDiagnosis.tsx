@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 // import CourseDetails from './modals/CourseDetails';
 import CourseDetails from './modals/CourseDetails';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -97,15 +97,15 @@ const AuthorizedDiagnosis = () => {
 
     if (isLoading) {
         return (
-            <div>
-                <div>Cargando...</div>
-            </div>
+            <View style={styles.centeredView}>
+                <ActivityIndicator size="large" color="#2f64ba" />
+            </View>
         );
     }
 
 
     return (
-        <ScrollView horizontal style={styles.container}>
+        <ScrollView horizontal style={styles.container} centerContent>
 
             {diagnosisSpecific && (
                 <DiagnosisOfNeedsDetails
@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        margin: 50
     },
     rowHeader: {
         flexDirection: 'row',

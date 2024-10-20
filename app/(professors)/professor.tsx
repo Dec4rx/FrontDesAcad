@@ -103,9 +103,12 @@ const Professor = () => {
       </View>
 
       <View style={styles.contentContainer}>
-        {selectedOption === 'currentCourses' && userData && <CurrentCourses {...userData} />}
-        {selectedOption === 'courseRegistration' && userData && <CourseRegistration {...userData} />}
-        {selectedOption === 'completedCourses' && userData && <CompletedCourses{...userData} />}
+        
+
+          {selectedOption === 'currentCourses' && userData && <CurrentCourses {...userData} />}
+          {selectedOption === 'courseRegistration' && userData && <CourseRegistration {...userData} />}
+          {selectedOption === 'completedCourses' && userData && <CompletedCourses{...userData} />}
+        
       </View>
     </SafeAreaView>
   )
@@ -114,8 +117,8 @@ const Professor = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     backgroundColor: '#fff',
+    alignItems: 'center',
     padding: 20,
   },
   buttonContainer: {
@@ -163,12 +166,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
     flex: 1,
     width: '100%', // Ensure the content container takes up the full width
     backgroundColor: '#fff', // Ensure the background is white
-  },  
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center', // Centra verticalmente
+    alignItems: 'center', // Centra horizontalmente
+  },
 });
 
 export default Professor;

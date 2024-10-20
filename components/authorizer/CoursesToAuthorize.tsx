@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useState, useCallback } from 'react';
@@ -92,8 +92,16 @@ const CoursesToAuthorize = () => {
         </View>
     );
 
+    if (isLoading) {
+        return (
+            <View style={styles.centeredView}>
+                <ActivityIndicator size="large" color="#2f64ba" />
+            </View>
+        );
+    }
+
     return (
-        <ScrollView horizontal style={styles.container}>
+        <ScrollView horizontal style={styles.container} centerContent>
 
             {diagnosisSpecific && (
                 <CoursesToAuthorizeDetails

@@ -1,4 +1,4 @@
-import { Alert, Modal, View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, Modal, View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import NewCourseRegistration from './modals/NewCourseRegistration';
 import React, { useCallback, useState } from 'react';
@@ -39,16 +39,19 @@ interface ModalProps {
 const CourseRegistration = (props: UserData) => {
 
     const [courseData, setCourseData] = useState<courseData[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleGetCourses = async () => {
         try {
             const courses = await getInfoCourseRegistration();
             console.log(courses);
             setCourseData(courses);
-        }
-        catch (error) {
+        } catch (error) {
             console.error('Error reading value:', error);
+        } finally {
+            setIsLoading(false);
         }
+
     }
 
     useFocusEffect(
@@ -96,8 +99,16 @@ const CourseRegistration = (props: UserData) => {
         </View>
     );
 
+    if (isLoading) {
+        return (
+            <View style={styles.centeredView}>
+                <ActivityIndicator size="large" color="#2f64ba" />
+            </View>
+        );
+    }
+
     return (
-        <ScrollView horizontal style={styles.container}>
+        <ScrollView horizontal style={styles.container} centerContent>
 
             <NewCourseRegistration
                 modalVisible={modalVisible}

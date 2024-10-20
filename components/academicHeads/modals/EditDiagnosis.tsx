@@ -1,4 +1,4 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Button, TextInput, ScrollView } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, Button, TextInput, ScrollView, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
 import { Diagnosis, DiagnosisForm } from '@/services/interfaces/AcademicHead';
@@ -7,6 +7,7 @@ import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-datepicker';
 import { parseISO, set } from 'date-fns';
 import { updateDiagnosis } from '@/services/Diagnosis';
+import GenericModal from '@/components/utils/GenericModal';
 
 
 
@@ -77,7 +78,7 @@ const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setMod
             const diagnosis = await updateDiagnosis(diagnosisData.id, fieldsToUpdateJSON); // TO DO: Implementar función de UPDATE
             console.log('Diagnóstico guardado exitosamente:', diagnosis);
             setModalVisible(false);
-            router.replace('/academicHead');
+            // router.replace('/academicHead');
         } catch (error: any) {
             // Revisar la estructura del error capturado
             console.error('Error al guardar el diagnóstico:', error);
@@ -120,9 +121,9 @@ const EditDiagnosis: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setMod
 
     if (isLoading) {
         return (
-            <div>
-                <div>Cargando...</div>
-            </div>
+            <View style={styles.centeredLoading}>
+                <ActivityIndicator size="large" color="#2f64ba" />
+            </View>
         );
     }
 
@@ -338,8 +339,12 @@ const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: 'center',
-        // alignItems: 'center',
         marginTop: 22,
+    },
+    centeredLoading: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     modalView: {
         margin: 20,

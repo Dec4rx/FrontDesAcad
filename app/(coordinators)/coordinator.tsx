@@ -62,7 +62,6 @@ export default Coordinator;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     backgroundColor: '#fff',
     padding: 20,
   },
@@ -111,8 +110,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
     flex: 1,
     width: '100%', // Ensure the content container takes up the full width
     backgroundColor: '#fff', // Ensure the background is white

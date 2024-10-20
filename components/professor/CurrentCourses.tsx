@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, FlatList, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { useState, useEffect } from 'react';
 import { UserData } from '@/services/interfaces/UserInterface';
 
@@ -20,7 +20,7 @@ const CurrentCourses = (props: UserData) => {
     const [loading, setLoading] = useState(true);
 
     const professorId = props.id;
-    
+
 
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const CurrentCourses = (props: UserData) => {
         const fetchCourses = async () => {
             try {
                 const response = await fetch(`http://localhost:4000/professor-course/${professorId}`);
-                
+
                 if (!response.ok) {
                     throw new Error("Error en la respuesta del servidor");
                 }
@@ -41,13 +41,13 @@ const CurrentCourses = (props: UserData) => {
                 setLoading(false); // Asegura que el estado de loading cambie incluso en caso de error
             }
         };
-    
+
         // Llamamos a la función fetchCourses
         fetchCourses();
     }, [professorId]); // Se ejecuta cuando el professorId cambia
-    
 
-    
+
+
 
     const Item: React.FC<ItemProps> = ({ courseName, startDate, endDate, shift, schedule, capacity, requirements }) => (
         <View style={styles.row}>
@@ -63,15 +63,16 @@ const CurrentCourses = (props: UserData) => {
 
     if (loading) {
         return (
-            <View style={styles.loadingContainer}>
-                <Text>Cargando cursos...</Text>
+            <View style={styles.centeredView}>
+                <ActivityIndicator size="large" color="#2f64ba" />
             </View>
         );
     }
 
     return (
-        <ScrollView horizontal style={styles.container}>
+        <ScrollView horizontal style={styles.container} centerContent>
             <View>
+
                 <View style={styles.rowHeader}>
                     <Text style={styles.headerCell}>Nombre del Curso</Text>
                     <Text style={styles.headerCell}>Fecha de Inicio</Text>
@@ -85,20 +86,21 @@ const CurrentCourses = (props: UserData) => {
                     data={cursos}
                     renderItem={({ item }) => (
                         <Item
-                        id={item.id}
-                        courseName={item.courseName}
-                        startDate={item.startDate}
-                        endDate={item.endDate}
-                        shift={item.shift}
-                        schedule={item.schedule}
-                        capacity={item.capacity}
-                        requirements={item.requirements}
+                            id={item.id}
+                            courseName={item.courseName}
+                            startDate={item.startDate}
+                            endDate={item.endDate}
+                            shift={item.shift}
+                            schedule={item.schedule}
+                            capacity={item.capacity}
+                            requirements={item.requirements}
                         />
                     )}
                     keyExtractor={(item) => item.id.toString()}
                 />
             </View>
         </ScrollView>
+
     );
 }
 
@@ -106,6 +108,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+    },
+    table: {
+        minWidth: 800, // Asegura que la tabla completa sea más ancha que pantallas pequeñas
     },
     rowHeader: {
         flexDirection: 'row',
@@ -132,10 +137,10 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea
         overflow: 'hidden', // Asegura que el contenido no se desborde
     },
-    loadingContainer: {
+    centeredView: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'center', // Centra verticalmente
+        alignItems: 'center', // Centra horizontalmente
     },
 });
 
