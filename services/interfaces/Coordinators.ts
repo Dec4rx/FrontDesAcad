@@ -1,9 +1,9 @@
 export interface FormCourseRegistration {
-    diagnosis_id: number;
+    diagnosis: number;
     dateRegistration: Date;
     departament: string;
-    coordinator_id: number; // TO DO: Cambiar por el ID del coordinador
-    name: string;
+    //coordinator_id: number; // TO DO: Cambiar por el ID del coordinador
+    courseName: string;
     aimedAt: string; // dirigido a
     type: string;
     approach: string;
@@ -20,17 +20,18 @@ export interface FormCourseRegistration {
     thematicContents: string;
     resources: string;
     informationSources: string;
-    autoriazation: string;
+    authorization: string;
     review: string;
+    capacity: number;
 }
 
 export interface CourseRegistered {
     id: number
-    diagnosis_id: number;
+    diagnosis: number;
     dateRegistration: Date;
     departament: string;
-    coordinator_id: number; // TO DO: Cambiar por el ID del coordinador
-    name: string;
+    //coordinator_id: number; // TO DO: Cambiar por el ID del coordinador
+    courseName: string;
     aimedAt: string; // dirigido a
     type: string;
     approach: string;
@@ -47,6 +48,7 @@ export interface CourseRegistered {
     thematicContents: string;
     resources: string;
     informationSources: string;
-    autoriazation: string;
+    authorization: string;
     review: string;
+    capacity: number;
 }

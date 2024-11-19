@@ -7,6 +7,7 @@ import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-datepicker';
 import { parseISO, set } from 'date-fns';
 import { FormCourseRegistration } from '@/services/interfaces/Coordinators';
+import { registerCourse } from '@/services/Course';
 
 
 
@@ -20,14 +21,14 @@ interface DiagnosisOfNeedsDetails {
 const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisible, setModalVisible, diagnosisData }) => {
 
 
-    
+
     const [isLoading, setIsLoading] = useState(false);
     const [form, setForm] = useState<FormCourseRegistration>({
-        diagnosis_id: diagnosisData.id,
-        coordinator_id: 1,//TO DO: Check this and changue for the real id
-        dateRegistration: parseISO(new Date().toISOString()), 
+        diagnosis: diagnosisData.id,
+        //coordinator_id: 1,TO DO: Check this and changue for the real id
+        dateRegistration: parseISO(new Date().toISOString()),
         departament: diagnosisData.departament,
-        name: '',
+        courseName: '',
         aimedAt: '',
         type: '',
         approach: '',
@@ -38,14 +39,15 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
         numberHours: 0,
         shift: diagnosisData.shift,
         place: '',
-        requirements: '',
+        requirements: diagnosisData.requiredSubjects,
         justification: '',
         objective: diagnosisData.objective,
         thematicContents: diagnosisData.thematicContents,
         resources: '',
         informationSources: '',
-        autoriazation: '', // TO DO: Check this, maybe is the boolean is_authorized_by_first
-        review: '' // TO DO: Check this, maybe is the boolean is_authorized_by_second
+        authorization: '',
+        review: '',
+        capacity: diagnosisData.numberProfessors
     });
 
 
@@ -59,26 +61,31 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
     const handleSaveRegister = async () => {
         setIsLoading(true);
         setErrors({}); // Limpiar errores antes de enviar
-        try {
-            // const diagnosis = await registerDiagnostic(form); // TO DO: Implementar función de UPDATE
-            // console.log('Diagnóstico guardado exitosamente:', diagnosis);
-            setModalVisible(false);
-        } catch (error: any) {
-            // Revisar la estructura del error capturado
-            console.error('Error al guardar el diagnóstico:', error);
 
-            // Si el error capturado tiene una estructura con errores específicos
-            if (error && typeof error === 'object') {
-                setErrors(error); // Ajustar la estructura si es necesario según el formato del servidor
-            } else {
-                setErrors({ general: 'Error al guardar el diagnóstico. Inténtalo de nuevo.' });
-            }
+        // Validación básica
+        if (!form.courseName.trim() || !form.type) {
+            setErrors({
+                ...errors,
+                name: form.courseName ? '' : 'El nombre del curso es necesario',
+                type: form.type ? '' : 'Selecciona un tipo de curso',
+            });
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const data = await registerCourse(form); // Llamada al servicio para registrar el curso
+            console.log('Curso registrado exitosamente:', data);
+            setModalVisible(false); // Cerrar el modal si el registro es exitoso
+        } catch (error) {
+            console.error('Error al guardar el curso:', error);
+            setErrors({ general: (error as any).message || 'Error al guardar el curso. Inténtalo de nuevo.' });
         } finally {
             setIsLoading(false);
         }
     };
 
-    
+
 
     if (isLoading) {
         return (
@@ -109,12 +116,12 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
                         <Text style={styles.label}>Nombre del curso:</Text>
                         <TextInput
                             placeholder="Nombre del curso"
-                            value={form.name}
-                            onChangeText={text => handleInputChange('name', text)}
+                            value={form.courseName}
+                            onChangeText={text => handleInputChange('courseName', text)}
                             style={[styles.input, errors.name ? styles.inputError : null]}
                         />
                         {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
-                       
+
                         <Text style={styles.label}>Dirigido a:</Text>
                         <TextInput
                             placeholder="Dirigido a"
@@ -209,6 +216,35 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
                             style={[styles.input, errors.informationSources ? styles.inputError : null, styles.largeInput]}
                         />
                         {errors.informationSources && <Text style={styles.errorText}>{errors.informationSources}</Text>}
+
+                        <Text style={styles.label}>Lugar:</Text>
+                        <TextInput
+                            placeholder="Lugar donde se impartirá el curso"
+                            value={form.place}
+                            onChangeText={text => handleInputChange('place', text)}
+                            style={[styles.input, errors.place ? styles.inputError : null]}
+                        />
+                        {errors.place && <Text style={styles.errorText}>{errors.place}</Text>}
+                        
+                        <Text style={styles.label}>Autorizó:</Text>
+                        <TextInput
+                            placeholder="Nombre de quien autorizó"
+                            value={form.authorization}
+                            onChangeText={text => handleInputChange('authorization', text)}
+                            style={[styles.input, errors.authorizedBy ? styles.inputError : null]}
+                        />
+                        {errors.authorizedBy && <Text style={styles.errorText}>{errors.authorizedBy}</Text>}
+
+                        <Text style={styles.label}>Revisó:</Text>
+                        <TextInput
+                            placeholder="Nombre de quien revisó"
+                            value={form.review}
+                            onChangeText={text => handleInputChange('review', text)}
+                            style={[styles.input, errors.reviewedBy ? styles.inputError : null]}
+                        />
+                        {errors.reviewedBy && <Text style={styles.errorText}>{errors.reviewedBy}</Text>}
+
+
 
                         <Button title="Crear Registro" onPress={handleSaveRegister} />
 
