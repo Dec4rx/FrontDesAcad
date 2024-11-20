@@ -27,11 +27,11 @@ export interface FormCourseRegistration {
 
 export interface CourseRegistered {
     id: number
-    diagnosis: number;
+    diagnosis_id: number;
     dateRegistration: Date;
     departament: string;
-    //coordinator_id: number; // TO DO: Cambiar por el ID del coordinador
-    courseName: string;
+    coordinator_id: number; // TO DO: Cambiar por el ID del coordinador
+    name: string;
     aimedAt: string; // dirigido a
     type: string;
     approach: string;

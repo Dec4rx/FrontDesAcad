@@ -97,12 +97,16 @@ const RegisteredCourseDetails: React.FC<RegisteredCourseDetails> = ({ modalVisib
                             <Text style={styles.modalText}>{courseData.dateRegistration.toISOString().split('T')[0]}</Text>
                         </View>
                         <View style={styles.textRow}>
+                            <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Capacidad: </Text>
+                            <Text style={styles.modalText}>{courseData.capacity}</Text>
+                        </View>
+                        <View style={styles.textRow}>
                             <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Revisó: </Text>
                             <Text style={styles.modalText}>{courseData.review}</Text>
                         </View>
                         <View style={styles.textRow}>
                             <Text style={[styles.modalText, { fontWeight: 'bold', }]}>Autorizó: </Text>
-                            <Text style={styles.modalText}>{courseData.autoriazation}</Text>
+                            <Text style={styles.modalText}>{courseData.authorization}</Text>
                         </View>
 
                     </View>

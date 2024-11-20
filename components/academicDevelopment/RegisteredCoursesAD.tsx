@@ -1,13 +1,17 @@
 import { View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import RegisteredCourseDetails from './modals/RegisteredCourseDetails';
+import RegisteredCourseDetails from '../coordinator/modals/RegisteredCourseDetails';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
+import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useState } from 'react';
 import { CourseRegistered } from '@/services/interfaces/Coordinators';
+import AddFolio from './modals/AddFolio';
+import AddInstructor from './modals/AddInstructor';
 
 
 
-const RegisteredCourses = () => {
+const RegisteredCoursesAD = () => {
 
     // Datos de ejemplo para los cursos
     const cursos: CourseRegistered[] = [{
@@ -102,6 +106,12 @@ const RegisteredCourses = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [course_id, setCourse_id] = useState(0)
+
+    const [modalVisibleFolio, setModalVisibleFolio] = useState(false);
+
+    const [modalVisibleInstructor, setModalVisibleInstructor] = useState(false);
+
     const handleSelectCourse = (id: number) => {
 
         console.log(id)
@@ -159,7 +169,21 @@ const RegisteredCourses = () => {
                     </TouchableOpacity>
                 </View>
             </View>
+            <View style={styles.cell}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity style={styles.centeredView} onPress={() => { setModalVisibleFolio(!modalVisibleFolio); setCourse_id(id) }}>
+                        <AntDesign style={styles.innerText} name="tagso" size={35} color="#2f64ba" />
+                    </TouchableOpacity>
+                </View>
+            </View>
 
+            <View style={styles.cell}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity style={styles.centeredView} onPress={() => { setModalVisibleInstructor(!modalVisibleInstructor); setCourse_id(id) }}>
+                        <AntDesign style={styles.innerText} name="adduser" size={35} color="#2f64ba" />
+                    </TouchableOpacity>
+                </View>
+            </View>
         </View>
     );
 
@@ -173,6 +197,23 @@ const RegisteredCourses = () => {
                 courseData={courseSpecific}//TO DO MODIFICAR ESTOOO ES TEMPORAL
             />}
 
+            {
+                <AddFolio
+                    modalVisible={modalVisibleFolio}
+                    setModalVisible={setModalVisibleFolio}
+                    course_id={course_id}
+                />
+            }
+
+            {
+                <AddInstructor
+                    modalVisible={modalVisibleInstructor}
+                    setModalVisible={setModalVisibleInstructor}
+                    course_id={course_id}
+                />
+            }
+
+
 
             <View>
                 <View style={styles.rowHeader}>
@@ -185,6 +226,8 @@ const RegisteredCourses = () => {
                     <Text style={styles.headerCell}>Fecha de Inicio</Text>
                     <Text style={styles.headerCell}>Fecha de Término</Text>
                     <Text style={styles.headerCell}>Detalles</Text>
+                    <Text style={styles.headerCell}>Agregar Folio</Text>
+                    <Text style={styles.headerCell}>Asignar Instructor</Text>
                 </View>
                 <FlatList
                     data={cursos}
@@ -274,4 +317,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default RegisteredCourses;
+export default RegisteredCoursesAD;

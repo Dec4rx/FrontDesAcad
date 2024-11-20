@@ -6,6 +6,7 @@ export default function AcademicDevelopmentLayout() {
         <Stack>
 
             <Stack.Screen name="loginAcademicDevelopment" options={{ headerShown: false }} />
+            <Stack.Screen name="academicDevelopment" options={{ headerShown: false }} />
             {/* <Stack.Screen name="" options={{ headerShown: false }} /> */}
         </Stack>
     );
