@@ -1,5 +1,5 @@
 export interface FormCourseRegistration {
-    diagnosis: number;
+    diagnosisId: number;
     dateRegistration: Date;
     departament: string;
     //coordinator_id: number; // TO DO: Cambiar por el ID del coordinador
@@ -30,8 +30,7 @@ export interface CourseRegistered {
     diagnosis_id: number;
     dateRegistration: Date;
     departament: string;
-    coordinator_id: number; // TO DO: Cambiar por el ID del coordinador
-    name: string;
+    courseName: string;
     aimedAt: string; // dirigido a
     type: string;
     approach: string;
@@ -51,4 +50,6 @@ export interface CourseRegistered {
     authorization: string;
     review: string;
     capacity: number;
+    file1Path: string;
+    file2Path: string;
 }

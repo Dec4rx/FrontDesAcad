@@ -87,7 +87,7 @@ const CourseRegistration = (props: UserData) => {
             <Text style={styles.cell}>{fechaInicio}</Text>
             <Text style={styles.cell}>{fechaFin}</Text>
             <Text style={styles.cell}>{turno}</Text>
-            <Text style={styles.cell}>{horario}</Text>
+            
             <Text style={styles.cell}>{cupo}</Text>
             <Text style={styles.cell}>{requerimientos}</Text>
             <View style={styles.cell}>
@@ -123,7 +123,6 @@ const CourseRegistration = (props: UserData) => {
                     <Text style={styles.headerCell}>Fecha de Inicio</Text>
                     <Text style={styles.headerCell}>Fecha de Fin</Text>
                     <Text style={styles.headerCell}>Turno</Text>
-                    <Text style={styles.headerCell}>Horario</Text>
                     <Text style={styles.headerCell}>Cupo</Text>
                     <Text style={styles.headerCell}>Requerimientos</Text>
                     <Text style={styles.headerCell}>Inscribir</Text>

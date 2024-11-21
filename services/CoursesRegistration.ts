@@ -3,7 +3,7 @@ import { Professor_Course } from './interfaces/Professor_Course';
 
 export const getInfoCourseRegistration = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/course/not-assigned`, {
+    const response = await fetch(`${BASE_URL}/course/with-files-not-assigned`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -24,7 +24,7 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
 
     const [isLoading, setIsLoading] = useState(false);
     const [form, setForm] = useState<FormCourseRegistration>({
-        diagnosis: diagnosisData.id,
+        diagnosisId: diagnosisData.id,
         //coordinator_id: 1,TO DO: Check this and changue for the real id
         dateRegistration: parseISO(new Date().toISOString()),
         departament: diagnosisData.departament,

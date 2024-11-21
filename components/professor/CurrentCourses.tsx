@@ -55,7 +55,6 @@ const CurrentCourses = (props: UserData) => {
             <Text style={styles.cell}>{startDate}</Text>
             <Text style={styles.cell}>{endDate}</Text>
             <Text style={styles.cell}>{shift}</Text>
-            <Text style={styles.cell}>{schedule}</Text>
             <Text style={styles.cell}>{capacity}</Text>
             <Text style={styles.cell}>{requirements}</Text>
         </View>
@@ -78,7 +77,6 @@ const CurrentCourses = (props: UserData) => {
                     <Text style={styles.headerCell}>Fecha de Inicio</Text>
                     <Text style={styles.headerCell}>Fecha de Fin</Text>
                     <Text style={styles.headerCell}>Turno</Text>
-                    <Text style={styles.headerCell}>Horario</Text>
                     <Text style={styles.headerCell}>Cupo</Text>
                     <Text style={styles.headerCell}>Requerimientos</Text>
                 </View>
