@@ -5,6 +5,7 @@ import RegisteredDiagnosis from '@/components/coordinator/RegisteredCourses';
 import AcademicDevelopmentLayout from './_layout';
 import RegisteredCoursesAD from '@/components/academicDevelopment/RegisteredCoursesAD';
 import DiagnosisAD from '@/components/academicDevelopment/DiagnosisAD';
+import ProfessorsAD from '@/components/academicDevelopment/ProfessorsAD';
 
 const AcademicDevelopment = () => {
     const academicDevelopmentInfo =
@@ -56,14 +57,15 @@ const AcademicDevelopment = () => {
                     <Text style={styles.buttonText}>Cursos Registrados</Text>
                 </TouchableOpacity>
 
-                {/* <TouchableOpacity style={[styles.button, selectedOption === 'RegisterDiagnosis' && styles.buttonSelected]}
-                    onPress={() => handleButtonPress('RegisterDiagnosis')}>
-                    <Text style={styles.buttonText}>Registro de Diagnostico</Text>
-                </TouchableOpacity> */}
+                <TouchableOpacity style={[styles.button, selectedOption === 'professors' && styles.buttonSelected]}
+                    onPress={() => handleButtonPress('professors')}>
+                    <Text style={styles.buttonText}>Profesores</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.contentContainer}>
                 {selectedOption === 'diagnosisOfNeeds' && <DiagnosisAD />}
                 {selectedOption === 'registeredCourses' && <RegisteredCoursesAD />}
+                {selectedOption === 'professors' && <ProfessorsAD />}
                 {/* {selectedOption === 'RegisterDiagnosis' && <RegisterDiagnosis />} */}
             </View>
         </SafeAreaView>
