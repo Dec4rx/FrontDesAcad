@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import AntDesign from '@expo/vector-icons/AntDesign';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CourseRegistered } from '@/services/interfaces/Coordinators';
 import AddFolio from './modals/AddFolio';
 import AddInstructor from './modals/AddInstructor';
@@ -13,127 +13,53 @@ import AddInstructor from './modals/AddInstructor';
 
 const RegisteredCoursesAD = () => {
 
-    // Datos de ejemplo para los cursos
-    const cursos: CourseRegistered[] = [{
-        "id": 1,
-        "diagnosis_id": 12345,
-        "coordinator_id": 1,
-        "dateRegistration": new Date(),
-        "departament": "Computer Science",
-        "name": "Intro to AI Workshop",
-        "aimedAt": "Students",
-        "type": "Workshop",
-        "approach": "Hands-on",
-        "personToTeach": "Dr. John Doe",
-        "institutionOrAcademic": "Tech University",
-        "startDate": new Date(),
-        "endDate": new Date(),
-        "numberHours": 40,
-        "shift": "Morning",
-        "place": "Room 202, Main Building",
-        "requirements": "Basic programming knowledge",
-        "justification": "Increase AI literacy among students",
-        "objective": "Teach the fundamentals of AI and machine learning",
-        "thematicContents": "Introduction to AI, Machine Learning Algorithms, Neural Networks",
-        "resources": "Computers, Projector, Notebooks",
-        "informationSources": "AI Textbook, Research Papers",
-        "authorization": "Juan Pérez",
-        "review": "María González",
-        "capacity": 0
-    },
-    {
-        "id": 2,
-        "diagnosis_id": 12346,
-        "coordinator_id": 2,
-        "dateRegistration": new Date(),
-        "departament": "Data Science",
-        "name": "Advanced Data Analysis Seminar",
-        "aimedAt": "Graduate Students",
-        "type": "Seminar",
-        "approach": "Lecture",
-        "personToTeach": "Dr. Jane Smith",
-        "institutionOrAcademic": "Data Science Institute",
-        "startDate": new Date(),
-        "endDate": new Date(),
-        "numberHours": 30,
-        "shift": "Afternoon",
-        "place": "Room 305, Data Science Building",
-        "requirements": "Basic knowledge of statistics",
-        "justification": "Enhance data analysis skills",
-        "objective": "Teach advanced data analysis techniques using Python and R",
-        "thematicContents": "Data Cleaning, Statistical Models, Machine Learning",
-        "resources": "Laptops, Statistical Software",
-        "informationSources": "Data Science Journals, Online Courses",
-        "authorization": "Carlos Rodríguez",
-        "review": "Ana Martínez",
-        "capacity": 0
-    },
-    {
-        "id": 3,
-        "diagnosis_id": 12347,
-        "coordinator_id": 3,
-        "dateRegistration": new Date(),
-        "departament": "Software Engineering",
-        "name": "Agile Methodologies Workshop",
-        "aimedAt": "Developers",
-        "type": "Workshop",
-        "approach": "Interactive",
-        "personToTeach": "Eng. Michael Brown",
-        "institutionOrAcademic": "Software Development Academy",
-        "startDate": new Date(),
-        "endDate": new Date(),
-        "numberHours": 20,
-        "shift": "Evening",
-        "place": "Room 101, Engineering Building",
-        "requirements": "Basic programming skills",
-        "justification": "Improve project management skills",
-        "objective": "Teach the fundamentals of Agile and Scrum methodologies",
-        "thematicContents": "Agile Principles, Scrum Framework, Project Management",
-        "resources": "Whiteboards, Markers, Laptops",
-        "informationSources": "Agile Manifesto, Scrum Guide",
-        "authorization": "Laura Sánchez",
-        "review": "Pedro Hernández",
-        "capacity": 0
-    }
-    ];
-
-
-    const [selectId, setSelectId] = useState(0)
-
-
-
-    const [courseSpecific, setCourseSpecific] = useState<CourseRegistered>()
-
+    const [courses, setCourses] = useState<CourseRegistered[]>([]); // Para almacenar los cursos de la API
+    const [loading, setLoading] = useState(true); // Para indicar si los datos están cargando
+    const [error, setError] = useState<string | null>(null); // Para manejar errores
+    const [selectedCourse, setSelectedCourse] = useState<CourseRegistered | null>(null); // Curso seleccionado para mostrar detalles // Curso seleccionado para mostrar detalles
     const [modalVisible, setModalVisible] = useState(false);
-
+    const [selectId, setSelectId] = useState(0)
+    const [courseSpecific, setCourseSpecific] = useState<CourseRegistered>()
     const [course_id, setCourse_id] = useState(0)
-
     const [modalVisibleFolio, setModalVisibleFolio] = useState(false);
-
     const [modalVisibleInstructor, setModalVisibleInstructor] = useState(false);
 
-    const handleSelectCourse = (id: number) => {
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await fetch('http://localhost:4000/course');
+                if (!response.ok) {
+                    throw new Error(`Error al obtener los cursos: ${response.statusText}`);
+                }
+                const data: CourseRegistered[] = await response.json();
+                setCourses(data);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Error inesperado');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        console.log(id)
-        setSelectId(id)
-        const curso = cursos.find(curso => curso.id === id)
-        if (curso) {
-            setCourseSpecific(curso)
-            console.log(courseSpecific)
-            setModalVisible(!modalVisible)
+        fetchCourses();
+    }, []);
+
+
+    
+
+    const handleSelectCourse = (id: number) => {
+        const course = courses.find((c) => c.id === id);
+        if (course) {
+            setSelectedCourse(course);
+            setModalVisible(!modalVisible);
         }
-        else {
-            console.log("no encontrado :v")
-        }
-    }
+    };
 
     const Item: React.FC<CourseRegistered> = ({
         id,
         diagnosis_id,
         dateRegistration,
         departament,
-        coordinator_id,
-        name,
+        courseName,
         aimedAt,
         type,
         approach,
@@ -151,17 +77,41 @@ const RegisteredCoursesAD = () => {
         resources,
         informationSources,
         authorization,
-        review
-    }) => (
+        review,
+        file1Path,
+        file2Path
+    }) => {
+        const handleOpenFile = (path: String) => {
+            if (path) {
+                window.open(`http://localhost:4000${path}`, "_blank");
+            } else {
+                alert("Archivo no disponible");
+            }
+        };
+
+        return(
         <View style={styles.row}>
-            <Text style={styles.cell}>{name}</Text>
+            <Text style={styles.cell}>{courseName}</Text>
             <Text style={styles.cell}>{departament}</Text>
             <Text style={styles.cell}>{type}</Text>
             <Text style={styles.cell}>{approach}</Text>
-            <Text style={styles.cell}>{aimedAt}</Text>
-            <Text style={styles.cell}>{shift}</Text>
-            <Text style={styles.cell}>{startDate.toISOString().split('T')[0]}</Text>
-            <Text style={styles.cell}>{endDate.toISOString().split('T')[0]}</Text>
+            <Text style={styles.cell}>
+                    {startDate ? new Date(startDate).toLocaleDateString() : 'Fecha no válida'}
+                </Text>
+                <Text style={styles.cell}>
+                    {endDate ? new Date(endDate).toLocaleDateString() : 'Fecha no válida'}
+                </Text>
+                {/* Botón para abrir el primer archivo */}
+                <TouchableOpacity style={styles.cell} onPress={() => handleOpenFile(file1Path)}>
+                    <Ionicons name="document-outline" size={25} color="#4caf50" />
+                    <Text style={styles.fileText}>Abrir Archivo 1</Text>
+                </TouchableOpacity>
+
+                {/* Botón para abrir el segundo archivo */}
+                <TouchableOpacity style={styles.cell} onPress={() => handleOpenFile(file2Path)}>
+                    <Ionicons name="document-outline" size={25} color="#4caf50" />
+                    <Text style={styles.fileText}>Abrir Archivo 2</Text>
+                </TouchableOpacity>
             <View style={styles.cell}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity style={styles.centeredView} onPress={() => handleSelectCourse(id)}>
@@ -186,10 +136,18 @@ const RegisteredCoursesAD = () => {
             </View>
         </View>
     );
+};
 
 
     return (
         <ScrollView horizontal style={styles.container} centerContent>
+            {selectedCourse && (
+                <RegisteredCourseDetails
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    courseData={selectedCourse} // Datos del curso seleccionado
+                />
+            )}
 
             {courseSpecific && <RegisteredCourseDetails
                 modalVisible={modalVisible}
@@ -221,24 +179,23 @@ const RegisteredCoursesAD = () => {
                     <Text style={styles.headerCell}>Departamento o Academia que Propone</Text>
                     <Text style={styles.headerCell}>Tipo de Curso</Text>
                     <Text style={styles.headerCell}>Enfoque del Curso</Text>
-                    <Text style={styles.headerCell}>Dirigido a</Text>
-                    <Text style={styles.headerCell}>Horario</Text>
                     <Text style={styles.headerCell}>Fecha de Inicio</Text>
                     <Text style={styles.headerCell}>Fecha de Término</Text>
+                    <Text style={styles.headerCell}>Archivo 1</Text>
+                    <Text style={styles.headerCell}>Archivo 2</Text>
                     <Text style={styles.headerCell}>Detalles</Text>
                     <Text style={styles.headerCell}>Agregar Folio</Text>
                     <Text style={styles.headerCell}>Asignar Instructor</Text>
                 </View>
                 <FlatList
-                    data={cursos}
+                    data={courses}
                     renderItem={({ item }) => (
                         <Item
                             id={item.id}
                             diagnosis_id={item.diagnosis_id}
                             dateRegistration={item.dateRegistration}
                             departament={item.departament}
-                            coordinator_id={item.coordinator_id}
-                            name={item.name}
+                            courseName={item.courseName}
                             aimedAt={item.aimedAt}
                             type={item.type}
                             approach={item.approach}
@@ -258,6 +215,8 @@ const RegisteredCoursesAD = () => {
                             authorization={item.authorization}
                             review={item.review}
                             capacity={item.capacity}
+                            file1Path={item.file1Path}
+                            file2Path={item.file2Path}
                         />
                     )}
                     keyExtractor={(item) => item.id.toString()}
@@ -314,7 +273,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex'
-    }
+    },
+    fileText: {
+        fontSize: 12,
+        color: '#4caf50',
+        textAlign: 'center',
+        marginTop: 5,
+    },
 });
 
 export default RegisteredCoursesAD;
