@@ -41,7 +41,7 @@ const AddInstructor: React.FC<AddInstructor> = ({ modalVisible, setModalVisible,
                                 style={styles.input}
                                 onChangeText={setInstructor}
                                 value={instructor}
-                                placeholder="Ingrese el instructor Nombre del Instructor Aquí"
+                                placeholder="Ingrese el Nombre del Instructor Aquí"
                                 multiline
                             />
 
