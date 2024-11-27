@@ -1,7 +1,7 @@
 import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import React, { useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
-import { Diagnosis } from '@/services/interfaces/AcademicHead';
+import { submitInstructor } from '@/services/AssignInstructor';
 
 
 
@@ -15,6 +15,8 @@ interface AddInstructor {
 const AddInstructor: React.FC<AddInstructor> = ({ modalVisible, setModalVisible, course_id }) => {
 
     const [instructor, setInstructor] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     return (
         <Modal
@@ -22,44 +24,58 @@ const AddInstructor: React.FC<AddInstructor> = ({ modalVisible, setModalVisible,
             transparent={true}
             visible={modalVisible}
         >
-                <View style={styles.centeredView}>
+            <View style={styles.centeredView}>
 
-                    <View style={styles.modalView}>
+                <View style={styles.modalView}>
 
-                        <TouchableOpacity
-                            style={{ alignSelf: 'flex-end' }}
-                            onPress={() => setModalVisible(!modalVisible)}>
-                            <Entypo name="cross" size={35} color="black" />
-                        </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{ alignSelf: 'flex-end' }}
+                        onPress={() => setModalVisible(!modalVisible)}>
+                        <Entypo name="cross" size={35} color="black" />
+                    </TouchableOpacity>
+
+
+                    <View>
 
 
                         <View>
-
-
                             <Text style={[styles.modalText]}>Ingrese el Nombre del Instructor</Text>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={setInstructor}
                                 value={instructor}
-                                placeholder="Ingrese el Nombre del Instructor Aquí"
-                                multiline
+                                placeholder="Nombre del Instructor"
+                            />
+
+                            <Text style={[styles.modalText]}>Ingrese el Usuario</Text>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={setUsername}
+                                value={username}
+                                placeholder="Usuario"
+                            />
+
+                            <Text style={[styles.modalText]}>Ingrese la Contraseña</Text>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={setPassword}
+                                value={password}
+                                placeholder="Contraseña"
+                                secureTextEntry // Esto asegura que el texto se oculte mientras se escribe
                             />
 
                             <TouchableOpacity
                                 style={[styles.button, styles.buttonRegister]}
                                 onPress={() => {
-                                    // onAuthorize(diagnosisData.id, authKey); TO DO AGREAGAR FUNCIONALIDAD
-                                    console.log('Instructor: ', instructor);
-                                    console.log('Course ID: ', course_id);
+                                    submitInstructor(instructor, username, password, course_id);
                                     setModalVisible(!modalVisible);
                                 }}>
                                 <Text style={styles.textStyle}>Registrar Instructor</Text>
                             </TouchableOpacity>
-
-
                         </View>
                     </View>
                 </View>
+            </View>
         </Modal >
     );
 }
