@@ -1,4 +1,4 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Button, TextInput, ScrollView } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, Button, TextInput, ScrollView, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
 import { Diagnosis, DiagnosisForm } from '@/services/interfaces/AcademicHead';
@@ -89,9 +89,9 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
 
     if (isLoading) {
         return (
-            <div>
-                <div>Cargando...</div>
-            </div>
+            <View style={styles.centeredView}>
+                <ActivityIndicator size="large" color="#2f64ba" />
+            </View>
         );
     }
 
@@ -225,7 +225,7 @@ const GenerateRegistrationForm: React.FC<DiagnosisOfNeedsDetails> = ({ modalVisi
                             style={[styles.input, errors.place ? styles.inputError : null]}
                         />
                         {errors.place && <Text style={styles.errorText}>{errors.place}</Text>}
-                        
+
                         <Text style={styles.label}>Autorizó:</Text>
                         <TextInput
                             placeholder="Nombre de quien autorizó"

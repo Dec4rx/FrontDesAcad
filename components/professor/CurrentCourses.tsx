@@ -1,8 +1,12 @@
-import { View, Text, ScrollView, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import { UserData } from '@/services/interfaces/UserInterface';
 
 import React from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { set } from 'date-fns';
+import { createSurvey } from '@/services/Surveys';
+import DoSurvey from './modals/DoSurvey';
 
 interface ItemProps {
     id: number,
@@ -19,6 +23,9 @@ const CurrentCourses = (props: UserData) => {
     const [cursos, setCursos] = useState<ItemProps[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const [selectId, setSelectId] = useState(0);
+    const [selectSurveyId, setSelectSurveyId] = useState(0);
+    const [modalVisible, setModalVisible] = useState(false);
     const professorId = props.id;
 
 
@@ -47,9 +54,19 @@ const CurrentCourses = (props: UserData) => {
     }, [professorId]); // Se ejecuta cuando el professorId cambia
 
 
+    const handleOnDoSurvey = async (id: number) => {
+        console.log("profe", professorId);
+        setSelectId(id);
+        console.log("id", selectId);
+        setModalVisible(!modalVisible);
+        const response = await createSurvey({ courseId: id, professorId: professorId });
+        console.log(response.id);
+        setSelectSurveyId(response.id);
+        console.log(response);
+    }
 
 
-    const Item: React.FC<ItemProps> = ({ courseName, startDate, endDate, shift, schedule, capacity, requirements }) => (
+    const Item: React.FC<ItemProps> = ({ id, courseName, startDate, endDate, shift, schedule, capacity, requirements }) => (
         <View style={styles.row}>
             <Text style={styles.cell}>{courseName}</Text>
             <Text style={styles.cell}>{startDate}</Text>
@@ -57,6 +74,11 @@ const CurrentCourses = (props: UserData) => {
             <Text style={styles.cell}>{shift}</Text>
             <Text style={styles.cell}>{capacity}</Text>
             <Text style={styles.cell}>{requirements}</Text>
+            <View style={styles.cell}>
+                <TouchableOpacity style={styles.buttonCenter} onPress={() => handleOnDoSurvey(id)}>
+                    <MaterialCommunityIcons name="file-document-edit-outline" size={35} color="#2f64ba" />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 
@@ -70,6 +92,15 @@ const CurrentCourses = (props: UserData) => {
 
     return (
         <ScrollView horizontal style={styles.container} centerContent>
+             {
+                // selectSurveyId &&
+                <DoSurvey
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    surveyId={selectSurveyId}
+                />
+            }
+
             <View>
 
                 <View style={styles.rowHeader}>
@@ -79,6 +110,7 @@ const CurrentCourses = (props: UserData) => {
                     <Text style={styles.headerCell}>Turno</Text>
                     <Text style={styles.headerCell}>Cupo</Text>
                     <Text style={styles.headerCell}>Requerimientos</Text>
+                    <Text style={styles.headerCell}>Encuestas</Text>
                 </View>
                 <FlatList
                     data={cursos}
@@ -140,6 +172,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center', // Centra verticalmente
         alignItems: 'center', // Centra horizontalmente
     },
+    buttonCenter: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'flex'
+    }
 });
 
 export default CurrentCourses;
